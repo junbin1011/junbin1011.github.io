@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,数据结构与算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.排序算法分类基础的排序算法包含冒泡排序、选择排序、插入排序、希尔排序、堆排序、归并排序及快速排序。根据实现类型可分为插入排序类、选择排序类、交换排序类及归并排序类。
+
+2.排序算法的综合分析各算法的排序方式、平均情况、最好最坏情况、所需的辅助空间及稳定性如下：
+事实上，排序算法没有十全十美，本来想写一套模拟测试的数据来验证孰优孰略。但是突然发现可比性不高，需要根据排序源的情况，选择合适的排序算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法总结">
+<meta property="og:url" content="https://junbin1011.github.io/2016/12/24/排序算法总结/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.排序算法分类基础的排序算法包含冒泡排序、选择排序、插入排序、希尔排序、堆排序、归并排序及快速排序。根据实现类型可分为插入排序类、选择排序类、交换排序类及归并排序类。
+
+2.排序算法的综合分析各算法的排序方式、平均情况、最好最坏情况、所需的辅助空间及稳定性如下：
+事实上，排序算法没有十全十美，本来想写一套模拟测试的数据来验证孰优孰略。但是突然发现可比性不高，需要根据排序源的情况，选择合适的排序算">
+<meta property="og:image" content="http://img.blog.csdn.net/20161224151916566?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20161224151927488?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.782Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="排序算法总结">
+<meta name="twitter:description" content="1.排序算法分类基础的排序算法包含冒泡排序、选择排序、插入排序、希尔排序、堆排序、归并排序及快速排序。根据实现类型可分为插入排序类、选择排序类、交换排序类及归并排序类。
+
+2.排序算法的综合分析各算法的排序方式、平均情况、最好最坏情况、所需的辅助空间及稳定性如下：
+事实上，排序算法没有十全十美，本来想写一套模拟测试的数据来验证孰优孰略。但是突然发现可比性不高，需要根据排序源的情况，选择合适的排序算">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20161224151916566?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2016/12/24/排序算法总结/"/>
+
+
+
+
+
+  <title> 排序算法总结 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2016/12/24/排序算法总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                排序算法总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-24T15:19:06+08:00">
+                2016-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/24/排序算法总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/24/排序算法总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-排序算法分类"><a href="#1-排序算法分类" class="headerlink" title="1.排序算法分类"></a>1.排序算法分类</h1><p>基础的排序算法包含冒泡排序、选择排序、插入排序、希尔排序、堆排序、归并排序及快速排序。<br>根据实现类型可分为插入排序类、选择排序类、交换排序类及归并排序类。</p>
+<p><img src="http://img.blog.csdn.net/20161224151916566?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<h1 id="2-排序算法的综合分析"><a href="#2-排序算法的综合分析" class="headerlink" title="2.排序算法的综合分析"></a>2.排序算法的综合分析</h1><p>各算法的排序方式、平均情况、最好最坏情况、所需的辅助空间及稳定性如下：<br><img src="http://img.blog.csdn.net/20161224151927488?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>事实上，排序算法没有十全十美，本来想写一套模拟测试的数据来验证孰优孰略。但是突然发现可比性不高，需要根据排序源的情况，选择合适的排序算法。<br>从平均情况来看，显然最后3种改进的算法要优于希尔排序及其他3种简单的排序算法<br>从最坏情况来看，堆排序与归并排序又强过快速排序及其他简单排序<br>从辅助空间来看，简单排序算法及堆排序算法最优<br>从稳定性来看，改进的排序算法只有归并排序最稳定<br>选择怎样的排序算法需要根据各项指标来综合考虑，从待排序的个数上来说，待排序的个数n越小，采用简单排序的方法越合适，反之n越大，采用改进排序方法越合适，例如当关键字本身信息量很大，暂用存储空间大，移动比较花费时间，此时简单排序算法比较有优势。当然如果需要考虑算法的稳定性，显然改进的算法中只有归并排序合适。当然如果一定要说那个排序算法比较好，从综合的情况来说，改进的排序算法显然更优。</p>
+<h1 id="3-JDK1-7中的排序算法"><a href="#3-JDK1-7中的排序算法" class="headerlink" title="3.JDK1.7中的排序算法"></a>3.JDK1.7中的排序算法</h1><p>java的程序员都知道我们对排序经常使用Collections.sort()或者Arrays.sort(),当然Collections.sort(）最后也是调用了Arrays.sort(),如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;  </div><div class="line"> Object[] a = list.toArray();  </div><div class="line"> Arrays.sort(a);  </div><div class="line"> ListIterator&lt;T&gt; i = list.listIterator();  </div><div class="line"> for (int j=0; j&lt;a.length; j++) &#123;  </div><div class="line"> i.next();  </div><div class="line"> i.set((T)a[j]);  </div><div class="line"> &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>那个Arrays.sort()，到底使用什么排序的算法呢？<br>分析源码得知：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public static void sort(int[] a) &#123;  </div><div class="line">  DualPivotQuicksort.sort(a);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>DualPivotQuicksort是一种在快速排序（单轴）上优化的排序算法，是一种双轴快排。该算法的实现印证了第2点中的描述，算法的选择根据了数据源的情况进行实现。DualPivotQuicksort的实现包含组合了 TimSort（ 是一个归并排序做了大量优化的版本）、插入排序、单轴快速排序等。</p>
+<p>有兴趣的深入了解DualPivotQuicksort的具体实现参考：<br><a href="http://www.tuicool.com/articles/BfY7Nz" target="_blank" rel="external">http://www.tuicool.com/articles/BfY7Nz</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/数据结构与算法/" rel="tag"># 数据结构与算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/24/排序算法-快速排序/" rel="next" title="排序算法-快速排序">
+                <i class="fa fa-chevron-left"></i> 排序算法-快速排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/03/设计模式-面向对象的六大设计原则/" rel="prev" title="设计模式-面向对象的六大设计原则">
+                设计模式-面向对象的六大设计原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/24/排序算法总结/"
+           data-title="排序算法总结" data-url="https://junbin1011.github.io/2016/12/24/排序算法总结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-排序算法分类"><span class="nav-number">1.</span> <span class="nav-text">1.排序算法分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-排序算法的综合分析"><span class="nav-number">2.</span> <span class="nav-text">2.排序算法的综合分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-JDK1-7中的排序算法"><span class="nav-number">3.</span> <span class="nav-text">3.JDK1.7中的排序算法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,781 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.单利模式的定义及使用场景确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源，或者某种类型的对象应该有且只有一个。例如创建一个对象需要消耗的资源过多，如要访问IO和数据库等资源，这时就要考虑使用单例模式。
+2.单例模式的优缺点2.1优点
+减少内存，特别是一个对象需要频繁地创建、销毁，而且创建或销毁时性能又无法优化
+单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-单例模式">
+<meta property="og:url" content="https://junbin1011.github.io/2017/01/06/设计模式-单例模式/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.单利模式的定义及使用场景确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源，或者某种类型的对象应该有且只有一个。例如创建一个对象需要消耗的资源过多，如要访问IO和数据库等资源，这时就要考虑使用单例模式。
+2.单例模式的优缺点2.1优点
+减少内存，特别是一个对象需要频繁地创建、销毁，而且创建或销毁时性能又无法优化
+单">
+<meta property="og:image" content="http://img.blog.csdn.net/20170106093535299?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.785Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-单例模式">
+<meta name="twitter:description" content="1.单利模式的定义及使用场景确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源，或者某种类型的对象应该有且只有一个。例如创建一个对象需要消耗的资源过多，如要访问IO和数据库等资源，这时就要考虑使用单例模式。
+2.单例模式的优缺点2.1优点
+减少内存，特别是一个对象需要频繁地创建、销毁，而且创建或销毁时性能又无法优化
+单">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170106093535299?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/01/06/设计模式-单例模式/"/>
+
+
+
+
+
+  <title> 设计模式-单例模式 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/01/06/设计模式-单例模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式-单例模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-06T09:33:13+08:00">
+                2017-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/06/设计模式-单例模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/06/设计模式-单例模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-单利模式的定义及使用场景"><a href="#1-单利模式的定义及使用场景" class="headerlink" title="1.单利模式的定义及使用场景"></a>1.单利模式的定义及使用场景</h1><p>确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源，或者某种类型的对象应该有且只有一个。例如创建一个对象需要消耗的资源过多，如要访问IO和数据库等资源，这时就要考虑使用单例模式。<br><img src="http://img.blog.csdn.net/20170106093535299?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<h1 id="2-单例模式的优缺点"><a href="#2-单例模式的优缺点" class="headerlink" title="2.单例模式的优缺点"></a>2.单例模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ol>
+<li>减少内存，特别是一个对象需要频繁地创建、销毁，而且创建或销毁时性能又无法优化</li>
+<li>单例模式可以避免对资源的多重占用，例如一个写文件动作，由于只有一个实例存在内存中，避免同时对一个资源文件的同时写操作</li>
+<li>单例模式可以在系统设置全局的访问点，优化和共享资源访问<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2></li>
+<li>单例模式一般没有接口，扩展比较困难</li>
+<li>单例模式与单一责任原则有冲突。一个类应该只实现一个逻辑，而不关心它是否是单例的，是不是要单例取决于环境，单例模式把“要单例”和业务逻辑融合在一个类中<h1 id="3-单例模式的实现方式"><a href="#3-单例模式的实现方式" class="headerlink" title="3.单例模式的实现方式"></a>3.单例模式的实现方式</h1><h2 id="3-1懒汉模式"><a href="#3-1懒汉模式" class="headerlink" title="3.1懒汉模式"></a>3.1懒汉模式</h2></li>
+<li><p>最原始的懒汉模式</p>
+<p> 优点：懒加载</p>
+<p> 缺点：未考虑线程安全</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">    private static Singleton instance;  </div><div class="line">    private Singleton ()&#123;&#125;  </div><div class="line">  </div><div class="line">    public static Singleton getInstance() &#123;  </div><div class="line">    if (instance == null) &#123;  </div><div class="line">        instance = new Singleton();  </div><div class="line">    &#125;  </div><div class="line">    return instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>加锁的懒汉模式</li>
+</ol>
+<p>优点：懒加载 、线程安全</p>
+<p>缺点：效率低</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">    private static Singleton instance;  </div><div class="line">    private Singleton ()&#123;&#125;  </div><div class="line">    public static synchronized Singleton getInstance() &#123;  </div><div class="line">    if (instance == null) &#123;  </div><div class="line">        instance = new Singleton();  </div><div class="line">    &#125;  </div><div class="line">    return instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>双重锁懒汉模式</li>
+</ol>
+<p>优点：懒加载、线程安全</p>
+<p>缺点：效率高于2）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">     private volatile static Singleton singleton;  </div><div class="line">     private Singleton ()&#123;&#125;  </div><div class="line">     public static Singleton getSingleton() &#123;  </div><div class="line">     if (singleton == null) &#123;  </div><div class="line">         synchronized (Singleton.class) &#123;  </div><div class="line">         if (singleton == null) &#123;  </div><div class="line">             singleton = new Singleton();  </div><div class="line">         &#125;  </div><div class="line">         &#125;  </div><div class="line">     &#125;  </div><div class="line">     return singleton;  </div><div class="line">     &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>静态内部类</li>
+</ol>
+<p>优点：懒加载、线程安全</p>
+<p>缺点：实现方式比较复杂</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">     private static class SingletonHolder &#123;  </div><div class="line">     private static final Singleton INSTANCE = new Singleton();  </div><div class="line">     &#125;  </div><div class="line">     private Singleton ()&#123;&#125;  </div><div class="line">     public static final Singleton getInstance() &#123;  </div><div class="line">     return SingletonHolder.INSTANCE;  </div><div class="line">     &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h2 id="3-2饿汉模式"><a href="#3-2饿汉模式" class="headerlink" title="3.2饿汉模式"></a>3.2饿汉模式</h2><p>优点：非懒加载</p>
+<p>缺点：线程安全</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">     private Singleton instance = null;  </div><div class="line">     static &#123;  </div><div class="line">     instance = new Singleton();  </div><div class="line">     &#125;  </div><div class="line">     private Singleton ()&#123;&#125;  </div><div class="line">     public static Singleton getInstance() &#123;  </div><div class="line">     return this.instance;  </div><div class="line">     &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h1 id="4-单例模式在Android中的实际应用"><a href="#4-单例模式在Android中的实际应用" class="headerlink" title="4.单例模式在Android中的实际应用"></a>4.单例模式在Android中的实际应用</h1><p>相信大家对LayoutInflate都不陌生，特别在ListView的Adapter的getView方法中基本都会出现，使用inflate方法去加载一个布局，用于ListView的每个Item的布局。最简单的使用方法是LayoutInflater layoutInflater = LayoutInflater.from(context);  那么Android的源码中是怎么保持LayoutInflater的单例模式呢？分析源码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line"> * Obtains the LayoutInflater from the given context. </div><div class="line"> */  </div><div class="line"> public static LayoutInflater from(Context context) &#123;  </div><div class="line"> LayoutInflater LayoutInflater =  </div><div class="line"> (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);  </div><div class="line"> if (LayoutInflater == null) &#123;  </div><div class="line"> throw new AssertionError(&quot;LayoutInflater not found.&quot;);  </div><div class="line"> &#125;  </div><div class="line"> return LayoutInflater;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p> Context：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@SuppressWarnings(&quot;unchecked&quot;)  </div><div class="line">public final &lt;T&gt; T getSystemService(Class&lt;T&gt; serviceClass) &#123;  </div><div class="line">// Because subclasses may override getSystemService(String) we cannot  </div><div class="line">// perform a lookup by class alone. We must first map the class to its  </div><div class="line">// service name then invoke the stringbased method.  </div><div class="line">String serviceName = getSystemServiceName(serviceClass);  </div><div class="line">return serviceName != null ? (T)getSystemService(serviceName) : null;  </div><div class="line">&#125;  </div><div class="line">public abstract String getSystemServiceName(Class&lt;?&gt; serviceClass);</div></pre></td></tr></table></figure></p>
+<p> ContextImpl：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override  </div><div class="line"> public String getSystemServiceName(Class&lt;?&gt; serviceClass) &#123;  </div><div class="line"> return SystemServiceRegistry.getSystemServiceName(serviceClass);  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p> SystemServiceRegistry :<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"> /** </div><div class="line">  * Gets the name of the systemlevel service that is represented by the specified class. </div><div class="line">  */  </div><div class="line">  public static String getSystemServiceName(Class&lt;?&gt; serviceClass) &#123;  </div><div class="line">  return SYSTEM_SERVICE_NAMES.get(serviceClass);  </div><div class="line">  &#125;  </div><div class="line">registerService(Context.LAYOUT_INFLATER_SERVICE, LayoutInflater.class,  </div><div class="line">  new CachedServiceFetcher&lt;LayoutInflater&gt;() &#123;  </div><div class="line">  @Override  </div><div class="line">  public LayoutInflater createService(ContextImpl ctx) &#123;  </div><div class="line">  return new PhoneLayoutInflater(ctx.getOuterContext());  </div><div class="line">  &#125;&#125;);  </div><div class="line">  </div><div class="line">  /** </div><div class="line">  * Statically registers a system service with the context. </div><div class="line">  * This method must be called during static initialization only. </div><div class="line">  */  </div><div class="line">  private static &lt;T&gt; void registerService(String serviceName, Class&lt;T&gt; serviceClass,  </div><div class="line">  ServiceFetcher&lt;T&gt; serviceFetcher) &#123;  </div><div class="line">  SYSTEM_SERVICE_NAMES.put(serviceClass, serviceName);  </div><div class="line">  SYSTEM_SERVICE_FETCHERS.put(serviceName, serviceFetcher);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  static abstract class CachedServiceFetcher&lt;T&gt; implements ServiceFetcher&lt;T&gt; &#123;  </div><div class="line">  private final int mCacheIndex;  </div><div class="line">  </div><div class="line">  public CachedServiceFetcher() &#123;  </div><div class="line">  mCacheIndex = sServiceCacheSize++;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  @Override  </div><div class="line">  @SuppressWarnings(&quot;unchecked&quot;)  </div><div class="line">  public final T getService(ContextImpl ctx) &#123;  </div><div class="line">  final Object[] cache = ctx.mServiceCache;  </div><div class="line">  synchronized (cache) &#123;  </div><div class="line">  // Fetch or create the service.  </div><div class="line">  Object service = cache[mCacheIndex];  </div><div class="line">  if (service == null) &#123;  </div><div class="line">  service = createService(ctx);  </div><div class="line">  cache[mCacheIndex] = service;  </div><div class="line">  &#125;  </div><div class="line">  return (T)service;  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  public abstract T createService(ContextImpl ctx);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>通过源码分析可知，LayoutInflater最终是保存在cache的一个Object数组中，以这种方式进行单例的提供。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/03/设计模式-面向对象的六大设计原则/" rel="next" title="设计模式-面向对象的六大设计原则">
+                <i class="fa fa-chevron-left"></i> 设计模式-面向对象的六大设计原则
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/10/设计模式-工厂模式/" rel="prev" title="设计模式-工厂模式">
+                设计模式-工厂模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/06/设计模式-单例模式/"
+           data-title="设计模式-单例模式" data-url="https://junbin1011.github.io/2017/01/06/设计模式-单例模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-单利模式的定义及使用场景"><span class="nav-number">1.</span> <span class="nav-text">1.单利模式的定义及使用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-单例模式的优缺点"><span class="nav-number">2.</span> <span class="nav-text">2.单例模式的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1优点"><span class="nav-number">2.1.</span> <span class="nav-text">2.1优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2缺点"><span class="nav-number">2.2.</span> <span class="nav-text">2.2缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-单例模式的实现方式"><span class="nav-number">3.</span> <span class="nav-text">3.单例模式的实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1懒汉模式"><span class="nav-number">3.1.</span> <span class="nav-text">3.1懒汉模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2饿汉模式"><span class="nav-number">3.2.</span> <span class="nav-text">3.2饿汉模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-单例模式在Android中的实际应用"><span class="nav-number">4.</span> <span class="nav-text">4.单例模式在Android中的实际应用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

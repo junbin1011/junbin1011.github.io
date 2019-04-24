@@ -1,0 +1,775 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JVM,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言前面我们介绍了new一个对象需要经过类加载、内存分配、初始化、对象设置、执行init等操作。那么在我们的代码中，一个对象是怎么样就被回收的呢？我们所知道的当一个对象实例没用被引用持有，就会被GC回收，究竟JVM是怎样来判断一个对象是否被持有引用的呢？下面我们将一一来进行分析。
+如何判断对象是否被持有引用？引用计数算法
+定义：引用计数算法（Reference Counting）:给对象添加一个引">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM学习笔记-内存分配与回收">
+<meta property="og:url" content="https://junbin1011.github.io/2017/05/03/JVM学习笔记-内存分配与回收/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="前言前面我们介绍了new一个对象需要经过类加载、内存分配、初始化、对象设置、执行init等操作。那么在我们的代码中，一个对象是怎么样就被回收的呢？我们所知道的当一个对象实例没用被引用持有，就会被GC回收，究竟JVM是怎样来判断一个对象是否被持有引用的呢？下面我们将一一来进行分析。
+如何判断对象是否被持有引用？引用计数算法
+定义：引用计数算法（Reference Counting）:给对象添加一个引">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-0b5d19574afc5621?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-7cc47a60fd0e8dc5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.774Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM学习笔记-内存分配与回收">
+<meta name="twitter:description" content="前言前面我们介绍了new一个对象需要经过类加载、内存分配、初始化、对象设置、执行init等操作。那么在我们的代码中，一个对象是怎么样就被回收的呢？我们所知道的当一个对象实例没用被引用持有，就会被GC回收，究竟JVM是怎样来判断一个对象是否被持有引用的呢？下面我们将一一来进行分析。
+如何判断对象是否被持有引用？引用计数算法
+定义：引用计数算法（Reference Counting）:给对象添加一个引">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-0b5d19574afc5621?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/05/03/JVM学习笔记-内存分配与回收/"/>
+
+
+
+
+
+  <title> JVM学习笔记-内存分配与回收 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/05/03/JVM学习笔记-内存分配与回收/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JVM学习笔记-内存分配与回收
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-03T16:03:11+08:00">
+                2017-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/03/JVM学习笔记-内存分配与回收/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/03/JVM学习笔记-内存分配与回收/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前面我们介绍了new一个对象需要经过类加载、内存分配、初始化、对象设置、执行init等操作。那么在我们的代码中，一个对象是怎么样就被回收的呢？我们所知道的当一个对象实例没用被引用持有，就会被GC回收，究竟JVM是怎样来判断一个对象是否被持有引用的呢？下面我们将一一来进行分析。</p>
+<h1 id="如何判断对象是否被持有引用？"><a href="#如何判断对象是否被持有引用？" class="headerlink" title="如何判断对象是否被持有引用？"></a>如何判断对象是否被持有引用？</h1><h2 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h2><ul>
+<li>定义：引用计数算法（Reference Counting）:给对象添加一个引用计数器，每当一个地方引用它时，计数器值就+1；当引用失效时，计数器值就-1；任何时刻计数器为0的对象就是不可能被再使用的；</li>
+<li>优点：实现简单，判定效率高；微软的COM技术、Python中都使用了Reference Couting算法进行内存管理；</li>
+<li>缺点：由于其很难解决对象之间相互循环引用的问题，主流Java虚拟机里面都没有选用Refrence Couting算法来管理内存；<h2 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h2>定义：可达性分析（Reachability Analysis）判断对象存活的基本思路：通过一系列的称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain）,当一个对象到GC Roots没有任何引用链相连（即GC Roots到这个对象不可达）时，则证明此对象是不可用的；</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-0b5d19574afc5621?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>Java语言中，可作为GC Roots对象包括：</p>
+<ol>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象；</li>
+<li>方法区中类静态属性引用的对象；</li>
+<li>方法区中产量引用的对象；</li>
+<li>本地方法栈中JNI（即一般的Native方法）引用的对象</li>
+</ol>
+<h1 id="没有持有引用就会被GC回收么？"><a href="#没有持有引用就会被GC回收么？" class="headerlink" title="没有持有引用就会被GC回收么？"></a>没有持有引用就会被GC回收么？</h1><p>即使在可达性分析算法中不可达的对象，也并非是“非死不可”的，这时候它们暂时处于“缓刑”阶段，而真正宣告一个对象死亡，至少要经历两次标记过程；如果对象在进行可达性分析后发现没有GC Roots想连接的引用链，那它将会被第一次标记并且进行一次筛选，筛选的条件是此对象是否有必要执行finalize()方法。当对象没有覆盖finalize()方法，或者finalize()方法已被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。</p>
+<p>如果这个对象被判定为有必要执行finalize()方法，那么这个对象将会放置在一个叫做F-Queue的队列中，并在稍后由一个虚拟机自动建立的、低优先级的Finalizer线程去执行它。这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束。这样做的原因是，如果一个对象finalize()方法中执行缓慢，或者发送了死循环，将很可能会导致F-Queue队列中其他对象永久处于等待，甚至导致整个内存回收系统崩溃。finalize()方法是对象逃脱死亡命运的最后一次机会，稍后GC将对F-Queue中的对象进行第二次小规模的标记，如果对象要在finalize()中成功拯救自己——只有重新与引用链上的任何一个对象建立关联即可，那在第二次标记时它将被移除出F-Queue；如果对象这时候还没有逃脱，那就会被GC回收。</p>
+<h1 id="内存分配与回收策略"><a href="#内存分配与回收策略" class="headerlink" title="内存分配与回收策略"></a>内存分配与回收策略</h1><h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p>由于不同的对象的生命周期是不一样的，因此，不同生命周期的对象可以采取不同的收集方式，以便提高回收的效率。因此JVM采用了分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区、和两个Survivor区。新的对象分配是首先放在Eden区、Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集任然存活的，就会被转移到年老区。<br><img src="http://upload-images.jianshu.io/upload_images/5125122-7cc47a60fd0e8dc5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>对象的内存分配，主要分配在年轻代的Eden区上，如果启动了本地线程分配缓冲，将按线程优先在TLAB上分配。少数情况下也可能会直接分配在老年代中，分配的规则并不是百分之百固定的，其细节取决于当前使用了哪一种垃圾收集器组合，还有虚拟机中与内存相关的参数配置，接下来将会介绍几条最普遍的内存分配规则。</p>
+<h3 id="对象优先在Eden分配"><a href="#对象优先在Eden分配" class="headerlink" title="对象优先在Eden分配"></a>对象优先在Eden分配</h3><p>大多数情况下，对象在新生代Eden区中分配。当Eden区没有足够空间进行分配时，虚拟机将发起一次Minor GC。</p>
+<h3 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h3><p>所谓的大对象是指需要大量连续内存空间的Java对象，最典型的大对象就是那种很长的字符串以及数组。经常出现大对象容易导致内存还有不少空间时就提前触发垃圾收集以获取足够的连续空间来存放</p>
+<h3 id="长期存活的对象将进入年老代"><a href="#长期存活的对象将进入年老代" class="headerlink" title="长期存活的对象将进入年老代"></a>长期存活的对象将进入年老代</h3><p>既然虚拟机采用了分代收集的思想来管理内存，那么内存回收时就必须能识别哪些对象应该在年轻代，哪些应该在年老代。为了做到这点，虚拟机给每个对象定义了一个对象年龄（Age）计数器。如果对象在Eden出生并经过第一次的GC后任然存活，并且能被Survivor容纳的话，将被移动到Survivor空间中，并且对象年龄设为1.对象在Survivor区中每熬过一次GC，年龄就增加1岁，当它的年龄增加到一定程度（默认15岁），就将会被晋升到老年代中。</p>
+<h3 id="动态对象年龄判断"><a href="#动态对象年龄判断" class="headerlink" title="动态对象年龄判断"></a>动态对象年龄判断</h3><p>为了能更换地适应不同程序的内存情况，虚拟机并不是永远的要求对象的年龄必须达到了MaxTenuringThreshold才能晋升年老代，如果Survivor空间中相同年龄所有对象大小的总和大于Survivor空间的一半，年龄大于或等于改年龄的对象就可以直接进入年老代。</p>
+<h3 id="空间分配担保"><a href="#空间分配担保" class="headerlink" title="空间分配担保"></a>空间分配担保</h3><p>在发生MinorGC之前，虚拟机会先检查年老代最大可用的连续空间是否大于年轻代所有对象空间，如果这个条件成立，那么GC可以确保是安全的，如果不成立，则虚拟机会查看HandlePromotionFailure设置值是否允许担保失败。如果允许，那么会继续检查年老代最大可用的连续空间是否大于历次晋升到年老代的对象的平均大小。如果大于，将尝试进行一次MinorGC，尽管这次MinorGC是有风险的；如果小于，或者HandlePromotionFailure不允许冒险，那这时也要改为进行一次FullGC</p>
+<h2 id="回收策略"><a href="#回收策略" class="headerlink" title="回收策略"></a>回收策略</h2><p>由于对象进行了分代处理，因此垃圾回收区域、时间也不一样。GC有两种类型：Minor GC和Full GC。</p>
+<h3 id="Minor-GC"><a href="#Minor-GC" class="headerlink" title="Minor GC"></a>Minor GC</h3><p>一般情况下，当新对象生成，并且在Eden申请空间失败时，就会触发SMinorGC，对Eden区域进行GC，清除非存活对象，并且把尚且存活的对象移动到Survivor区。然后整理Survivor的两个区。这种方式的GC是对年轻代的Eden区进行，不会影响到年老代。因为大部分对象都是从Eden区开始的，同时Eden区不会分配的很大，所以Eden区的GC会频繁进行。因而，一般在这里需要使用速度快、效率高的算法，使Eden去能尽快空闲出来。</p>
+<h3 id="Full-GC"><a href="#Full-GC" class="headerlink" title="Full GC"></a>Full GC</h3><p>对整个堆进行整理，包括Young、Tenured和Perm。Full GC因为需要对整个对进行回收，所以比Scavenge GC要慢，因此应该尽可能减少Full GC的次数。在对JVM调优的过程中，很大一部分工作就是对于FullGC的调节。有如下原因可能导致Full GC：</p>
+<ul>
+<li><p>年老代（Tenured）被写满</p>
+</li>
+<li><p>持久代（Perm）被写满</p>
+</li>
+<li><p>System.gc()被显示调用</p>
+</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>本文主要参考《深入理解Java虚拟机：JVM高级特性与最佳实践》后的学习笔记及总结</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/27/JVM学习笔记-内存管理机制/" rel="next" title="JVM学习笔记-内存管理机制">
+                <i class="fa fa-chevron-left"></i> JVM学习笔记-内存管理机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/08/JVM学习笔记-3-垃圾收集算法/" rel="prev" title="JVM学习笔记(3)-垃圾收集算法">
+                JVM学习笔记(3)-垃圾收集算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/03/JVM学习笔记-内存分配与回收/"
+           data-title="JVM学习笔记-内存分配与回收" data-url="https://junbin1011.github.io/2017/05/03/JVM学习笔记-内存分配与回收/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何判断对象是否被持有引用？"><span class="nav-number">2.</span> <span class="nav-text">如何判断对象是否被持有引用？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引用计数算法"><span class="nav-number">2.1.</span> <span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">2.2.</span> <span class="nav-text">可达性分析算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#没有持有引用就会被GC回收么？"><span class="nav-number">3.</span> <span class="nav-text">没有持有引用就会被GC回收么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存分配与回收策略"><span class="nav-number">4.</span> <span class="nav-text">内存分配与回收策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存分配"><span class="nav-number">4.1.</span> <span class="nav-text">内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象优先在Eden分配"><span class="nav-number">4.1.1.</span> <span class="nav-text">对象优先在Eden分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大对象直接进入老年代"><span class="nav-number">4.1.2.</span> <span class="nav-text">大对象直接进入老年代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长期存活的对象将进入年老代"><span class="nav-number">4.1.3.</span> <span class="nav-text">长期存活的对象将进入年老代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态对象年龄判断"><span class="nav-number">4.1.4.</span> <span class="nav-text">动态对象年龄判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间分配担保"><span class="nav-number">4.1.5.</span> <span class="nav-text">空间分配担保</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回收策略"><span class="nav-number">4.2.</span> <span class="nav-text">回收策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Minor-GC"><span class="nav-number">4.2.1.</span> <span class="nav-text">Minor GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Full-GC"><span class="nav-number">4.2.2.</span> <span class="nav-text">Full GC</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

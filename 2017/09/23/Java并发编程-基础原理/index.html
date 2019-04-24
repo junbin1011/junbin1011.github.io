@@ -1,0 +1,836 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果
+CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换
+减">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程-基础原理">
+<meta property="og:url" content="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果
+CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换
+减">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-cdeffbbfe86e5c74?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.776Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发编程-基础原理">
+<meta name="twitter:description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果
+CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换
+减">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/"/>
+
+
+
+
+
+  <title> Java并发编程-基础原理 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java并发编程-基础原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T10:13:59+08:00">
+                2017-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/23/Java并发编程-基础原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/23/Java并发编程-基础原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="并发编的挑战"><a href="#并发编的挑战" class="headerlink" title="并发编的挑战"></a>并发编的挑战</h1><h2 id="上下文切换（并行不一定比串行快）"><a href="#上下文切换（并行不一定比串行快）" class="headerlink" title="上下文切换（并行不一定比串行快）"></a>上下文切换（并行不一定比串行快）</h2><p>时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果</p>
+<p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换</p>
+<p>减少上下文切换的方法有无锁并发编程、CAS算法、使用最少线程和使用协程</p>
+<p>无锁并发编程：如将数据的ID按照Hash算法取模分段，不同的线程处理不同的段的数据</p>
+<p>CAS算法：Java的Atomic包使用CAS算法来更新数据，而不需要加锁</p>
+<p>使用最少线程：避免创建不需要的线程</p>
+<p>协程：在单线程里实现多任务的调度，并在单线程里维持多个任务间的切换</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>锁是个非常有用的工具，运用场景非常多。但同时它也会带来一些困扰，那就是可能会引起死锁，一旦产生死锁，就会造成系统功能不可用。</p>
+<p>避免死锁的常用方法</p>
+<ul>
+<li>避免一个线程同时获取多个锁</li>
+<li>避免一个线程在锁内同时占用多个资源，尽量保证每个锁只占用一个资源</li>
+<li>尝试使用定向锁，使用lock.tryLock(timeout)来替代使用内部锁机制</li>
+<li>对于数据库锁，加锁和解锁必现在一个数据库连接池里，否则会出现解锁失败的现象</li>
+</ul>
+<h2 id="资源限制"><a href="#资源限制" class="headerlink" title="资源限制"></a>资源限制</h2><p>资源限制是指在进行并发编程时，程序的执行速度受限于计算机硬件或软件资源。硬件资源限制有带宽的上传/下载速度、硬盘读写速度和CPU处理速度。软件资源限制有数据库的连接数和socket连接数等。<br>对于硬件资源限制，可以考虑使用集群并行执行程序。对于软件资源限制，可以考虑使用资源池将资源复用。需要根据不同的资源限制调整程序的并发度</p>
+<h1 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h1><p>Java的并发采用的是共享内存模型，Java线程之间的通讯总是隐式进行，整个通信过程对程序员完全透明。Java线程之间的通信由Java内存模型（JMM）控制，JMM决定一个线程对共享变量的写入核实对另一个线程可见<br><img src="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ol>
+<li>线程对共享变量的所有操作都必须在自己的工作内存中进行，不能直接在主内存中读写</li>
+<li>不同线程之间无法直接访问其他线程工作内存中的变量，线程间变量值的传递需要通过主内存来完成。</li>
+<li><p>线程1对共享变量的修改，要想被线程2及时看到，必须经过如下2个过程：</p>
+<p> 把工作内存1中更新过的共享变量刷新到主内存中</p>
+<p> 将主内存中最新的共享变量的值更新到工作内存2中</p>
+</li>
+</ol>
+<h1 id="可见性、原子性、重排序"><a href="#可见性、原子性、重排序" class="headerlink" title="可见性、原子性、重排序"></a>可见性、原子性、重排序</h1><p>   可见性：一个线程对共享变量的修改，更够及时的被其他线程看到</p>
+<p>   原子性：即不可再分了，不能分为多步操作。比如赋值或者return。比如”a = 1;”和 “return a;”这样的操作都具有原子性。类似”a += b”这样的操作不具有原子性，在某些JVM中”a += b”可能要经过这样三个步骤：</p>
+<ol>
+<li>　取出a和b</li>
+<li>　计算a+b</li>
+<li>　将计算结果写入内存</li>
+</ol>
+<p>重排序：重排序是指编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段</p>
+<h1 id="Volatile"><a href="#Volatile" class="headerlink" title="Volatile"></a>Volatile</h1><p>volatile是轻量级的synchronized，它在多处理器开发中保证了共享变量的“可见性”</p>
+<p> Volatile实现内存可见性是通过store和load指令完成的；也就是对volatile变量执行写操作时，会在写操作后加入一条store指令，即强迫线程将最新的值刷新到主内存中；而在读操作时，会加入一条load指令，即强迫从主内存中读入变量的值。但volatile不保证volatile变量的原子性。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> class MyThread extends Thread &#123;             </div><div class="line">    private volatile boolean isStop = false;          </div><div class="line">    public void run() &#123;      </div><div class="line">        while (!isStop) &#123;      </div><div class="line">            System.out.println(&quot;do something&quot;);      </div><div class="line">        &#125;      </div><div class="line">    &#125;      </div><div class="line">    public void setStop() &#123;      </div><div class="line">        isStop = true;      </div><div class="line">    &#125;            </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 线程执行run()的时候我们需要在线程中不停的做一些事情，比如while循环，那么这时候该如何停止线程呢？如果线程做的事情不是耗时的，那么只需要使用一个标志即可。如果需要退出时，调用setStop()即可。这里就使用了关键字volatile，这个关键字的目的是如果修改了isStop的值，那么在while循环中可以立即读取到修改后的值</p>
+<h1 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Synchronized在JVM的实现原理，主要是使用了monitorenter和monitorexit指令实现。monitorenter指令是在编译后插入到同步代码块的开始位置，而monitorexit是插入到方法结束处和异常处，JVM要保证整个monitorenter必须有对应的monitorexit与之配对。任何对象都有一个monitor与之关联，当且有一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象所对应的monitor的所有权，即尝试获得对象的锁</p>
+<p>synchronized用的锁是存在Java对象头里面的。Java对象头里的Mark Word里默认存储对象的HashCode、分代年龄和锁标记位。在运行期间，Mark Word里存储的数据会随着锁标志位的变化而变化<br>锁的状态总共有四种：无锁状态、偏向锁、轻量级锁和重量级锁。随着锁的竞争，锁可以从偏向锁升级到轻量级锁，再升级的重量级锁（但是锁的升级是单向的，也就是说只能从低到高升级，不会出现锁的降级）。JDK 1.6中默认是开启偏向锁和轻量级锁的，我们也可以通过-XX:-UseBiasedLocking来禁用偏向锁</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-cdeffbbfe86e5c74?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>锁</th>
+<th>定义</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>偏向锁</td>
+<td>偏向锁，顾名思义，它会偏向于第一个访问锁的线程，如果在接下来的运行过程中，该锁没有被其他的线程访问，则持有偏向锁的线程将永远不需要触发同步。如果在运行过程中，遇到了其他线程抢占锁，则持有偏向锁的线程会被挂起，JVM会尝试消除它身上的偏向锁，将锁恢复到标准的轻量级锁。</td>
+<td>加锁和解锁不需要额外的消耗，和执行非同步方法比仅存在纳秒级的差距。</td>
+<td>如果线程间存在锁竞争，会带来额外的锁撤销的消耗。</td>
+<td>适用于只有一个线程访问同步块场景。</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td>线程的阻塞和唤醒需要CPU从用户态转为核心态，频繁的阻塞和唤醒对CPU来说是一件负担很重的工作。同时我们可以发现，很多对象锁的锁定状态只会持续很短的一段时间，例如整数的自加操作，在很短的时间内阻塞并唤醒线程显然不值得，为此引入了自旋锁</td>
+<td>竞争的线程不会阻塞，提高了程序的响应速度。</td>
+<td>如果始终得不到锁竞争的线程使用自旋会消耗CPU。</td>
+<td>追求响应时间。同步块执行速度非常快。</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td>重量锁在JVM中又叫对象监视器（Monitor），它很像C中的Mutex，除了具备Mutex互斥的功能，它还负责实现了Semaphore的功能，也就是说它至少包含一个竞争锁的队列，和一个信号阻塞队列（wait队列），前者负责做互斥，后一个用于做线程同步</td>
+<td>线程竞争不使用自旋，不会消耗CPU。</td>
+<td>线程阻塞，响应时间缓慢。</td>
+<td>追求吞吐量。同步块执行速度较长。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p> synchronized是Java中的关键字，是一种同步锁。它修饰的对象有以下几种： </p>
+<ol>
+<li>修饰一个代码块，被修饰的代码块称为同步语句块，其作用的范围是大括号{}括起来的代码，作用的对象是调用这个代码块的对象； </li>
+<li>修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象； </li>
+<li>修改一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象； </li>
+<li>修改一个类，其作用的范围是synchronized后面括号括起来的部分，作用主的对象是这个类的所有对象。</li>
+</ol>
+<ul>
+<li>无论synchronized关键字加在方法上还是对象上，如果它作用的对象是非静态的，则它取得的锁是对象；如果synchronized作用的对象是一个静态方法或一个类，则它取得的锁是对类，该类所有的对象同一把锁。 </li>
+<li>每个对象只有一个锁（lock）与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。 </li>
+<li>实现同步是要很大的系统开销作为代价的，甚至可能造成死锁，所以尽量避免无谓的同步控制。</li>
+<li>synchronized关键字不能继承</li>
+</ul>
+<p>## </p>
+<h2 id="Synchronized和Volatile的比较"><a href="#Synchronized和Volatile的比较" class="headerlink" title="Synchronized和Volatile的比较"></a>Synchronized和Volatile的比较</h2><ol>
+<li>Synchronized保证内存可见性和操作的原子性</li>
+<li>Volatile只能保证内存可见性</li>
+<li>Volatile不需要加锁，比Synchronized更轻量级，并不会阻塞线程（volatile不会造成线程的阻塞；synchronized可能会造成线程的阻塞。）</li>
+<li>volatile标记的变量不会被编译器优化,而synchronized标记的变量可以被编译器优化（如编译器重排序的优化）.</li>
+<li>volatile是变量修饰符，仅能用于变量，而synchronized是一个方法或块的修饰符。</li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://book.douban.com/subject/26591326/" target="_blank" rel="external">《Java并发编程的艺术》</a></p>
+<p><a href="http://blog.csdn.net/guyuealian/article/details/52525724" target="_blank" rel="external">内存可见性和原子性：Synchronized和Volatile的比较</a></p>
+<p><a href="http://blog.csdn.net/luoweifu/article/details/46613015" target="_blank" rel="external">Java中Synchronized的用法</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/Android程序员，你应该知道的设计模式/" rel="next" title="Android程序员，你应该知道的设计模式">
+                <i class="fa fa-chevron-left"></i> Android程序员，你应该知道的设计模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/27/Java并发编程-多线程/" rel="prev" title="Java并发编程-多线程">
+                Java并发编程-多线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/09/23/Java并发编程-基础原理/"
+           data-title="Java并发编程-基础原理" data-url="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#并发编的挑战"><span class="nav-number">1.</span> <span class="nav-text">并发编的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#上下文切换（并行不一定比串行快）"><span class="nav-number">1.1.</span> <span class="nav-text">上下文切换（并行不一定比串行快）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死锁"><span class="nav-number">1.2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源限制"><span class="nav-number">1.3.</span> <span class="nav-text">资源限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存模型"><span class="nav-number">2.</span> <span class="nav-text">Java内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可见性、原子性、重排序"><span class="nav-number">3.</span> <span class="nav-text">可见性、原子性、重排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Volatile"><span class="nav-number">4.</span> <span class="nav-text">Volatile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Synchronized"><span class="nav-number">5.</span> <span class="nav-text">Synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">5.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用法"><span class="nav-number">5.2.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Synchronized和Volatile的比较"><span class="nav-number">5.3.</span> <span class="nav-text">Synchronized和Volatile的比较</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

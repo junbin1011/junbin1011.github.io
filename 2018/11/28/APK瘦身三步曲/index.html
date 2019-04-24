@@ -1,0 +1,1028 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Android性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言背景115于2009年推出的网络数据在线存储服务，一直以来都有阶段性对应用进行安装包的体积优化，因为公司也没有硬性的指标规定，所以这块的重视程度也一直不高。对比了目前竞品的一个情况，如下：
+
+
+
+应用
+版本号
+大小
+
+
+
+
+115
+V8.1.1
+50.26M
+
+
+微云
+V6.6.4
+37.67MB
+
+
+百度云
+V9.0.2
+48.3MB
+
+
+
+使用Android Studio的APK Anal">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APK瘦身三步曲">
+<meta property="og:url" content="https://junbin1011.github.io/2018/11/28/APK瘦身三步曲/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="前言背景115于2009年推出的网络数据在线存储服务，一直以来都有阶段性对应用进行安装包的体积优化，因为公司也没有硬性的指标规定，所以这块的重视程度也一直不高。对比了目前竞品的一个情况，如下：
+
+
+
+应用
+版本号
+大小
+
+
+
+
+115
+V8.1.1
+50.26M
+
+
+微云
+V6.6.4
+37.67MB
+
+
+百度云
+V9.0.2
+48.3MB
+
+
+
+使用Android Studio的APK Anal">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-4b0211c7d9dae8da?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-15d203966b219747?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-237f41569728e956?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.768Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="APK瘦身三步曲">
+<meta name="twitter:description" content="前言背景115于2009年推出的网络数据在线存储服务，一直以来都有阶段性对应用进行安装包的体积优化，因为公司也没有硬性的指标规定，所以这块的重视程度也一直不高。对比了目前竞品的一个情况，如下：
+
+
+
+应用
+版本号
+大小
+
+
+
+
+115
+V8.1.1
+50.26M
+
+
+微云
+V6.6.4
+37.67MB
+
+
+百度云
+V9.0.2
+48.3MB
+
+
+
+使用Android Studio的APK Anal">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-4b0211c7d9dae8da?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2018/11/28/APK瘦身三步曲/"/>
+
+
+
+
+
+  <title> APK瘦身三步曲 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/11/28/APK瘦身三步曲/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                APK瘦身三步曲
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-28T15:26:37+08:00">
+                2018-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/28/APK瘦身三步曲/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/11/28/APK瘦身三步曲/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>115于2009年推出的网络数据在线存储服务，一直以来都有阶段性对应用进行安装包的体积优化，因为公司也没有硬性的指标规定，所以这块的重视程度也一直不高。对比了目前竞品的一个情况，如下：</p>
+<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>版本号</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>115</td>
+<td>V8.1.1</td>
+<td>50.26M</td>
+</tr>
+<tr>
+<td>微云</td>
+<td>V6.6.4</td>
+<td>37.67MB</td>
+</tr>
+<tr>
+<td>百度云</td>
+<td>V9.0.2</td>
+<td>48.3MB</td>
+</tr>
+</tbody>
+</table>
+<p>使用Android Studio的APK Analyzer具体详细分析如下：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>115</th>
+<th>微云</th>
+<th>百度云</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> res</td>
+<td>31.8M</td>
+<td>+assert 10.2M</td>
+<td>+assert 17.4M</td>
+</tr>
+<tr>
+<td>lib</td>
+<td>7M</td>
+<td>18.2M</td>
+<td>13.1M</td>
+</tr>
+<tr>
+<td>classes</td>
+<td>7.3M</td>
+<td>6.8M</td>
+<td>13.9M</td>
+</tr>
+<tr>
+<td>resource.arsc</td>
+<td>1.9M</td>
+<td>1.6M</td>
+<td>2.2M</td>
+</tr>
+</tbody>
+</table>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>虽然各个应用的功能集不一致，但是主要都是提供存储服务，这里的对比也是从某个层面进行比较。通过分析对比表可以得知。</p>
+<ol>
+<li>微云体积最少，百度云次之，115最大</li>
+<li>115体积主要最大的地方在res图片资源这块</li>
+<li>115的lib及classes是最小的</li>
+</ol>
+<p><strong>所以从分析的结果上来看，115的体积优化的主要方向要从res图片资源入手。</strong></p>
+<h1 id="瘦身三步曲-删除、压缩、混淆"><a href="#瘦身三步曲-删除、压缩、混淆" class="headerlink" title="瘦身三步曲(删除、压缩、混淆)"></a>瘦身三步曲(删除、压缩、混淆)</h1><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><h3 id="删除无用的代码"><a href="#删除无用的代码" class="headerlink" title="删除无用的代码"></a>删除无用的代码</h3><p>删除无用的代码，这个放在第一位是因为这个是问题的根源。</p>
+<p>随着项目版本的迭代及业务快速的更迭，有时候为了赶时间，废弃的代码及资源都不会及时清理，日积月累的堆积，慢慢APK的体积就会越来越臃肿。</p>
+<p>如果属于这种情况，应该先自己进行人工的整理及清除。这个时候可以先不管资源（后面用工具进行清理），但是类相关的调用及无用的类要及时进行清理。否则后面的图片及资源也会照样被识别为有引用，打包进APK。</p>
+<h3 id="Lint工具检查"><a href="#Lint工具检查" class="headerlink" title="Lint工具检查"></a>Lint工具检查</h3><p>Android Studio给我们提供了强大的检查工具。只需要选中res目录，右键选择Refactor然后再选择Remove Unused Resources。<br>建议先使用Preview，然后再进行删除。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-4b0211c7d9dae8da?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Lint使用"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-15d203966b219747?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Lint Preview"></p>
+<blockquote>
+<p>这里需要注意，特别有使用第三方的SDK，有些代码是在jar包里面，但是资源独立拷贝进工程，这样也会被识别成无引用的资源。但是这类资源一般都有特定的命名格式。</p>
+</blockquote>
+<h3 id="Grdle配置"><a href="#Grdle配置" class="headerlink" title="Grdle配置"></a>Grdle配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">        buildTypes &#123;</div><div class="line">            release &#123;</div><div class="line">                minifyEnabled true //是否开启混淆</div><div class="line">                shrinkResources true //压缩</div><div class="line">                zipAlignEnabled true ////去掉无用的resourse文件</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>启用shrinkResources，gradle在打包的时候会自动进行资源的清理。</p>
+<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><h3 id="PNG压缩优化"><a href="#PNG压缩优化" class="headerlink" title="PNG压缩优化"></a>PNG压缩优化</h3><p>推荐使用<a href="https://tinypng.com/" target="_blank" rel="external">tinypng</a>。</p>
+<p>tinypng通过合并图片中相似的颜色，通过将 24 位的 PNG 图片压缩成小得多的 8 位色值的图片，并且去掉了图片中不必要的 metadata（元数据，从 Photoshop 等工具中导出的图片都会带有此类信息），这种方式几乎能完美支持原图片的透明度。有部分文档指出tinypng同时采用了pngquant、optipng、advpng几种脚本。图片的压缩率能达到50%以上。</p>
+<h3 id="webp使用"><a href="#webp使用" class="headerlink" title="webp使用"></a>webp使用</h3><p>WebP格式，谷歌（google）开发的一种旨在加快图片加载速度的图片格式。无损压缩比PNG文件小45%，即使PNG已经过其他的优化，也能达到28%。缺点，加载比PNG慢。</p>
+<p>Android Studio自带了对WebP的转换支持。选中资源，右键Convert to WebP。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-237f41569728e956?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PNG 转 WebP"></p>
+<p>通过删除及压缩前两步的操作，115的优化情况如下：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>115</th>
+<th>115优化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> res</td>
+<td>31.8M</td>
+<td>26.1MM</td>
+</tr>
+<tr>
+<td>lib</td>
+<td>7M</td>
+<td>7M </td>
+</tr>
+<tr>
+<td>classes</td>
+<td>7.3M</td>
+<td>7.3M</td>
+</tr>
+<tr>
+<td>resource.arsc</td>
+<td>1.9M</td>
+<td>1.8M</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>优化情况分析：优化后为44.46M，约节省5.8M，优化11%</strong></p>
+<h2 id="混淆"><a href="#混淆" class="headerlink" title="混淆"></a>混淆</h2><h3 id="Proguard代码混淆"><a href="#Proguard代码混淆" class="headerlink" title="Proguard代码混淆"></a>Proguard代码混淆</h3><ol>
+<li>删除注释和无用的代码</li>
+<li>将java文件文件名及方法名改成短名 a.java </li>
+</ol>
+<p>支持的方式也很简单，Gradle默认支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">        buildTypes &#123;</div><div class="line">            release &#123;</div><div class="line">                minifyEnabled true //是否开启混淆</div><div class="line">                 proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="资源混淆"><a href="#资源混淆" class="headerlink" title="资源混淆"></a>资源混淆</h3><p><a href="https://github.com/shwenzhang/AndResGuard/blob/master/README.zh-cn.md" target="_blank" rel="external">AndResGuard</a>是一个帮助你缩小APK大小的工具，他的原理类似Java Proguard，但是只针对资源。他会将原本冗长的资源路径变短，例如将res/drawable/wechat变为r/d/a。</p>
+<p>具体的原理可参看<a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=208135658&amp;idx=1&amp;sn=ac9bd6b4927e9e82f9fa14e396183a8f#rd" target="_blank" rel="external">安装包立减1M–微信Android资源混淆打包工具</a></p>
+<p>集成也非常简单，详细参看Github中的使用说明则可。</p>
+<p>通过资源混淆后，115的优化情况如下：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>115</th>
+<th>115优化</th>
+<th>115资源混淆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> res</td>
+<td>31.8M</td>
+<td>26.1MM</td>
+<td>25.4M</td>
+</tr>
+<tr>
+<td>lib</td>
+<td>7M</td>
+<td>7M</td>
+<td>6.7M</td>
+</tr>
+<tr>
+<td>classes</td>
+<td>7.3M</td>
+<td>7.3M</td>
+<td>6.9M</td>
+</tr>
+<tr>
+<td>resource.arsc</td>
+<td>1.9M</td>
+<td>1.8M</td>
+<td>280.3KB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>优化情况分析：优化后为41.32M，相比没做资源混淆，约节省3.14M，体积优化7%</strong></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>经过瘦身三步曲的优化后，最终115应用的一个优化情况如下：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>115</th>
+<th>115最终优化版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> res</td>
+<td>31.8M</td>
+<td>25.4M</td>
+</tr>
+<tr>
+<td>lib</td>
+<td>7M</td>
+<td>6.7M</td>
+</tr>
+<tr>
+<td>classes</td>
+<td>7.3M</td>
+<td>6.9M</td>
+</tr>
+<tr>
+<td>resource.arsc</td>
+<td>1.9M</td>
+<td>280.3KB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>优化情况分析：优化后为41.32M，相比没做优化前，约节省8.94M，体积优化17.7%</strong></p>
+<blockquote>
+<p>115的APK体积优化，现阶段只能说是做了一个初步优化，特别是对于第一步的删除，由于历史的遗留原因。对于一些遗留的代码还待进一步的整理和清除，体积也是还有继续优化的空间。</p>
+</blockquote>
+<h2 id="其他方案"><a href="#其他方案" class="headerlink" title="其他方案"></a>其他方案</h2><p>除了常规的瘦身三步曲，对于APK体积当然还有其他的方案。如：</p>
+<ol>
+<li>资源动态加载（如表情包动态下载）</li>
+<li>插件化（动态加载）</li>
+</ol>
+<p>方案当然还有很多，本文只介绍常规使用的一些方法，有兴趣的伙伴可以继续深入了解。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://tinypng.com/" target="_blank" rel="external">tinypng</a></p>
+<p><a href="https://github.com/shwenzhang/AndResGuard/blob/master/README.zh-cn.md" target="_blank" rel="external">AndResGuard</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=208135658&amp;idx=1&amp;sn=ac9bd6b4927e9e82f9fa14e396183a8f#rd" target="_blank" rel="external">安装包立减1M–微信Android资源混淆打包工具</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Android性能优化/" rel="tag"># Android性能优化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/21/Android热修复技术，你会怎么选？/" rel="next" title="Android热修复技术，你会怎么选？">
+                <i class="fa fa-chevron-left"></i> Android热修复技术，你会怎么选？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/24/回顾2018，展望2019/" rel="prev" title="回顾2018，展望2019">
+                回顾2018，展望2019 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/11/28/APK瘦身三步曲/"
+           data-title="APK瘦身三步曲" data-url="https://junbin1011.github.io/2018/11/28/APK瘦身三步曲/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">1.2.</span> <span class="nav-text">分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#瘦身三步曲-删除、压缩、混淆"><span class="nav-number">2.</span> <span class="nav-text">瘦身三步曲(删除、压缩、混淆)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#删除"><span class="nav-number">2.1.</span> <span class="nav-text">删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#删除无用的代码"><span class="nav-number">2.1.1.</span> <span class="nav-text">删除无用的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lint工具检查"><span class="nav-number">2.1.2.</span> <span class="nav-text">Lint工具检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Grdle配置"><span class="nav-number">2.1.3.</span> <span class="nav-text">Grdle配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩"><span class="nav-number">2.2.</span> <span class="nav-text">压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PNG压缩优化"><span class="nav-number">2.2.1.</span> <span class="nav-text">PNG压缩优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webp使用"><span class="nav-number">2.2.2.</span> <span class="nav-text">webp使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混淆"><span class="nav-number">2.3.</span> <span class="nav-text">混淆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Proguard代码混淆"><span class="nav-number">2.3.1.</span> <span class="nav-text">Proguard代码混淆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源混淆"><span class="nav-number">2.3.2.</span> <span class="nav-text">资源混淆</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#其他方案"><span class="nav-number">3.1.</span> <span class="nav-text">其他方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.2.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,911 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="简介我们在开发的过程中，可能经常会遇到测试的一些反馈，就是APP运行卡顿的问题。我们通常所讲的卡顿问题都是因为渲染掉帧的问题引起视觉上的卡顿感。所以了解渲染机制，我们在项目的开发过程中，可以有意识的少挖坑。同时要打造一款精品的应用，注意渲染优化也是非常重要的一件事情。
+当然目前我们好多同学在开发的工程中，经常会忽略渲染优化这一块，主要的原因可能是
+
+项目没要求，能满足功能则可
+缺少意识，没有做性能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android性能优化-渲染优化">
+<meta property="og:url" content="https://junbin1011.github.io/2017/04/01/“Android性能优化-渲染优化/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="简介我们在开发的过程中，可能经常会遇到测试的一些反馈，就是APP运行卡顿的问题。我们通常所讲的卡顿问题都是因为渲染掉帧的问题引起视觉上的卡顿感。所以了解渲染机制，我们在项目的开发过程中，可以有意识的少挖坑。同时要打造一款精品的应用，注意渲染优化也是非常重要的一件事情。
+当然目前我们好多同学在开发的工程中，经常会忽略渲染优化这一块，主要的原因可能是
+
+项目没要求，能满足功能则可
+缺少意识，没有做性能">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-ef657df135a35dd4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-e23209efde68a709?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-03bcc5a5b347a429?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-8592a54d9b74875e?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-11efe079fc9a8412?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-0fa395db766a1fbc?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-9e4fc92004fcef5e?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-6f9f35cb1191232d?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-9e2007855c88a653?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-7ad0ae5b35a74451?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-c72f08897b8fb597?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-674fcf10291d7813?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android性能优化-渲染优化">
+<meta name="twitter:description" content="简介我们在开发的过程中，可能经常会遇到测试的一些反馈，就是APP运行卡顿的问题。我们通常所讲的卡顿问题都是因为渲染掉帧的问题引起视觉上的卡顿感。所以了解渲染机制，我们在项目的开发过程中，可以有意识的少挖坑。同时要打造一款精品的应用，注意渲染优化也是非常重要的一件事情。
+当然目前我们好多同学在开发的工程中，经常会忽略渲染优化这一块，主要的原因可能是
+
+项目没要求，能满足功能则可
+缺少意识，没有做性能">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-ef657df135a35dd4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/04/01/“Android性能优化-渲染优化/"/>
+
+
+
+
+
+  <title> Android性能优化-渲染优化 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/04/01/“Android性能优化-渲染优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android性能优化-渲染优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-01T19:32:43+08:00">
+                2017-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/01/“Android性能优化-渲染优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/01/“Android性能优化-渲染优化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>我们在开发的过程中，可能经常会遇到测试的一些反馈，就是APP运行卡顿的问题。我们通常所讲的卡顿问题都是因为渲染掉帧的问题引起视觉上的卡顿感。所以了解渲染机制，我们在项目的开发过程中，可以有意识的少挖坑。同时要打造一款精品的应用，注意渲染优化也是非常重要的一件事情。</p>
+<p>当然目前我们好多同学在开发的工程中，经常会忽略渲染优化这一块，主要的原因可能是</p>
+<ul>
+<li>项目没要求，能满足功能则可</li>
+<li>缺少意识，没有做性能优化的意识</li>
+<li>缺少用工具分析，主观感受不强</li>
+<li>需求的苦海，无法脱身(有多少童鞋戳中泪点)</li>
+</ul>
+<p>不管如何，我们都需要对自己有所要求。尽量在开发的过程中注意，少挖坑。对已上线的项目能够进行优化分析，打造精品。<br>接下来我们将介绍渲染的底层机制，并针对性地进行优化分析。</p>
+<h1 id="渲染机制"><a href="#渲染机制" class="headerlink" title="渲染机制"></a>渲染机制</h1><h2 id="视觉感官"><a href="#视觉感官" class="headerlink" title="视觉感官"></a>视觉感官</h2><p>我们都可能听过Android的屏幕刷新频率是60fps 也就是16ms需要完成一帧的刷新。</p>
+<p>首先我们理解一下帧的概念。<br>每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象，因此高的帧率可以得到更流畅、更逼真的动画。</p>
+<p>当物体在快速运动时, 当人眼所看到的影像消失后，人眼仍能继续保留其影像1/24秒左右的图像，这种现象被称为视觉暂留现象。是人眼具有的一种性质。人眼观看物体时，成像于视网膜上，并由视神经输入人脑，感觉到物体的像。但当物体移去时，视神经对物体的印象不会立即消失，而要延续1/24秒左右的时间，人眼的这种性质被称为“眼睛的视觉暂留”。</p>
+<p>所以以前我们看胶卷电影的时候刷新的频率就是24fps。我们看起来就是连续的一个视觉效果。当然这里越高的帧率，我们可以得到更流畅、逼真的画面。</p>
+<h2 id="VSYNC"><a href="#VSYNC" class="headerlink" title="VSYNC"></a>VSYNC</h2><p>Android系统每隔16ms发出VSYNC信号，触发对UI进行渲染， 如果每次渲染都成功，这样就能够达到流畅的画面所需要的60fps，为了能够实现60fps，这意味着程序的大多数操作都必须在16ms内完成。如果超过了16ms那么可能就出现丢帧的情况。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-ef657df135a35dd4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google性能优化示例图"></p>
+<p>VSYNC有两个概念</p>
+<ol>
+<li>Refresh Rate：屏幕在一秒时间内刷新屏幕的次数—-由硬件的参数决定，比如60HZ.</li>
+<li>Frame Rate：GPU在一秒内绘制操作的帧数，比如：60fps。</li>
+</ol>
+<p>通常来说，帧率超过刷新频率只是一种理想的状况，在超过60fps的情况下，GPU所产生的帧数据会因为等待VSYNC的刷新信息而被Hold住，这样能够保持每次刷新都有实际的新的数据可以显示。但是我们遇到更多的情况是帧率小于刷新频率。在这种情况下，某些帧显示的画面内容就会与上一帧的画面相同,造成卡顿的现象。 </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-e23209efde68a709?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google性能优化示例图">    </p>
+<p>简单来说，VSYNC也叫垂直刷新，是一个信号。会触发渲染。这个过程需要我们屏幕的刷新频率（一般60fps）和我们GPU所产生的帧数能够进行同步，那么UI的渲染就能流畅。如果我们自己定义的布局或者自定义控件的渲染时间超过了16ms每帧，那么就可能导致屏幕刷新的时候，我们的GPU还不能产生新的帧，用户看的还是旧的帧。这就造成了我们视觉上的卡顿，影响用户体验。</p>
+<h2 id="渲染管线"><a href="#渲染管线" class="headerlink" title="渲染管线"></a>渲染管线</h2><p>我们定义好了一个xml的布局界面后，是怎样最终呈现在我们的手机屏幕上的呢？</p>
+<p>这里我们借助Google官方的性能优化的一张示例图来说明。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-03bcc5a5b347a429?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google性能优化示例图"></p>
+<p>CPU负责把UI组件计算成Polygons，Texture纹理，然后交给GPU进行栅格化渲染。最终在屏幕进行显示。</p>
+<p>这个地方CPU主要是将我们的布局文件的View Tree进行测量和绘制，最后形成Ploygons（多边形）及Texture(纹理贴图)</p>
+<p>栅格化是绘制那些Button，Shape，Path，String，Bitmap等组件最基础的操作。它把那些组件拆分到不同的像素上进行显示。这是一个很费时的操作，GPU的引入就是为了加快栅格化的操作</p>
+<p>Android在性能优化已经做了很多工作。在CPU将Ploygons和Texture传递到GPU是一个很耗时的过程。所以Android将Bitmaps，Drawables都是一起打包到统一的Texture纹理当中，然后再传递到 GPU里面，这意味着每次你需要使用这些资源的时候，都是直接从纹理里面进行获取渲染的。</p>
+<h4 id="Tip"><a href="#Tip" class="headerlink" title="Tip"></a>Tip</h4><blockquote>
+<p>项目里曾经遇到一个问题，对一个图标染色了。然后其他使用到改图标的地方也同样变成染色后的图标了。这个地方就是因为GPU有缓存的缘故。还有遇到过另外一个坑就是染色后的图标再红米的一个手机上无效，估计这个地方不同的硬件缓存的机制可能还不一样。所以如果项目中有用到图标的染色需要注意。</p>
+</blockquote>
+<h1 id="如何在我们的项目中进行渲染优化？"><a href="#如何在我们的项目中进行渲染优化？" class="headerlink" title="如何在我们的项目中进行渲染优化？"></a>如何在我们的项目中进行渲染优化？</h1><p>知道了我们的渲染的机制，我们知道整一个渲染的的流程，基本都是系统在处理，流程我们没办法进行干预。那么我们就需要针对渲染的原理，进行一些针对性的优化操作，减少我们每一帧的渲染时间，使应用更加流畅。所以平时除了我们都知道的阻塞UI线程导致卡顿，其实对于CPU及内存的不合理使用，也同样会造成我们的卡顿。接下来我们来一一进行分析。</p>
+<h2 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h2><p>程序在任意帧内执行GCs所用的时间越多，消除少于16毫秒的呈像障碍，所必需的时间就会变少，如果有许多GCs或一大串指令一个接一个地操作，帧象时间很可能会超过16毫秒的呈像障碍，这会导致隐形的碰撞或闪躲。内存在断时间的抖动也会造成我们的卡顿现象。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-8592a54d9b74875e?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>所以如果要减少任意帧内启动GC的次数，需要着重优化程序的内存使用量。</p>
+<p>我们在实际的项目中了已通过Monitor进行内存的抖动分析，再通过分析源码来看是否在某一时刻重复创建大量的对象，导致GC的回收。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-11efe079fc9a8412?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Tip-1"><a href="#Tip-1" class="headerlink" title="Tip"></a>Tip</h4><blockquote>
+<ol>
+<li>避免在循环里面重复创建对象</li>
+<li>操作大量的字符，慎用String进行+=，多使用StringBuilder及StringBuffer</li>
+<li>多用池进行进行对象的复用</li>
+</ol>
+</blockquote>
+<h2 id="计算优化"><a href="#计算优化" class="headerlink" title="计算优化"></a>计算优化</h2><p>这是一个很浅显的道理，我们知道渲染的过程需要CPU参与Ploygons与Texture的生成，假如我们将CPU的使用率长时间压榨得很高，自然就会影响我们的渲染，造成UI卡顿。</p>
+<p>那么怎么来分析我们的计算优化呢？</p>
+<p>首先一个很简单，可以看看是否在执行某个操作的时候，过分的压榨了CPU的使用率，我们通过Android Monitor可以看到瞬时的CPU的使用率。<br>观察到CPU使用率的异常后，我们可以通过Traceview工具来查找并确定哪些是阻碍应用程序性能问题的代码。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-0fa395db766a1fbc?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>同样开DDMS视图选择我们要分析的应用，这里箭头所指向看上去像是三面箭头，上面有红色的圆点，如果按这些按钮，会出现一些提示，说将开始进行方法分析。这是TraceView的启动方法，我们点击它。将出现一个弹出窗口，提示有两种方法来分析你的应用程序。你可以记录每个方法的输入和输出，他们对资源的要求很高，或者，你也利用示例进行一些分析。其含义是，默认情况下分析程序，将会每1000毫秒侦测一次你的应用程序，以发现和记录实际上在运行的功能，现在，让我们来使用这些默认设置。我点击一下OK，既然分析程序已经在继续，我们就与你的应用程序进行交互，看能否记录一些动作。</p>
+<p>我们来看跟踪视图，跟踪视图有两个主要组成部分。上方窗格的名称是timeline面板，下方窗格内有很多的信息，称为profile面板。这个时间线能够很好的显示代码的执行情况，这里显示的每一行，实际上对应于一个线程。显示的每一个颜色，对应于一个正在运行的特定方法。例如，我们可以看到，主线程的所有活动，我们可以看到方法启动和停止时间点，更有用的是放大这里，找到特定的方法，了解他们是如何执行的。它们会以这种U型模式显示出来。这里的条形表示，方法的启动时间。右侧的条形表示，方法的停止时间。条形的宽度表示方法执行所用的时间。现在，我们选择一个特定的方法，我们跳转到跟踪视图窗口的底部，这里，我们看到一些分析数据显示出来。我们可以看到哪些方法调用了我们选定的方法。</p>
+<p>底部面板的一些字段含义如下：</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>该进程运行过程中所调用的函数名</td>
+</tr>
+<tr>
+<td>Incl Cpu Time</td>
+<td>函数占用的CPU时间，包含内部调用其它函数的CPU时间</td>
+</tr>
+<tr>
+<td>Excl Cpu Time</td>
+<td>函数占用的CPU时间，但不包含内部调用其它函数所占用的CPU时间</td>
+</tr>
+<tr>
+<td>Incl Real Time</td>
+<td>函数运行的真实时间（以毫秒为单位），内含调用其它函数所占用的真实时间</td>
+</tr>
+<tr>
+<td>Excl Real Time</td>
+<td>函数运行的真实时间（以毫秒为单位），不包含调用其它函数所占用的真实时间</td>
+</tr>
+<tr>
+<td>Calls+Recur Calls/Total</td>
+<td>函数被调用次数以及递归调用占总调用次数的百分比</td>
+</tr>
+<tr>
+<td>Cpu Time/Call</td>
+<td>函数调用CPU时间与调用次数的比（该函数平均执行时间）</td>
+</tr>
+<tr>
+<td>Real Time/Call</td>
+<td>同CPU Time/Call类似，只不过统计单位换成了真实时间</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Tip-2"><a href="#Tip-2" class="headerlink" title="Tip"></a>Tip</h4><blockquote>
+<ol>
+<li>优化一些计算的算法,例如递归等</li>
+<li>使用线程池技术，避免过度压榨CPU</li>
+<li>使用批处理及缓存，优化CPU计算</li>
+</ol>
+</blockquote>
+<h2 id="CPU优化"><a href="#CPU优化" class="headerlink" title="CPU优化"></a>CPU优化</h2><p>我们知道CPU在渲染的过程，主要需要处理Ploygons和Texture。在CPU方面，最常见的性能问题是不必要的布局和失效，这些内容必须在视图层次结构中进行测量、清除并重新创建，引发这种问题通常有两个原因：一是重建显示列表的次数太多，二是花费太多时间作废视图层次并进行不必要的重绘，这两个原因在更新显示列表或者其他缓存GPU资源时导致CPU工作过度。<br>引用Google官方示例图。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-9e4fc92004fcef5e?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google性能优化示例图"></p>
+<p>所以我们需要进行优化的点有：</p>
+<ol>
+<li>减少不必要布局元素</li>
+<li>减少过多的布局嵌套</li>
+</ol>
+<p>那么如何来知道，我们的布局是否因为CPU过度工作导致我们的渲染卡顿呢？<br>我们可以通过DDMS里面的Hierarchy Viewer 来进行我们的布局分析。</p>
+<p>1）通过AS的Tools-Android-Android Device Monitor调起</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-6f9f35cb1191232d?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这个时候APP运行到我们需要检测的界面，这个点击蓝色的按钮，就可以显示当前界面的View Tree</p>
+<p>2)我们可以通过图2箭头指向来观察我们的View布局、绘制、渲染的时间<br><img src="http://upload-images.jianshu.io/upload_images/5125122-9e2007855c88a653?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ul>
+<li>箭头1为我们当前View节点的界面，我们可以观察当前节点的渲染时间</li>
+<li>箭头2为触发检测渲染性能的按钮</li>
+<li>箭头3为渲染性能的显示，有绿、黄、红三种颜色</li>
+</ul>
+<p>三个圆点分别代表：测量、布局、绘制三个阶段的性能表现。</p>
+<ol>
+<li>绿色：渲染的管道阶段，这个视图的渲染速度快于至少一半的其他的视图。</li>
+<li>黄色：渲染速度比较慢的50%。</li>
+<li>红色：渲染速度非常慢。</li>
+</ol>
+<p>所以我们可以根据分析查看自己的布局，层次是否很深以及渲染比较耗时，然后想办法能否减少层级以及优化每一个View的渲染时。</p>
+<h4 id="Tip-3"><a href="#Tip-3" class="headerlink" title="Tip"></a>Tip</h4><blockquote>
+<ol>
+<li>避免过来无用的布局嵌套，特别是ViewGroup层级尽量最小化</li>
+<li>使用<merge>标签，减少布局嵌套</merge></li>
+<li>使用懒加载布局 ViewStub，尽量减少使用View的GONE方式</li>
+<li>注意一些自定义的View的性能，可通过工具的绿黄红分析</li>
+</ol>
+</blockquote>
+<h2 id="GPU优化"><a href="#GPU优化" class="headerlink" title="GPU优化"></a>GPU优化</h2><p>通过上面的流程我们知道，GPU主要干的事情就是栅格化，所以我们需要尽量尽量避免过度绘制（overdraw）。</p>
+<p>我们在开发的过程中,经常会遇到牛逼的设计，需要完善绚丽的UI。高性能和完美的设计，往往会碰到一种性能问题，即过度绘制。过度绘制是一个术语，指的是屏幕上的某个像素点在同一帧的时间内被绘制了多次。假如我们有一堆重叠的UI卡片，最接近用户的卡片在最上面，其余卡片都藏在下面，也就是说我们花大力气绘制的那些下面的卡片基本都是不可见的。</p>
+<p>我们借助Google官方的一个图来进行说明</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-7ad0ae5b35a74451?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google性能优化示例图"></p>
+<p>Android在屏幕上使用不同颜色，标记过度绘制的区域，如果某个像素点只渲染了一次，我们看到的是它原来的颜色，随着过度绘制的增多，标记颜色也会逐渐加深，例如1倍过度绘制会被标记为蓝色，2倍、3倍、4倍过度绘制遵循同样的模式。所以当我们调试应用程序的用户界面时，目标就是尽可能的减少过度绘制，将红色区块转变成蓝色区块。</p>
+<p>1）通过开发者选项打开过度绘制检测</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-c72f08897b8fb597?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>2)开启后就可以查看应用的绘制情况</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-674fcf10291d7813?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这里拿了百度网盘来做例子，还是优化得不错。</p>
+<p>首先我们要从视图中清除那些，不必要的背景和图片，他们不会在最终渲染图像中显示，这些都会影响性能。其次，对视图中重叠的屏幕区域进行定义，从而降低CPU和GPU的消耗。</p>
+<h4 id="Tip-4"><a href="#Tip-4" class="headerlink" title="Tip"></a>Tip</h4><blockquote>
+<ol>
+<li>由于我们布局设置了背景，同时用到的MaterialDesign的主题会默认给一个背景。可以在Activity设置getWindow().setBackgroundDrawable(null);</li>
+<li>尽量保持你的布局只有一层拥有Background，避免给过多的ViewGroup设置背景</li>
+<li>如果是自定义控件可以通过裁剪来处理（Canvas.clipRect）。</li>
+</ol>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>尽量了解渲染的机制，在开始做项目的时候就少挖坑</li>
+<li>尽量动手给自己现在的项目进行优化，这样可以更深刻的理解</li>
+<li>渲染优化是一个苦逼的体力活，掌握了方法以后，我们需要花时间去一个个调优</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android性能优化/" rel="tag"># Android性能优化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/22/Android性能优化-内存泄漏（下）/" rel="next" title="Android性能优化-内存泄漏（下）">
+                <i class="fa fa-chevron-left"></i> Android性能优化-内存泄漏（下）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/10/Android之Activity启动流程/" rel="prev" title="Android之Activity启动流程">
+                Android之Activity启动流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/01/“Android性能优化-渲染优化/"
+           data-title="Android性能优化-渲染优化" data-url="https://junbin1011.github.io/2017/04/01/“Android性能优化-渲染优化/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渲染机制"><span class="nav-number">2.</span> <span class="nav-text">渲染机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#视觉感官"><span class="nav-number">2.1.</span> <span class="nav-text">视觉感官</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VSYNC"><span class="nav-number">2.2.</span> <span class="nav-text">VSYNC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染管线"><span class="nav-number">2.3.</span> <span class="nav-text">渲染管线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在我们的项目中进行渲染优化？"><span class="nav-number">3.</span> <span class="nav-text">如何在我们的项目中进行渲染优化？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存优化"><span class="nav-number">3.1.</span> <span class="nav-text">内存优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip-1"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算优化"><span class="nav-number">3.2.</span> <span class="nav-text">计算优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip-2"><span class="nav-number">3.2.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU优化"><span class="nav-number">3.3.</span> <span class="nav-text">CPU优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip-3"><span class="nav-number">3.3.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU优化"><span class="nav-number">3.4.</span> <span class="nav-text">GPU优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip-4"><span class="nav-number">3.4.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

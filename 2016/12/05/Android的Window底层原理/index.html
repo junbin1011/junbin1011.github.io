@@ -1,0 +1,795 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.概述Window是一个抽象类，他的实现是PhoneWindow。Window通过WindowManager创建，是访问Window的入口。Window的具体实现位于WindowManagerService中，WIndowManager与WindowManagerService的交互是一个IPC的过程。
+WindowManager中的Layoutparam中的Type表示Window的类型，Wi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android的Window底层原理">
+<meta property="og:url" content="https://junbin1011.github.io/2016/12/05/Android的Window底层原理/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.概述Window是一个抽象类，他的实现是PhoneWindow。Window通过WindowManager创建，是访问Window的入口。Window的具体实现位于WindowManagerService中，WIndowManager与WindowManagerService的交互是一个IPC的过程。
+WindowManager中的Layoutparam中的Type表示Window的类型，Wi">
+<meta property="og:image" content="http://img.blog.csdn.net/20161205120243264?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20161205120302122?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20161205120419701?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.772Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android的Window底层原理">
+<meta name="twitter:description" content="1.概述Window是一个抽象类，他的实现是PhoneWindow。Window通过WindowManager创建，是访问Window的入口。Window的具体实现位于WindowManagerService中，WIndowManager与WindowManagerService的交互是一个IPC的过程。
+WindowManager中的Layoutparam中的Type表示Window的类型，Wi">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20161205120243264?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2016/12/05/Android的Window底层原理/"/>
+
+
+
+
+
+  <title> Android的Window底层原理 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2016/12/05/Android的Window底层原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android的Window底层原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-05T12:00:11+08:00">
+                2016-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/05/Android的Window底层原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/05/Android的Window底层原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h1><p>Window是一个抽象类，他的实现是PhoneWindow。Window通过WindowManager创建，是访问Window的入口。Window的具体实现位于WindowManagerService中，WIndowManager与WindowManagerService的交互是一个IPC的过程。</p>
+<p>WindowManager中的Layoutparam中的Type表示Window的类型，Window有三种类型，分别是应用Window、子Window和系统Window。应用类Window对应着一个Activity。子Window不能单独存在，他需要附属在特定的父Window，例如Dialog。系统Window是需要在声明权限在能创建Window，比如Toast。</p>
+<p>Window的层级范围是1-99，子Window的层级范围是1000-1999，系统Window的层级范围是2000-2999。对应着LayoutParams的type参数。层级大的会覆盖在层级小的Window上面。</p>
+<p>Layoutparams</p>
+<p>  public static final int FIRST_SUB_WINDOW = 1000;</p>
+<p>  public static final int FIRST_SYSTEM_WINDOW = 2000;</p>
+<h1 id="2-Window的内部实现机制"><a href="#2-Window的内部实现机制" class="headerlink" title="2.Window的内部实现机制"></a>2.Window的内部实现机制</h1><h2 id="2-1Window、PhoneWindow、DecorView"><a href="#2-1Window、PhoneWindow、DecorView" class="headerlink" title="2.1Window、PhoneWindow、DecorView"></a>2.1Window、PhoneWindow、DecorView</h2><p><img src="http://img.blog.csdn.net/20161205120243264?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="http://img.blog.csdn.net/20161205120302122?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>window是一个抽象类，提供一组通用的绘制窗口API，可抽象理解为一个载体，各种View在这个载体上显示</p>
+<p>PhoneWindow是window类的实现，类内部包含一个DecorView</p>
+<p>DecorView是一个FragmeLayout的子类，该DecorView对象时所有应用窗口的根View<br>Activity的setContentView调用到PhoneView的setConteView，如果没有DecorView，那么就创建他，将View添加到DecorView的mContentParent中，回调Activity的onContentChanged方法通知Activity视图已经发生改变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">@Override  </div><div class="line">  public void setContentView(int layoutResID) &#123;  </div><div class="line">  // Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window  </div><div class="line">  // decor, when theme attributes and the like are crystalized. Do not check the feature  </div><div class="line">  // before this happens.  </div><div class="line">  if (mContentParent == null) &#123;  </div><div class="line">  installDecor();//创建DecorView  </div><div class="line">  &#125; else if (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;//所以Activity可以多次的setContetView-  </div><div class="line">  mContentParent.removeAllViews();  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  if (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;  </div><div class="line">  final Scene newScene = Scene.getSceneForLayout(mContentParent, layoutResID,  </div><div class="line">  getContext());  </div><div class="line">  transitionTo(newScene);  </div><div class="line">  &#125; else &#123;  </div><div class="line">  mLayoutInflater.inflate(layoutResID, mContentParent);  </div><div class="line">  &#125;  </div><div class="line">  mContentParent.requestApplyInsets();  </div><div class="line">  final Callback cb = getCallback();  </div><div class="line">  if (cb != null &amp;&amp; !isDestroyed()) &#123;  </div><div class="line">  cb.onContentChanged();  </div><div class="line">  &#125;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div></pre></td><td class="code"><pre><div class="line">private void installDecor() &#123;  </div><div class="line">if (mDecor == null) &#123;  </div><div class="line">mDecor = generateDecor();  </div><div class="line">mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);  </div><div class="line">mDecor.setIsRootNamespace(true);  </div><div class="line">if (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != 0) &#123;  </div><div class="line">mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">if (mContentParent == null) &#123;  </div><div class="line">mContentParent = generateLayout(mDecor);  </div><div class="line">  </div><div class="line">// Set up decor part of UI to ignore fitsSystemWindows if appropriate.  </div><div class="line">mDecor.makeOptionalFitsSystemWindows();  </div><div class="line">  </div><div class="line">final DecorContentParent decorContentParent = (DecorContentParent) mDecor.findViewById(  </div><div class="line">R.id.decor_content_parent);  </div><div class="line">  </div><div class="line">if (decorContentParent != null) &#123;  </div><div class="line">mDecorContentParent = decorContentParent;  </div><div class="line">mDecorContentParent.setWindowCallback(getCallback());  </div><div class="line">if (mDecorContentParent.getTitle() == null) &#123;  </div><div class="line">mDecorContentParent.setWindowTitle(mTitle);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">final int localFeatures = getLocalFeatures();  </div><div class="line">for (int i = 0; i &lt; FEATURE_MAX; i++) &#123;  </div><div class="line">if ((localFeatures &amp; (1 &lt;&lt; i)) != 0) &#123;  </div><div class="line">mDecorContentParent.initFeature(i);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">mDecorContentParent.setUiOptions(mUiOptions);  </div><div class="line">  </div><div class="line">if ((mResourcesSetFlags &amp; FLAG_RESOURCE_SET_ICON) != 0 ||  </div><div class="line">(mIconRes != 0 &amp;&amp; !mDecorContentParent.hasIcon())) &#123;  </div><div class="line">mDecorContentParent.setIcon(mIconRes);  </div><div class="line">&#125; else if ((mResourcesSetFlags &amp; FLAG_RESOURCE_SET_ICON) == 0 &amp;&amp;  </div><div class="line">mIconRes == 0 &amp;&amp; !mDecorContentParent.hasIcon()) &#123;  </div><div class="line">mDecorContentParent.setIcon(  </div><div class="line">getContext().getPackageManager().getDefaultActivityIcon());  </div><div class="line">mResourcesSetFlags |= FLAG_RESOURCE_SET_ICON_FALLBACK;  </div><div class="line">&#125;  </div><div class="line">if ((mResourcesSetFlags &amp; FLAG_RESOURCE_SET_LOGO) != 0 ||  </div><div class="line">(mLogoRes != 0 &amp;&amp; !mDecorContentParent.hasLogo())) &#123;  </div><div class="line">mDecorContentParent.setLogo(mLogoRes);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">// Invalidate if the panel menu hasn&apos;t been created before this.  </div><div class="line">// Panel menu invalidation is deferred avoiding application onCreateOptionsMenu  </div><div class="line">// being called in the middle of onCreate or similar.  </div><div class="line">// A pending invalidation will typically be resolved before the posted message  </div><div class="line">// would run normally in order to satisfy instance state restoration.  </div><div class="line">PanelFeatureState st = getPanelState(FEATURE_OPTIONS_PANEL, false);  </div><div class="line">if (!isDestroyed() &amp;&amp; (st == null || st.menu == null) &amp;&amp; !mIsStartingWindow) &#123;  </div><div class="line">invalidatePanelMenu(FEATURE_ACTION_BAR);  </div><div class="line">&#125;  </div><div class="line">&#125; else &#123;  </div><div class="line">mTitleView = (TextView)findViewById(R.id.title);  </div><div class="line">if (mTitleView != null) &#123;  </div><div class="line">mTitleView.setLayoutDirection(mDecor.getLayoutDirection());  </div><div class="line">if ((getLocalFeatures() &amp; (1 &lt;&lt; FEATURE_NO_TITLE)) != 0) &#123;  </div><div class="line">View titleContainer = findViewById(  </div><div class="line">R.id.title_container);  </div><div class="line">if (titleContainer != null) &#123;  </div><div class="line">titleContainer.setVisibility(View.GONE);  </div><div class="line">&#125; else &#123;  </div><div class="line">mTitleView.setVisibility(View.GONE);  </div><div class="line">&#125;  </div><div class="line">if (mContentParent instanceof FrameLayout) &#123;  </div><div class="line">((FrameLayout)mContentParent).setForeground(null);  </div><div class="line">&#125;  </div><div class="line">&#125; else &#123;  </div><div class="line">mTitleView.setText(mTitle);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">if (mDecor.getBackground() == null &amp;&amp; mBackgroundFallbackResource != 0) &#123;  </div><div class="line">mDecor.setBackgroundFallback(mBackgroundFallbackResource);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">// Only inflate or create a new TransitionManager if the caller hasn&apos;t  </div><div class="line">// already set a custom one.  </div><div class="line">if (hasFeature(FEATURE_ACTIVITY_TRANSITIONS)) &#123;  </div><div class="line">if (mTransitionManager == null) &#123;  </div><div class="line">final int transitionRes = getWindowStyle().getResourceId(  </div><div class="line">R.styleable.Window_windowContentTransitionManager,  </div><div class="line">0);  </div><div class="line">if (transitionRes != 0) &#123;  </div><div class="line">final TransitionInflater inflater = TransitionInflater.from(getContext());  </div><div class="line">mTransitionManager = inflater.inflateTransitionManager(transitionRes,  </div><div class="line">mContentParent);  </div><div class="line">&#125; else &#123;  </div><div class="line">mTransitionManager = new TransitionManager();  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">mEnterTransition = getTransition(mEnterTransition, null,  </div><div class="line">R.styleable.Window_windowEnterTransition);  </div><div class="line">mReturnTransition = getTransition(mReturnTransition, USE_DEFAULT_TRANSITION,  </div><div class="line">R.styleable.Window_windowReturnTransition);  </div><div class="line">mExitTransition = getTransition(mExitTransition, null,  </div><div class="line">R.styleable.Window_windowExitTransition);  </div><div class="line">mReenterTransition = getTransition(mReenterTransition, USE_DEFAULT_TRANSITION,  </div><div class="line">R.styleable.Window_windowReenterTransition);  </div><div class="line">mSharedElementEnterTransition = getTransition(mSharedElementEnterTransition, null,  </div><div class="line">R.styleable.Window_windowSharedElementEnterTransition);  </div><div class="line">mSharedElementReturnTransition = getTransition(mSharedElementReturnTransition,  </div><div class="line">USE_DEFAULT_TRANSITION,  </div><div class="line">R.styleable.Window_windowSharedElementReturnTransition);  </div><div class="line">mSharedElementExitTransition = getTransition(mSharedElementExitTransition, null,  </div><div class="line">R.styleable.Window_windowSharedElementExitTransition);  </div><div class="line">mSharedElementReenterTransition = getTransition(mSharedElementReenterTransition,  </div><div class="line">USE_DEFAULT_TRANSITION,  </div><div class="line">R.styleable.Window_windowSharedElementReenterTransition);  </div><div class="line">if (mAllowEnterTransitionOverlap == null) &#123;  </div><div class="line">mAllowEnterTransitionOverlap = getWindowStyle().getBoolean(  </div><div class="line">R.styleable.Window_windowAllowEnterTransitionOverlap, true);  </div><div class="line">&#125;  </div><div class="line">if (mAllowReturnTransitionOverlap == null) &#123;  </div><div class="line">mAllowReturnTransitionOverlap = getWindowStyle().getBoolean(  </div><div class="line">R.styleable.Window_windowAllowReturnTransitionOverlap, true);  </div><div class="line">&#125;  </div><div class="line">if (mBackgroundFadeDurationMillis &lt; 0) &#123;  </div><div class="line">mBackgroundFadeDurationMillis = getWindowStyle().getInteger(  </div><div class="line">R.styleable.Window_windowTransitionBackgroundFadeDuration,  </div><div class="line">DEFAULT_BACKGROUND_FADE_DURATION_MS);  </div><div class="line">&#125;  </div><div class="line">if (mSharedElementsUseOverlay == null) &#123;  </div><div class="line">mSharedElementsUseOverlay = getWindowStyle().getBoolean(  </div><div class="line">R.styleable.Window_windowSharedElementsUseOverlay, true);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-2WindowManager、WindowManagerGlobal、ViewRootImpl、WindowManagerService"><a href="#2-2WindowManager、WindowManagerGlobal、ViewRootImpl、WindowManagerService" class="headerlink" title="2.2WindowManager、WindowManagerGlobal、ViewRootImpl、WindowManagerService"></a>2.2WindowManager、WindowManagerGlobal、ViewRootImpl、WindowManagerService</h2><p><img src="http://img.blog.csdn.net/20161205120419701?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<ol>
+<li>WindowManagerImpl是客户端WindowManager管理接口的实现，WindowManagerImpl内部维护一个单例的WindowManagerGlobal对象，WindowManagerImpl通过该对象转发客户端的窗口管理请求。客户端在创建窗口时首先调用getWindowManager获得本地窗口管理对象，并调用其addView、removeView、UpdateViewLayout为窗口进行布局控制</li>
+<li>ViewManagerImp是Viewmanager的实现，该类并没有直接实现Window的操作，而是由WindowmanagerGlobal进行操作。</li>
+<li>WindowManagerGlobal对象内部维护一个ViewRootImpl实例数组和一个View视图对象数组，WindowmanagerGlobal的addView函数首先查看要添加的视图是否已经存在，若不存在则实例化一个ViewRootImpl对象，并把view和ViewRootImpl对象及布局参数保存到本地数组中，接着调用ViewRootImpl对象的setView函数；removeView通过调用ViewRootImpl的die方法进行，最终调用dispatchDetachedFromWindow进行移除;updateViewLayout首先更新View的LayoutParams并替换掉老的LayoutParams，接着更新ViewRootImpl的Layoutparams,通过调用scheduleTraversals对View重新布局</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private final ArrayList&lt;View&gt; mViews = new ArrayList&lt;View&gt;();  </div><div class="line">  private final ArrayList&lt;ViewRootImpl&gt; mRoots = new ArrayList&lt;ViewRootImpl&gt;();  </div><div class="line">  private final ArrayList&lt;WindowManager.LayoutParams&gt; mParams =  </div><div class="line">  new ArrayList&lt;WindowManager.LayoutParams&gt;();  </div><div class="line">  private final ArraySet&lt;View&gt; mDyingViews = new ArraySet&lt;View&gt;();</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line">public void addView(View view, ViewGroup.LayoutParams params,  </div><div class="line">Display display, Window parentWindow) &#123;  </div><div class="line">if (view == null) &#123;  </div><div class="line">throw new IllegalArgumentException(&quot;view must not be null&quot;);  </div><div class="line">&#125;  </div><div class="line">if (display == null) &#123;  </div><div class="line">throw new IllegalArgumentException(&quot;display must not be null&quot;);  </div><div class="line">&#125;  </div><div class="line">if (!(params instanceof WindowManager.LayoutParams)) &#123;  </div><div class="line">throw new IllegalArgumentException(&quot;Params must be WindowManager.LayoutParams&quot;);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">final WindowManager.LayoutParams wparams = (WindowManager.LayoutParams) params;  </div><div class="line">if (parentWindow != null) &#123;  </div><div class="line">parentWindow.adjustLayoutParamsForSubWindow(wparams);  </div><div class="line">&#125; else &#123;  </div><div class="line">// If there&apos;s no parent, then hardware acceleration for this view is  </div><div class="line">// set from the application&apos;s hardware acceleration setting.  </div><div class="line">final Context context = view.getContext();  </div><div class="line">if (context != null  </div><div class="line">&amp;&amp; (context.getApplicationInfo().flags  </div><div class="line">&amp; ApplicationInfo.FLAG_HARDWARE_ACCELERATED) != 0) &#123;  </div><div class="line">wparams.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">ViewRootImpl root;  </div><div class="line">View panelParentView = null;  </div><div class="line">  </div><div class="line">synchronized (mLock) &#123;  </div><div class="line">// Start watching for system property changes.  </div><div class="line">if (mSystemPropertyUpdater == null) &#123;  </div><div class="line">mSystemPropertyUpdater = new Runnable() &#123;  </div><div class="line">@Override public void run() &#123;  </div><div class="line">synchronized (mLock) &#123;  </div><div class="line">for (int i = mRoots.size() - 1; i &gt;= 0; --i) &#123;  </div><div class="line">mRoots.get(i).loadSystemProperties();  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">&#125;;  </div><div class="line">SystemProperties.addChangeCallback(mSystemPropertyUpdater);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">int index = findViewLocked(view, false);  </div><div class="line">if (index &gt;= 0) &#123;  </div><div class="line">if (mDyingViews.contains(view)) &#123;  </div><div class="line">// Don&apos;t wait for MSG_DIE to make it&apos;s way through root&apos;s queue.  </div><div class="line">mRoots.get(index).doDie();  </div><div class="line">&#125; else &#123;  </div><div class="line">throw new IllegalStateException(&quot;View &quot; + view  </div><div class="line">+ &quot; has already been added to the window manager.&quot;);  </div><div class="line">&#125;  </div><div class="line">// The previous removeView() had not completed executing. Now it has.  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">// If this is a panel window, then find the window it is being  </div><div class="line">// attached to for future reference.  </div><div class="line">if (wparams.type &gt;= WindowManager.LayoutParams.FIRST_SUB_WINDOW &amp;&amp;  </div><div class="line">wparams.type &lt;= WindowManager.LayoutParams.LAST_SUB_WINDOW) &#123;  </div><div class="line">final int count = mViews.size();  </div><div class="line">for (int i = 0; i &lt; count; i++) &#123;  </div><div class="line">if (mRoots.get(i).mWindow.asBinder() == wparams.token) &#123;  </div><div class="line">panelParentView = mViews.get(i);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">root = new ViewRootImpl(view.getContext(), display);  </div><div class="line">  </div><div class="line">view.setLayoutParams(wparams);  </div><div class="line">  </div><div class="line">mViews.add(view);  </div><div class="line">mRoots.add(root);  </div><div class="line">mParams.add(wparams);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">// do this last because it fires off messages to start doing things  </div><div class="line">try &#123;  </div><div class="line">root.setView(view, wparams, panelParentView);  </div><div class="line">&#125; catch (RuntimeException e) &#123;  </div><div class="line">// BadTokenException or InvalidDisplayException, clean up.  </div><div class="line">synchronized (mLock) &#123;  </div><div class="line">final int index = findViewLocked(view, false);  </div><div class="line">if (index &gt;= 0) &#123;  </div><div class="line">removeViewLocked(index, true);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">throw e;  </div><div class="line">&#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">public void updateViewLayout(View view, ViewGroup.LayoutParams params) &#123;  </div><div class="line">if (view == null) &#123;  </div><div class="line">throw new IllegalArgumentException(&quot;view must not be null&quot;);  </div><div class="line">&#125;  </div><div class="line">if (!(params instanceof WindowManager.LayoutParams)) &#123;  </div><div class="line">throw new IllegalArgumentException(&quot;Params must be WindowManager.LayoutParams&quot;);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">final WindowManager.LayoutParams wparams = (WindowManager.LayoutParams)params;  </div><div class="line">  </div><div class="line">view.setLayoutParams(wparams);  </div><div class="line">  </div><div class="line">synchronized (mLock) &#123;  </div><div class="line">int index = findViewLocked(view, true);  </div><div class="line">ViewRootImpl root = mRoots.get(index);  </div><div class="line">mParams.remove(index);  </div><div class="line">mParams.add(index, wparams);  </div><div class="line">root.setLayoutParams(wparams, false);  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">[java] view plain copy</div><div class="line">public void removeView(View view, boolean immediate) &#123;  </div><div class="line">  if (view == null) &#123;  </div><div class="line">  throw new IllegalArgumentException(&quot;view must not be null&quot;);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  synchronized (mLock) &#123;  </div><div class="line">  int index = findViewLocked(view, true);  </div><div class="line">  View curView = mRoots.get(index).getView();  </div><div class="line">  removeViewLocked(index, immediate);  </div><div class="line">  if (curView == view) &#123;  </div><div class="line">  return;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  throw new IllegalStateException(&quot;Calling with view &quot; + view  </div><div class="line">  + &quot; but the ViewAncestor is attached to &quot; + curView);  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  private void removeViewLocked(int index, boolean immediate) &#123;  </div><div class="line">  ViewRootImpl root = mRoots.get(index);  </div><div class="line">  View view = root.getView();  </div><div class="line">  </div><div class="line">  if (view != null) &#123;  </div><div class="line">  InputMethodManager imm = InputMethodManager.getInstance();  </div><div class="line">  if (imm != null) &#123;  </div><div class="line">  imm.windowDismissed(mViews.get(index).getWindowToken());  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  boolean deferred = root.die(immediate);  </div><div class="line">  if (view != null) &#123;  </div><div class="line">  view.assignParent(null);  </div><div class="line">  if (deferred) &#123;  </div><div class="line">  mDyingViews.add(view);  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>ViewRootImpl是视图处理类，是客户端视图的处理类，客户端的视图通过该类与窗口管理服务交互，因此ViewRootImpl是一个中介类。ViewRootImpl内部包含一个从IWindow.Stub派生的内部类（ViewRootImpl.W），窗口管理服务通过该对象可以与客户端反向通讯。<br>setView内部通过requestLayout来完成异步刷新请求，scheduleTraversals实际是View绘制的入口，通过调用performTraversals对View进行measure、layout、draw，最后通过pokeDrawLockIfNeeded进行IPC。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div></pre></td><td class="code"><pre><div class="line"> public void setView(View view, WindowManager.LayoutParams attrs, View panelParentView) &#123;  </div><div class="line"> synchronized (this) &#123;  </div><div class="line"> if (mView == null) &#123;  </div><div class="line"> mView = view;  </div><div class="line">  </div><div class="line"> mAttachInfo.mDisplayState = mDisplay.getState();  </div><div class="line"> mDisplayManager.registerDisplayListener(mDisplayListener, mHandler);  </div><div class="line">  </div><div class="line"> mViewLayoutDirectionInitial = mView.getRawLayoutDirection();  </div><div class="line"> mFallbackEventHandler.setView(view);  </div><div class="line"> mWindowAttributes.copyFrom(attrs);  </div><div class="line"> if (mWindowAttributes.packageName == null) &#123;  </div><div class="line"> mWindowAttributes.packageName = mBasePackageName;  </div><div class="line"> &#125;  </div><div class="line"> attrs = mWindowAttributes;  </div><div class="line"> // Keep track of the actual window flags supplied by the client.  </div><div class="line"> mClientWindowLayoutFlags = attrs.flags;  </div><div class="line">  </div><div class="line"> setAccessibilityFocus(null, null);  </div><div class="line">  </div><div class="line"> if (view instanceof RootViewSurfaceTaker) &#123;  </div><div class="line"> mSurfaceHolderCallback =  </div><div class="line"> ((RootViewSurfaceTaker)view).willYouTakeTheSurface();  </div><div class="line"> if (mSurfaceHolderCallback != null) &#123;  </div><div class="line"> mSurfaceHolder = new TakenSurfaceHolder();  </div><div class="line"> mSurfaceHolder.setFormat(PixelFormat.UNKNOWN);  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> // Compute surface insets required to draw at specified Z value.  </div><div class="line"> // TODO: Use real shadow insets for a constant max Z.  </div><div class="line"> if (!attrs.hasManualSurfaceInsets) &#123;  </div><div class="line"> final int surfaceInset = (int) Math.ceil(view.getZ() * 2);  </div><div class="line"> attrs.surfaceInsets.set(surfaceInset, surfaceInset, surfaceInset, surfaceInset);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> CompatibilityInfo compatibilityInfo = mDisplayAdjustments.getCompatibilityInfo();  </div><div class="line"> mTranslator = compatibilityInfo.getTranslator();  </div><div class="line">  </div><div class="line"> // If the application owns the surface, don&apos;t enable hardware acceleration  </div><div class="line"> if (mSurfaceHolder == null) &#123;  </div><div class="line"> enableHardwareAcceleration(attrs);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> boolean restore = false;  </div><div class="line"> if (mTranslator != null) &#123;  </div><div class="line"> mSurface.setCompatibilityTranslator(mTranslator);  </div><div class="line"> restore = true;  </div><div class="line"> attrs.backup();  </div><div class="line"> mTranslator.translateWindowLayout(attrs);  </div><div class="line"> &#125;  </div><div class="line"> if (DEBUG_LAYOUT) Log.d(TAG, &quot;WindowLayout in setView:&quot; + attrs);  </div><div class="line">  </div><div class="line"> if (!compatibilityInfo.supportsScreen()) &#123;  </div><div class="line"> attrs.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_COMPATIBLE_WINDOW;  </div><div class="line"> mLastInCompatMode = true;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> mSoftInputMode = attrs.softInputMode;  </div><div class="line"> mWindowAttributesChanged = true;  </div><div class="line"> mWindowAttributesChangesFlag = WindowManager.LayoutParams.EVERYTHING_CHANGED;  </div><div class="line"> mAttachInfo.mRootView = view;  </div><div class="line"> mAttachInfo.mScalingRequired = mTranslator != null;  </div><div class="line"> mAttachInfo.mApplicationScale =  </div><div class="line"> mTranslator == null ? 1.0f : mTranslator.applicationScale;  </div><div class="line"> if (panelParentView != null) &#123;  </div><div class="line"> mAttachInfo.mPanelParentWindowToken  </div><div class="line"> = panelParentView.getApplicationWindowToken();  </div><div class="line"> &#125;  </div><div class="line"> mAdded = true;  </div><div class="line"> int res; /* = WindowManagerImpl.ADD_OKAY; */  </div><div class="line">  </div><div class="line"> // Schedule the first layout -before- adding to the window  </div><div class="line"> // manager, to make sure we do the relayout before receiving  </div><div class="line"> // any other events from the system.  </div><div class="line"> requestLayout();  </div><div class="line"> if ((mWindowAttributes.inputFeatures  </div><div class="line"> &amp; WindowManager.LayoutParams.INPUT_FEATURE_NO_INPUT_CHANNEL) == 0) &#123;  </div><div class="line"> mInputChannel = new InputChannel();  </div><div class="line"> &#125;  </div><div class="line"> try &#123;  </div><div class="line"> mOrigWindowType = mWindowAttributes.type;  </div><div class="line"> mAttachInfo.mRecomputeGlobalAttributes = true;  </div><div class="line"> collectViewAttributes();  </div><div class="line"> res = mWindowSession.addToDisplay(mWindow, mSeq, mWindowAttributes,  </div><div class="line"> getHostVisibility(), mDisplay.getDisplayId(),  </div><div class="line"> mAttachInfo.mContentInsets, mAttachInfo.mStableInsets,  </div><div class="line"> mAttachInfo.mOutsets, mInputChannel);  </div><div class="line"> &#125; catch (RemoteException e) &#123;  </div><div class="line"> mAdded = false;  </div><div class="line"> mView = null;  </div><div class="line"> mAttachInfo.mRootView = null;  </div><div class="line"> mInputChannel = null;  </div><div class="line"> mFallbackEventHandler.setView(null);  </div><div class="line"> unscheduleTraversals();  </div><div class="line"> setAccessibilityFocus(null, null);  </div><div class="line"> throw new RuntimeException(&quot;Adding window failed&quot;, e);  </div><div class="line"> &#125; finally &#123;  </div><div class="line"> if (restore) &#123;  </div><div class="line"> attrs.restore();  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> if (mTranslator != null) &#123;  </div><div class="line"> mTranslator.translateRectInScreenToAppWindow(mAttachInfo.mContentInsets);  </div><div class="line"> &#125;  </div><div class="line"> mPendingOverscanInsets.set(0, 0, 0, 0);  </div><div class="line"> mPendingContentInsets.set(mAttachInfo.mContentInsets);  </div><div class="line"> mPendingStableInsets.set(mAttachInfo.mStableInsets);  </div><div class="line"> mPendingVisibleInsets.set(0, 0, 0, 0);  </div><div class="line"> if (DEBUG_LAYOUT) Log.v(TAG, &quot;Added window &quot; + mWindow);  </div><div class="line"> if (res &lt; WindowManagerGlobal.ADD_OKAY) &#123;  </div><div class="line"> mAttachInfo.mRootView = null;  </div><div class="line"> mAdded = false;  </div><div class="line"> mFallbackEventHandler.setView(null);  </div><div class="line"> unscheduleTraversals();  </div><div class="line"> setAccessibilityFocus(null, null);  </div><div class="line"> switch (res) &#123;  </div><div class="line"> case WindowManagerGlobal.ADD_BAD_APP_TOKEN:  </div><div class="line"> case WindowManagerGlobal.ADD_BAD_SUBWINDOW_TOKEN:  </div><div class="line"> throw new WindowManager.BadTokenException(  </div><div class="line"> &quot;Unable to add window -- token &quot; + attrs.token  </div><div class="line"> + &quot; is not valid; is your activity running?&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_NOT_APP_TOKEN:  </div><div class="line"> throw new WindowManager.BadTokenException(  </div><div class="line"> &quot;Unable to add window -- token &quot; + attrs.token  </div><div class="line"> + &quot; is not for an application&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_APP_EXITING:  </div><div class="line"> throw new WindowManager.BadTokenException(  </div><div class="line"> &quot;Unable to add window -- app for token &quot; + attrs.token  </div><div class="line"> + &quot; is exiting&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_DUPLICATE_ADD:  </div><div class="line"> throw new WindowManager.BadTokenException(  </div><div class="line"> &quot;Unable to add window -- window &quot; + mWindow  </div><div class="line"> + &quot; has already been added&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_STARTING_NOT_NEEDED:  </div><div class="line"> // Silently ignore -- we would have just removed it  </div><div class="line"> // right away, anyway.  </div><div class="line"> return;  </div><div class="line"> case WindowManagerGlobal.ADD_MULTIPLE_SINGLETON:  </div><div class="line"> throw new WindowManager.BadTokenException(  </div><div class="line"> &quot;Unable to add window &quot; + mWindow +  </div><div class="line"> &quot; -- another window of this type already exists&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_PERMISSION_DENIED:  </div><div class="line"> throw new WindowManager.BadTokenException(  </div><div class="line"> &quot;Unable to add window &quot; + mWindow +  </div><div class="line"> &quot; -- permission denied for this window type&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_INVALID_DISPLAY:  </div><div class="line"> throw new WindowManager.InvalidDisplayException(  </div><div class="line"> &quot;Unable to add window &quot; + mWindow +  </div><div class="line"> &quot; -- the specified display can not be found&quot;);  </div><div class="line"> case WindowManagerGlobal.ADD_INVALID_TYPE:  </div><div class="line"> throw new WindowManager.InvalidDisplayException(  </div><div class="line"> &quot;Unable to add window &quot; + mWindow  </div><div class="line"> + &quot; -- the specified window type is not valid&quot;);  </div><div class="line"> &#125;  </div><div class="line"> throw new RuntimeException(  </div><div class="line"> &quot;Unable to add window -- unknown error code &quot; + res);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> if (view instanceof RootViewSurfaceTaker) &#123;  </div><div class="line"> mInputQueueCallback =  </div><div class="line"> ((RootViewSurfaceTaker)view).willYouTakeTheInputQueue();  </div><div class="line"> &#125;  </div><div class="line"> if (mInputChannel != null) &#123;  </div><div class="line"> if (mInputQueueCallback != null) &#123;  </div><div class="line"> mInputQueue = new InputQueue();  </div><div class="line"> mInputQueueCallback.onInputQueueCreated(mInputQueue);  </div><div class="line"> &#125;  </div><div class="line"> mInputEventReceiver = new WindowInputEventReceiver(mInputChannel,  </div><div class="line"> Looper.myLooper());  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> view.assignParent(this);  </div><div class="line"> mAddedTouchMode = (res &amp; WindowManagerGlobal.ADD_FLAG_IN_TOUCH_MODE) != 0;  </div><div class="line"> mAppVisible = (res &amp; WindowManagerGlobal.ADD_FLAG_APP_VISIBLE) != 0;  </div><div class="line">  </div><div class="line"> if (mAccessibilityManager.isEnabled()) &#123;  </div><div class="line"> mAccessibilityInteractionConnectionManager.ensureConnection();  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> if (view.getImportantForAccessibility() == View.IMPORTANT_FOR_ACCESSIBILITY_AUTO) &#123;  </div><div class="line"> view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> // Set up the input pipeline.  </div><div class="line"> CharSequence counterSuffix = attrs.getTitle();  </div><div class="line"> mSyntheticInputStage = new SyntheticInputStage();  </div><div class="line"> InputStage viewPostImeStage = new ViewPostImeInputStage(mSyntheticInputStage);  </div><div class="line"> InputStage nativePostImeStage = new NativePostImeInputStage(viewPostImeStage,  </div><div class="line"> &quot;aq:native-post-ime:&quot; + counterSuffix);  </div><div class="line"> InputStage earlyPostImeStage = new EarlyPostImeInputStage(nativePostImeStage);  </div><div class="line"> InputStage imeStage = new ImeInputStage(earlyPostImeStage,  </div><div class="line"> &quot;aq:ime:&quot; + counterSuffix);  </div><div class="line"> InputStage viewPreImeStage = new ViewPreImeInputStage(imeStage);  </div><div class="line"> InputStage nativePreImeStage = new NativePreImeInputStage(viewPreImeStage,  </div><div class="line"> &quot;aq:native-pre-ime:&quot; + counterSuffix);  </div><div class="line">  </div><div class="line"> mFirstInputStage = nativePreImeStage;  </div><div class="line"> mFirstPostImeInputStage = earlyPostImeStage;  </div><div class="line"> mPendingInputEventQueueLengthCounterName = &quot;aq:pending:&quot; + counterSuffix;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">      </div><div class="line">@Override  </div><div class="line"> public void requestLayout() &#123;  </div><div class="line"> if (!mHandlingLayoutInLayoutRequest) &#123;  </div><div class="line"> checkThread();  </div><div class="line"> mLayoutRequested = true;  </div><div class="line"> scheduleTraversals();  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line">void scheduleTraversals() &#123;  </div><div class="line"> if (!mTraversalScheduled) &#123;  </div><div class="line"> mTraversalScheduled = true;  </div><div class="line"> mTraversalBarrier = mHandler.getLooper().getQueue().postSyncBarrier();  </div><div class="line"> mChoreographer.postCallback(  </div><div class="line"> Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);  </div><div class="line"> if (!mUnbufferedInputDispatch) &#123;  </div><div class="line"> scheduleConsumeBatchedInput();  </div><div class="line"> &#125;  </div><div class="line"> notifyRendererOfFramePending();  </div><div class="line"> pokeDrawLockIfNeeded();  </div><div class="line"> &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>在die方法内部只是简单做了判断，如果是异步删除，那个发送MSG_DIE的消息，ViewRootImpl中的Handle会处理并调用doDie，如果为同步直接调用doDie,doDie内部会调用dispatchDetachedFromWIndow，进行IPC<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line">* @param immediate True, do now if not in traversal. False, put on queue and do later. </div><div class="line">* @return True, request has been queued. False, request has been completed. </div><div class="line">*/  </div><div class="line">boolean die(boolean immediate) &#123;  </div><div class="line">// Make sure we do execute immediately if we are in the middle of a traversal or the damage  </div><div class="line">// done by dispatchDetachedFromWindow will cause havoc on return.  </div><div class="line">if (immediate &amp;&amp; !mIsInTraversal) &#123;  </div><div class="line">doDie();  </div><div class="line">return false;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">if (!mIsDrawing) &#123;  </div><div class="line">destroyHardwareRenderer();  </div><div class="line">&#125; else &#123;  </div><div class="line">Log.e(TAG, &quot;Attempting to destroy the window while drawing!\n&quot; +  </div><div class="line">&quot; window=&quot; + this + &quot;, title=&quot; + mWindowAttributes.getTitle());  </div><div class="line">&#125;  </div><div class="line">mHandler.sendEmptyMessage(MSG_DIE);  </div><div class="line">return true;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">void doDie() &#123;  </div><div class="line">checkThread();  </div><div class="line">if (LOCAL_LOGV) Log.v(TAG, &quot;DIE in &quot; + this + &quot; of &quot; + mSurface);  </div><div class="line">synchronized (this) &#123;  </div><div class="line">if (mRemoved) &#123;  </div><div class="line">return;  </div><div class="line">&#125;  </div><div class="line">mRemoved = true;  </div><div class="line">if (mAdded) &#123;  </div><div class="line">dispatchDetachedFromWindow();  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">if (mAdded &amp;&amp; !mFirst) &#123;  </div><div class="line">destroyHardwareRenderer();  </div><div class="line">  </div><div class="line">if (mView != null) &#123;  </div><div class="line">int viewVisibility = mView.getVisibility();  </div><div class="line">boolean viewVisibilityChanged = mViewVisibility != viewVisibility;  </div><div class="line">if (mWindowAttributesChanged || viewVisibilityChanged) &#123;  </div><div class="line">// If layout params have been changed, first give them  </div><div class="line">// to the window manager to make sure it has the correct  </div><div class="line">// animation info.  </div><div class="line">try &#123;  </div><div class="line">if ((relayoutWindow(mWindowAttributes, viewVisibility, false)  </div><div class="line">&amp; WindowManagerGlobal.RELAYOUT_RES_FIRST_TIME) != 0) &#123;  </div><div class="line">mWindowSession.finishDrawing(mWindow);  </div><div class="line">&#125;  </div><div class="line">&#125; catch (RemoteException e) &#123;  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">mSurface.release();  </div><div class="line">&#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">mAdded = false;  </div><div class="line">&#125;  </div><div class="line">WindowManagerGlobal.getInstance().doRemoveView(this);  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">void dispatchDetachedFromWindow() &#123;  </div><div class="line">if (mView != null &amp;&amp; mView.mAttachInfo != null) &#123;  </div><div class="line">mAttachInfo.mTreeObserver.dispatchOnWindowAttachedChange(false);  </div><div class="line">mView.dispatchDetachedFromWindow();  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">mAccessibilityInteractionConnectionManager.ensureNoConnection();  </div><div class="line">mAccessibilityManager.removeAccessibilityStateChangeListener(  </div><div class="line">mAccessibilityInteractionConnectionManager);  </div><div class="line">mAccessibilityManager.removeHighTextContrastStateChangeListener(  </div><div class="line">mHighContrastTextManager);  </div><div class="line">removeSendWindowContentChangedCallback();  </div><div class="line">  </div><div class="line">destroyHardwareRenderer();  </div><div class="line">  </div><div class="line">setAccessibilityFocus(null, null);  </div><div class="line">  </div><div class="line">mView.assignParent(null);  </div><div class="line">mView = null;  </div><div class="line">mAttachInfo.mRootView = null;  </div><div class="line">  </div><div class="line">mSurface.release();  </div><div class="line">  </div><div class="line">if (mInputQueueCallback != null &amp;&amp; mInputQueue != null) &#123;  </div><div class="line">mInputQueueCallback.onInputQueueDestroyed(mInputQueue);  </div><div class="line">mInputQueue.dispose();  </div><div class="line">mInputQueueCallback = null;  </div><div class="line">mInputQueue = null;  </div><div class="line">&#125;  </div><div class="line">if (mInputEventReceiver != null) &#123;  </div><div class="line">mInputEventReceiver.dispose();  </div><div class="line">mInputEventReceiver = null;  </div><div class="line">&#125;  </div><div class="line">try &#123;  </div><div class="line">mWindowSession.remove(mWindow);  </div><div class="line">&#125; catch (RemoteException e) &#123;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">// Dispose the input channel after removing the window so the Window Manager  </div><div class="line">// doesn&apos;t interpret the input channel being closed as an abnormal termination.  </div><div class="line">if (mInputChannel != null) &#123;  </div><div class="line">mInputChannel.dispose();  </div><div class="line">mInputChannel = null;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">mDisplayManager.unregisterDisplayListener(mDisplayListener);  </div><div class="line">  </div><div class="line">unscheduleTraversals();  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">void unscheduleTraversals() &#123;  </div><div class="line">if (mTraversalScheduled) &#123;  </div><div class="line">mTraversalScheduled = false;  </div><div class="line">mHandler.getLooper().getQueue().removeSyncBarrier(mTraversalBarrier);  </div><div class="line">mChoreographer.removeCallbacks(  </div><div class="line">Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);  </div><div class="line">&#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>Session对象也是一个服务端的桩对象，用来为客户端提供交互接口（IWindowSession），包括窗口的创建、销毁、布局等接口。每个与窗口管理服务交互的进程通常都需要打开一个Session对象来实现交互，用来保证一个Session会话期间窗口状态的一致。Session对象在一个进程新建第一个视图时使用窗口管理服务的的openSession接口函数创建，第一个视图新建期间也创建一个SurfaceSession对象用来实现视图的绘制操作。SurfaceSession对象用来与SurfaceFliger服务建立连接，实现视图及包含的子视图在显示硬件上的实际输出工作。</li>
+<li>WindowManagerService服务是一个系统服务类，是整个窗口管理机制实现的核心。<h1 id="3-Window的创建"><a href="#3-Window的创建" class="headerlink" title="3.Window的创建"></a>3.Window的创建</h1>View是Android中的视图的呈现方式，但是View不能单独存在，必须依赖于Window这个抽象的概念上，因此有视图的地方就有Window。<h2 id="3-1应用Window-Activity的创建"><a href="#3-1应用Window-Activity的创建" class="headerlink" title="3.1应用Window-Activity的创建"></a>3.1应用Window-Activity的创建</h2></li>
+<li><p>ActivityThread的performLaunchActivity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;  </div><div class="line"> // System.out.println(&quot;##### [&quot; + System.currentTimeMillis() + &quot;] ActivityThread.performLaunchActivity(&quot; + r + &quot;)&quot;);  </div><div class="line">  </div><div class="line"> ActivityInfo aInfo = r.activityInfo;  </div><div class="line"> if (r.packageInfo == null) &#123;  </div><div class="line"> r.packageInfo = getPackageInfo(aInfo.applicationInfo, r.compatInfo,  </div><div class="line"> Context.CONTEXT_INCLUDE_CODE);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> ComponentName component = r.intent.getComponent();  </div><div class="line"> if (component == null) &#123;  </div><div class="line"> component = r.intent.resolveActivity(  </div><div class="line"> mInitialApplication.getPackageManager());  </div><div class="line"> r.intent.setComponent(component);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> if (r.activityInfo.targetActivity != null) &#123;  </div><div class="line"> component = new ComponentName(r.activityInfo.packageName,  </div><div class="line"> r.activityInfo.targetActivity);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> Activity activity = null;  </div><div class="line"> try &#123;  </div><div class="line"> java.lang.ClassLoader cl = r.packageInfo.getClassLoader();  </div><div class="line"> activity = mInstrumentation.newActivity(  </div><div class="line"> cl, component.getClassName(), r.intent);  </div><div class="line"> StrictMode.incrementExpectedActivityCount(activity.getClass());  </div><div class="line"> r.intent.setExtrasClassLoader(cl);  </div><div class="line"> r.intent.prepareToEnterProcess();  </div><div class="line"> if (r.state != null) &#123;  </div><div class="line"> r.state.setClassLoader(cl);  </div><div class="line"> &#125;  </div><div class="line"> &#125; catch (Exception e) &#123;  </div><div class="line"> if (!mInstrumentation.onException(activity, e)) &#123;  </div><div class="line"> throw new RuntimeException(  </div><div class="line"> &quot;Unable to instantiate activity &quot; + component  </div><div class="line"> + &quot;: &quot; + e.toString(), e);  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> try &#123;  </div><div class="line"> Application app = r.packageInfo.makeApplication(false, mInstrumentation);  </div><div class="line">  </div><div class="line"> if (localLOGV) Slog.v(TAG, &quot;Performing launch of &quot; + r);  </div><div class="line"> if (localLOGV) Slog.v(  </div><div class="line"> TAG, r + &quot;: app=&quot; + app  </div><div class="line"> + &quot;, appName=&quot; + app.getPackageName()  </div><div class="line"> + &quot;, pkg=&quot; + r.packageInfo.getPackageName()  </div><div class="line"> + &quot;, comp=&quot; + r.intent.getComponent().toShortString()  </div><div class="line"> + &quot;, dir=&quot; + r.packageInfo.getAppDir());  </div><div class="line">  </div><div class="line"> if (activity != null) &#123;  </div><div class="line"> Context appContext = createBaseContextForActivity(r, activity);  </div><div class="line"> CharSequence title = r.activityInfo.loadLabel(appContext.getPackageManager());  </div><div class="line"> Configuration config = new Configuration(mCompatConfiguration);  </div><div class="line"> if (DEBUG_CONFIGURATION) Slog.v(TAG, &quot;Launching activity &quot;  </div><div class="line"> + r.activityInfo.name + &quot; with config &quot; + config);  </div><div class="line"> activity.attach(appContext, this, getInstrumentation(), r.token,  </div><div class="line"> r.ident, app, r.intent, r.activityInfo, title, r.parent,  </div><div class="line"> r.embeddedID, r.lastNonConfigurationInstances, config,  </div><div class="line"> r.referrer, r.voiceInteractor);  </div><div class="line">  </div><div class="line"> if (customIntent != null) &#123;  </div><div class="line"> activity.mIntent = customIntent;  </div><div class="line"> &#125;  </div><div class="line"> r.lastNonConfigurationInstances = null;  </div><div class="line"> activity.mStartedActivity = false;  </div><div class="line"> int theme = r.activityInfo.getThemeResource();  </div><div class="line"> if (theme != 0) &#123;  </div><div class="line"> activity.setTheme(theme);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> activity.mCalled = false;  </div><div class="line"> if (r.isPersistable()) &#123;  </div><div class="line"> mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);  </div><div class="line"> &#125; else &#123;  </div><div class="line"> mInstrumentation.callActivityOnCreate(activity, r.state);  </div><div class="line"> &#125;  </div><div class="line"> if (!activity.mCalled) &#123;  </div><div class="line"> throw new SuperNotCalledException(  </div><div class="line"> &quot;Activity &quot; + r.intent.getComponent().toShortString() +  </div><div class="line"> &quot; did not call through to super.onCreate()&quot;);  </div><div class="line"> &#125;  </div><div class="line"> r.activity = activity;  </div><div class="line"> r.stopped = true;  </div><div class="line"> if (!r.activity.mFinished) &#123;  </div><div class="line"> activity.performStart();  </div><div class="line"> r.stopped = false;  </div><div class="line"> &#125;  </div><div class="line"> if (!r.activity.mFinished) &#123;  </div><div class="line"> if (r.isPersistable()) &#123;  </div><div class="line"> if (r.state != null || r.persistentState != null) &#123;  </div><div class="line"> mInstrumentation.callActivityOnRestoreInstanceState(activity, r.state,  </div><div class="line"> r.persistentState);  </div><div class="line"> &#125;  </div><div class="line"> &#125; else if (r.state != null) &#123;  </div><div class="line"> mInstrumentation.callActivityOnRestoreInstanceState(activity, r.state);  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> if (!r.activity.mFinished) &#123;  </div><div class="line"> activity.mCalled = false;  </div><div class="line"> if (r.isPersistable()) &#123;  </div><div class="line"> mInstrumentation.callActivityOnPostCreate(activity, r.state,  </div><div class="line"> r.persistentState);  </div><div class="line"> &#125; else &#123;  </div><div class="line"> mInstrumentation.callActivityOnPostCreate(activity, r.state);  </div><div class="line"> &#125;  </div><div class="line"> if (!activity.mCalled) &#123;  </div><div class="line"> throw new SuperNotCalledException(  </div><div class="line"> &quot;Activity &quot; + r.intent.getComponent().toShortString() +  </div><div class="line"> &quot; did not call through to super.onPostCreate()&quot;);  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> r.paused = true;  </div><div class="line">  </div><div class="line"> mActivities.put(r.token, r);  </div><div class="line">  </div><div class="line"> &#125; catch (SuperNotCalledException e) &#123;  </div><div class="line"> throw e;  </div><div class="line">  </div><div class="line"> &#125; catch (Exception e) &#123;  </div><div class="line"> if (!mInstrumentation.onException(activity, e)) &#123;  </div><div class="line"> throw new RuntimeException(  </div><div class="line"> &quot;Unable to start activity &quot; + component  </div><div class="line"> + &quot;: &quot; + e.toString(), e);  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> return activity;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Activity的attach</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">final void attach(Context context, ActivityThread aThread,  </div><div class="line"> Instrumentation instr, IBinder token, int ident,  </div><div class="line"> Application application, Intent intent, ActivityInfo info,  </div><div class="line"> CharSequence title, Activity parent, String id,  </div><div class="line"> NonConfigurationInstances lastNonConfigurationInstances,  </div><div class="line"> Configuration config, String referrer, IVoiceInteractor voiceInteractor) &#123;  </div><div class="line"> attachBaseContext(context);  </div><div class="line">  </div><div class="line"> mFragments.attachHost(null /*parent*/);  </div><div class="line">  </div><div class="line"> mWindow = new PhoneWindow(this);  </div><div class="line"> mWindow.setCallback(this);  </div><div class="line"> mWindow.setOnWindowDismissedCallback(this);  </div><div class="line"> mWindow.getLayoutInflater().setPrivateFactory(this);  </div><div class="line"> if (info.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED) &#123;  </div><div class="line"> mWindow.setSoftInputMode(info.softInputMode);  </div><div class="line"> &#125;  </div><div class="line"> if (info.uiOptions != 0) &#123;  </div><div class="line"> mWindow.setUiOptions(info.uiOptions);  </div><div class="line"> &#125;  </div><div class="line"> mUiThread = Thread.currentThread();  </div><div class="line">  </div><div class="line"> mMainThread = aThread;  </div><div class="line"> mInstrumentation = instr;  </div><div class="line"> mToken = token;  </div><div class="line"> mIdent = ident;  </div><div class="line"> mApplication = application;  </div><div class="line"> mIntent = intent;  </div><div class="line"> mReferrer = referrer;  </div><div class="line"> mComponent = intent.getComponent();  </div><div class="line"> mActivityInfo = info;  </div><div class="line"> mTitle = title;  </div><div class="line"> mParent = parent;  </div><div class="line"> mEmbeddedID = id;  </div><div class="line"> mLastNonConfigurationInstances = lastNonConfigurationInstances;  </div><div class="line"> if (voiceInteractor != null) &#123;  </div><div class="line"> if (lastNonConfigurationInstances != null) &#123;  </div><div class="line"> mVoiceInteractor = lastNonConfigurationInstances.voiceInteractor;  </div><div class="line"> &#125; else &#123;  </div><div class="line"> mVoiceInteractor = new VoiceInteractor(voiceInteractor, this, this,  </div><div class="line"> Looper.myLooper());  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> mWindow.setWindowManager(  </div><div class="line"> (WindowManager)context.getSystemService(Context.WINDOW_SERVICE),  </div><div class="line"> mToken, mComponent.flattenToString(),  </div><div class="line"> (info.flags &amp; ActivityInfo.FLAG_HARDWARE_ACCELERATED) != 0);  </div><div class="line"> if (mParent != null) &#123;  </div><div class="line"> mWindow.setContainer(mParent.getWindow());  </div><div class="line"> &#125;  </div><div class="line"> mWindowManager = mWindow.getWindowManager();  </div><div class="line"> mCurrentConfig = config;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Window创建完成后，通过setContentView将视图附加在Window上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public void setContentView(@LayoutRes int layoutResID) &#123;  </div><div class="line"> getWindow().setContentView(layoutResID);  </div><div class="line"> initWindowDecorActionBar();  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>虽然在attach方法中Window就已经被创建，但这个时候还未被Windowmanager识别。在ActivityThread的handleResumeActvity中，调用了Activity的performResume方法，接着调用Activity的makeVisible方法。此时，DecorView才真正的被添加和显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">final void handleResumeActivity(IBinder token,  </div><div class="line"> boolean clearHide, boolean isForward, boolean reallyResume) &#123;  </div><div class="line"> // If we are getting ready to gc after going to the background, well  </div><div class="line"> // we are back active so skip it.  </div><div class="line"> unscheduleGcIdler();  </div><div class="line"> mSomeActivitiesChanged = true;  </div><div class="line">  </div><div class="line"> // TODO Push resumeArgs into the activity for consideration  </div><div class="line"> ActivityClientRecord r = performResumeActivity(token, clearHide);  </div><div class="line">  </div><div class="line"> if (r != null) &#123;  </div><div class="line"> final Activity a = r.activity;  </div><div class="line">  </div><div class="line"> if (localLOGV) Slog.v(  </div><div class="line"> TAG, &quot;Resume &quot; + r + &quot; started activity: &quot; +  </div><div class="line"> a.mStartedActivity + &quot;, hideForNow: &quot; + r.hideForNow  </div><div class="line"> + &quot;, finished: &quot; + a.mFinished);  </div><div class="line">  </div><div class="line"> final int forwardBit = isForward ?  </div><div class="line"> WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION : 0;  </div><div class="line">  </div><div class="line"> // If the window hasn&apos;t yet been added to the window manager,  </div><div class="line"> // and this guy didn&apos;t finish itself or start another activity,  </div><div class="line"> // then go ahead and add the window.  </div><div class="line"> boolean willBeVisible = !a.mStartedActivity;  </div><div class="line"> if (!willBeVisible) &#123;  </div><div class="line"> try &#123;  </div><div class="line"> willBeVisible = ActivityManagerNative.getDefault().willActivityBeVisible(  </div><div class="line"> a.getActivityToken());  </div><div class="line"> &#125; catch (RemoteException e) &#123;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> if (r.window == null &amp;&amp; !a.mFinished &amp;&amp; willBeVisible) &#123;  </div><div class="line"> r.window = r.activity.getWindow();  </div><div class="line"> View decor = r.window.getDecorView();  </div><div class="line"> decor.setVisibility(View.INVISIBLE);  </div><div class="line"> ViewManager wm = a.getWindowManager();  </div><div class="line"> WindowManager.LayoutParams l = r.window.getAttributes();  </div><div class="line"> a.mDecor = decor;  </div><div class="line"> l.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;  </div><div class="line"> l.softInputMode |= forwardBit;  </div><div class="line"> if (a.mVisibleFromClient) &#123;  </div><div class="line"> a.mWindowAdded = true;  </div><div class="line"> wm.addView(decor, l);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> // If the window has already been added, but during resume  </div><div class="line"> // we started another activity, then don&apos;t yet make the  </div><div class="line"> // window visible.  </div><div class="line"> &#125; else if (!willBeVisible) &#123;  </div><div class="line"> if (localLOGV) Slog.v(  </div><div class="line"> TAG, &quot;Launch &quot; + r + &quot; mStartedActivity set&quot;);  </div><div class="line"> r.hideForNow = true;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> // Get rid of anything left hanging around.  </div><div class="line"> cleanUpPendingRemoveWindows(r);  </div><div class="line">  </div><div class="line"> // The window is now visible if it has been added, we are not  </div><div class="line"> // simply finishing, and we are not starting another activity.  </div><div class="line"> if (!r.activity.mFinished &amp;&amp; willBeVisible  </div><div class="line"> &amp;&amp; r.activity.mDecor != null &amp;&amp; !r.hideForNow) &#123;  </div><div class="line"> if (r.newConfig != null) &#123;  </div><div class="line"> r.tmpConfig.setTo(r.newConfig);  </div><div class="line"> if (r.overrideConfig != null) &#123;  </div><div class="line"> r.tmpConfig.updateFrom(r.overrideConfig);  </div><div class="line"> &#125;  </div><div class="line"> if (DEBUG_CONFIGURATION) Slog.v(TAG, &quot;Resuming activity &quot;  </div><div class="line"> + r.activityInfo.name + &quot; with newConfig &quot; + r.tmpConfig);  </div><div class="line"> performConfigurationChanged(r.activity, r.tmpConfig);  </div><div class="line"> freeTextLayoutCachesIfNeeded(r.activity.mCurrentConfig.diff(r.tmpConfig));  </div><div class="line"> r.newConfig = null;  </div><div class="line"> &#125;  </div><div class="line"> if (localLOGV) Slog.v(TAG, &quot;Resuming &quot; + r + &quot; with isForward=&quot;  </div><div class="line"> + isForward);  </div><div class="line"> WindowManager.LayoutParams l = r.window.getAttributes();  </div><div class="line"> if ((l.softInputMode  </div><div class="line"> &amp; WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION)  </div><div class="line"> != forwardBit) &#123;  </div><div class="line"> l.softInputMode = (l.softInputMode  </div><div class="line"> &amp; (~WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION))  </div><div class="line"> | forwardBit;  </div><div class="line"> if (r.activity.mVisibleFromClient) &#123;  </div><div class="line"> ViewManager wm = a.getWindowManager();  </div><div class="line"> View decor = r.window.getDecorView();  </div><div class="line"> wm.updateViewLayout(decor, l);  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> r.activity.mVisibleFromServer = true;  </div><div class="line"> mNumVisibleActivities++;  </div><div class="line"> if (r.activity.mVisibleFromClient) &#123;  </div><div class="line"> r.activity.makeVisible();  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> if (!r.onlyLocalRequest) &#123;  </div><div class="line"> r.nextIdle = mNewActivities;  </div><div class="line"> mNewActivities = r;  </div><div class="line"> if (localLOGV) Slog.v(  </div><div class="line"> TAG, &quot;Scheduling idle handler for &quot; + r);  </div><div class="line"> Looper.myQueue().addIdleHandler(new Idler());  </div><div class="line"> &#125;  </div><div class="line"> r.onlyLocalRequest = false;  </div><div class="line">  </div><div class="line"> // Tell the activity manager we have resumed.  </div><div class="line"> if (reallyResume) &#123;  </div><div class="line"> try &#123;  </div><div class="line"> ActivityManagerNative.getDefault().activityResumed(token);  </div><div class="line"> &#125; catch (RemoteException ex) &#123;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> &#125; else &#123;  </div><div class="line"> // If an exception was thrown when trying to resume, then  </div><div class="line"> // just end this activity.  </div><div class="line"> try &#123;  </div><div class="line"> ActivityManagerNative.getDefault()  </div><div class="line"> .finishActivity(token, Activity.RESULT_CANCELED, null, false);  </div><div class="line"> &#125; catch (RemoteException ex) &#123;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> void makeVisible() &#123;  </div><div class="line"> if (!mWindowAdded) &#123;  </div><div class="line"> ViewManager wm = getWindowManager();  </div><div class="line"> wm.addView(mDecor, getWindow().getAttributes());  </div><div class="line"> mWindowAdded = true;  </div><div class="line"> &#125;  </div><div class="line"> mDecor.setVisibility(View.VISIBLE);  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="3-2-子Window-Dialog的创建"><a href="#3-2-子Window-Dialog的创建" class="headerlink" title="3.2 子Window-Dialog的创建"></a>3.2 子Window-Dialog的创建</h2><ol>
+<li><p>初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">Dialog(@NonNull Context context, @StyleRes int themeResId, boolean createContextThemeWrapper) &#123;  </div><div class="line">  if (createContextThemeWrapper) &#123;  </div><div class="line">  if (themeResId == 0) &#123;  </div><div class="line">  final TypedValue outValue = new TypedValue();  </div><div class="line">  context.getTheme().resolveAttribute(R.attr.dialogTheme, outValue, true);  </div><div class="line">  themeResId = outValue.resourceId;  </div><div class="line">  &#125;  </div><div class="line">  mContext = new ContextThemeWrapper(context, themeResId);  </div><div class="line">  &#125; else &#123;  </div><div class="line">  mContext = context;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);  </div><div class="line">  </div><div class="line">  final Window w = new PhoneWindow(mContext);  </div><div class="line">  mWindow = w;  </div><div class="line">  w.setCallback(this);  </div><div class="line">  w.setOnWindowDismissedCallback(this);  </div><div class="line">  w.setWindowManager(mWindowManager, null, null);  </div><div class="line">  w.setGravity(Gravity.CENTER);  </div><div class="line">  </div><div class="line">  mListenersHandler = new ListenersHandler(this);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>设置View</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line"> * Set the screen content to an explicit view. This view is placed </div><div class="line"> * directly into the screen&apos;s view hierarchy. It can itself be a complex </div><div class="line"> * view hierarchy. </div><div class="line"> * </div><div class="line"> * @param view The desired content to display. </div><div class="line"> */  </div><div class="line"> public void setContentView(View view) &#123;  </div><div class="line"> mWindow.setContentView(view);  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>显示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line">  * Start the dialog and display it on screen. The window is placed in the </div><div class="line">  * application layer and opaque. Note that you should not override this </div><div class="line">  * method to do initialization when the dialog is shown, instead implement </div><div class="line">  * that in &#123;@link #onStart&#125;. </div><div class="line">  */  </div><div class="line">  public void show() &#123;  </div><div class="line">  if (mShowing) &#123;  </div><div class="line">  if (mDecor != null) &#123;  </div><div class="line">  if (mWindow.hasFeature(Window.FEATURE_ACTION_BAR)) &#123;  </div><div class="line">  mWindow.invalidatePanelMenu(Window.FEATURE_ACTION_BAR);  </div><div class="line">  &#125;  </div><div class="line">  mDecor.setVisibility(View.VISIBLE);  </div><div class="line">  &#125;  </div><div class="line">  return;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  mCanceled = false;  </div><div class="line">  </div><div class="line">  if (!mCreated) &#123;  </div><div class="line">  dispatchOnCreate(null);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  onStart();  </div><div class="line">  mDecor = mWindow.getDecorView();  </div><div class="line">  </div><div class="line">  if (mActionBar == null &amp;&amp; mWindow.hasFeature(Window.FEATURE_ACTION_BAR)) &#123;  </div><div class="line">  final ApplicationInfo info = mContext.getApplicationInfo();  </div><div class="line">  mWindow.setDefaultIcon(info.icon);  </div><div class="line">  mWindow.setDefaultLogo(info.logo);  </div><div class="line">  mActionBar = new WindowDecorActionBar(this);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  WindowManager.LayoutParams l = mWindow.getAttributes();  </div><div class="line">  if ((l.softInputMode  </div><div class="line">  &amp; WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION) == 0) &#123;  </div><div class="line">  WindowManager.LayoutParams nl = new WindowManager.LayoutParams();  </div><div class="line">  nl.copyFrom(l);  </div><div class="line">  nl.softInputMode |=  </div><div class="line">  WindowManager.LayoutParams.SOFT_INPUT_IS_FORWARD_NAVIGATION;  </div><div class="line">  l = nl;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  try &#123;  </div><div class="line">  mWindowManager.addView(mDecor, l);  </div><div class="line">  mShowing = true;  </div><div class="line">  </div><div class="line">  sendShowMessage();  </div><div class="line">  &#125; finally &#123;  </div><div class="line">  &#125;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>取消</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">void dismissDialog() &#123;  </div><div class="line">  if (mDecor == null || !mShowing) &#123;  </div><div class="line">  return;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  if (mWindow.isDestroyed()) &#123;  </div><div class="line">  Log.e(TAG, &quot;Tried to dismissDialog() but the Dialog&apos;s window was already destroyed!&quot;);  </div><div class="line">  return;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  try &#123;  </div><div class="line">  mWindowManager.removeViewImmediate(mDecor);  </div><div class="line">  &#125; finally &#123;  </div><div class="line">  if (mActionMode != null) &#123;  </div><div class="line">  mActionMode.finish();  </div><div class="line">  &#125;  </div><div class="line">  mDecor = null;  </div><div class="line">  mWindow.closeAllPanels();  </div><div class="line">  onStop();  </div><div class="line">  mShowing = false;  </div><div class="line">  </div><div class="line">  sendDismissMessage();  </div><div class="line">  &#125;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="3-3-系统Window-Toast的创建"><a href="#3-3-系统Window-Toast的创建" class="headerlink" title="3.3 系统Window-Toast的创建"></a>3.3 系统Window-Toast的创建</h2><p>Toast属于系统Window，内部的视图有2种指定方式，一种是系统默认样式，另外一种是通过setView方法来指定一个自定义的View。由于Toast具有定时取消的功能，所以系统采用了Handler。Toast的显示及隐藏都是通过NotificationmanagerService进行控制<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line"> * Show the view for the specified duration. </div><div class="line"> */  </div><div class="line"> public void show() &#123;  </div><div class="line"> if (mNextView == null) &#123;  </div><div class="line"> throw new RuntimeException(&quot;setView must have been called&quot;);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> INotificationManager service = getService();  </div><div class="line"> String pkg = mContext.getOpPackageName();  </div><div class="line"> TN tn = mTN;  </div><div class="line"> tn.mNextView = mNextView;  </div><div class="line">  </div><div class="line"> try &#123;  </div><div class="line"> service.enqueueToast(pkg, tn, mDuration);  </div><div class="line"> &#125; catch (RemoteException e) &#123;  </div><div class="line"> // Empty  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> /** </div><div class="line"> * Close the view if it&apos;s showing, or don&apos;t show it if it isn&apos;t showing yet. </div><div class="line"> * You do not normally have to call this. Normally view will disappear on its own </div><div class="line"> * after the appropriate duration. </div><div class="line"> */  </div><div class="line"> public void cancel() &#123;  </div><div class="line"> mTN.hide();  </div><div class="line">  </div><div class="line"> try &#123;  </div><div class="line"> getService().cancelToast(mContext.getPackageName(), mTN);  </div><div class="line"> &#125; catch (RemoteException e) &#123;  </div><div class="line"> // Empty  </div><div class="line"> &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p> 主要在TN中进行Window操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line">private static class TN extends ITransientNotification.Stub &#123;  </div><div class="line"> final Runnable mShow = new Runnable() &#123;  </div><div class="line"> @Override  </div><div class="line"> public void run() &#123;  </div><div class="line"> handleShow();  </div><div class="line"> &#125;  </div><div class="line"> &#125;;  </div><div class="line">  </div><div class="line"> final Runnable mHide = new Runnable() &#123;  </div><div class="line"> @Override  </div><div class="line"> public void run() &#123;  </div><div class="line"> handleHide();  </div><div class="line"> // Don&apos;t do this in handleHide() because it is also invoked by handleShow()  </div><div class="line"> mNextView = null;  </div><div class="line"> &#125;  </div><div class="line"> &#125;;  </div><div class="line">  </div><div class="line"> private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();  </div><div class="line"> final Handler mHandler = new Handler();  </div><div class="line">  </div><div class="line"> int mGravity;  </div><div class="line"> int mX, mY;  </div><div class="line"> float mHorizontalMargin;  </div><div class="line"> float mVerticalMargin;  </div><div class="line">  </div><div class="line">  </div><div class="line"> View mView;  </div><div class="line"> View mNextView;  </div><div class="line">  </div><div class="line"> WindowManager mWM;  </div><div class="line">  </div><div class="line"> TN() &#123;  </div><div class="line"> // XXX This should be changed to use a Dialog, with a Theme.Toast  </div><div class="line"> // defined that sets up the layout params appropriately.  </div><div class="line"> final WindowManager.LayoutParams params = mParams;  </div><div class="line"> params.height = WindowManager.LayoutParams.WRAP_CONTENT;  </div><div class="line"> params.width = WindowManager.LayoutParams.WRAP_CONTENT;  </div><div class="line"> params.format = PixelFormat.TRANSLUCENT;  </div><div class="line"> params.windowAnimations = com.android.internal.R.style.Animation_Toast;  </div><div class="line"> params.type = WindowManager.LayoutParams.TYPE_TOAST;  </div><div class="line"> params.setTitle(&quot;Toast&quot;);  </div><div class="line"> params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON  </div><div class="line"> | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE  </div><div class="line"> | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> /** </div><div class="line"> * schedule handleShow into the right thread </div><div class="line"> */  </div><div class="line"> @Override  </div><div class="line"> public void show() &#123;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;SHOW: &quot; + this);  </div><div class="line"> mHandler.post(mShow);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> /** </div><div class="line"> * schedule handleHide into the right thread </div><div class="line"> */  </div><div class="line"> @Override  </div><div class="line"> public void hide() &#123;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;HIDE: &quot; + this);  </div><div class="line"> mHandler.post(mHide);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> public void handleShow() &#123;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;HANDLE SHOW: &quot; + this + &quot; mView=&quot; + mView  </div><div class="line"> + &quot; mNextView=&quot; + mNextView);  </div><div class="line"> if (mView != mNextView) &#123;  </div><div class="line"> // remove the old view if necessary  </div><div class="line"> handleHide();  </div><div class="line"> mView = mNextView;  </div><div class="line"> Context context = mView.getContext().getApplicationContext();  </div><div class="line"> String packageName = mView.getContext().getOpPackageName();  </div><div class="line"> if (context == null) &#123;  </div><div class="line"> context = mView.getContext();  </div><div class="line"> &#125;  </div><div class="line"> mWM = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);  </div><div class="line"> // We can resolve the Gravity here by using the Locale for getting  </div><div class="line"> // the layout direction  </div><div class="line"> final Configuration config = mView.getContext().getResources().getConfiguration();  </div><div class="line"> final int gravity = Gravity.getAbsoluteGravity(mGravity, config.getLayoutDirection());  </div><div class="line"> mParams.gravity = gravity;  </div><div class="line"> if ((gravity &amp; Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.FILL_HORIZONTAL) &#123;  </div><div class="line"> mParams.horizontalWeight = 1.0f;  </div><div class="line"> &#125;  </div><div class="line"> if ((gravity &amp; Gravity.VERTICAL_GRAVITY_MASK) == Gravity.FILL_VERTICAL) &#123;  </div><div class="line"> mParams.verticalWeight = 1.0f;  </div><div class="line"> &#125;  </div><div class="line"> mParams.x = mX;  </div><div class="line"> mParams.y = mY;  </div><div class="line"> mParams.verticalMargin = mVerticalMargin;  </div><div class="line"> mParams.horizontalMargin = mHorizontalMargin;  </div><div class="line"> mParams.packageName = packageName;  </div><div class="line"> if (mView.getParent() != null) &#123;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;REMOVE! &quot; + mView + &quot; in &quot; + this);  </div><div class="line"> mWM.removeView(mView);  </div><div class="line"> &#125;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;ADD! &quot; + mView + &quot; in &quot; + this);  </div><div class="line"> mWM.addView(mView, mParams);  </div><div class="line"> trySendAccessibilityEvent();  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> private void trySendAccessibilityEvent() &#123;  </div><div class="line"> AccessibilityManager accessibilityManager =  </div><div class="line"> AccessibilityManager.getInstance(mView.getContext());  </div><div class="line"> if (!accessibilityManager.isEnabled()) &#123;  </div><div class="line"> return;  </div><div class="line"> &#125;  </div><div class="line"> // treat toasts as notifications since they are used to  </div><div class="line"> // announce a transient piece of information to the user  </div><div class="line"> AccessibilityEvent event = AccessibilityEvent.obtain(  </div><div class="line"> AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);  </div><div class="line"> event.setClassName(getClass().getName());  </div><div class="line"> event.setPackageName(mView.getContext().getPackageName());  </div><div class="line"> mView.dispatchPopulateAccessibilityEvent(event);  </div><div class="line"> accessibilityManager.sendAccessibilityEvent(event);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> public void handleHide() &#123;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;HANDLE HIDE: &quot; + this + &quot; mView=&quot; + mView);  </div><div class="line"> if (mView != null) &#123;  </div><div class="line"> // note: checking parent() just to make sure the view has  </div><div class="line"> // been added... i have seen cases where we get here when  </div><div class="line"> // the view isn&apos;t yet added, so let&apos;s try not to crash.  </div><div class="line"> if (mView.getParent() != null) &#123;  </div><div class="line"> if (localLOGV) Log.v(TAG, &quot;REMOVE! &quot; + mView + &quot; in &quot; + this);  </div><div class="line"> mWM.removeView(mView);  </div><div class="line"> &#125;  </div><div class="line">  </div><div class="line"> mView = null;  </div><div class="line"> &#125;  </div><div class="line"> &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/" rel="next" title="顺序存储与链式存储的集合-HashMap、HashTable">
+                <i class="fa fa-chevron-left"></i> 顺序存储与链式存储的集合-HashMap、HashTable
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/06/查找算法-顺序查找、有序查找/" rel="prev" title="查找算法-顺序查找、有序查找">
+                查找算法-顺序查找、有序查找 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/05/Android的Window底层原理/"
+           data-title="Android的Window底层原理" data-url="https://junbin1011.github.io/2016/12/05/Android的Window底层原理/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-概述"><span class="nav-number">1.</span> <span class="nav-text">1.概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Window的内部实现机制"><span class="nav-number">2.</span> <span class="nav-text">2.Window的内部实现机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1Window、PhoneWindow、DecorView"><span class="nav-number">2.1.</span> <span class="nav-text">2.1Window、PhoneWindow、DecorView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2WindowManager、WindowManagerGlobal、ViewRootImpl、WindowManagerService"><span class="nav-number">2.2.</span> <span class="nav-text">2.2WindowManager、WindowManagerGlobal、ViewRootImpl、WindowManagerService</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Window的创建"><span class="nav-number">3.</span> <span class="nav-text">3.Window的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1应用Window-Activity的创建"><span class="nav-number">3.1.</span> <span class="nav-text">3.1应用Window-Activity的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-子Window-Dialog的创建"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 子Window-Dialog的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-系统Window-Toast的创建"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 系统Window-Toast的创建</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

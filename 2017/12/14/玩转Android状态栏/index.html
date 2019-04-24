@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下： 
+经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接
+Android各版本状态栏区别首先我们需要注意，Android不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="玩转Android状态栏">
+<meta property="og:url" content="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下： 
+经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接
+Android各版本状态栏区别首先我们需要注意，Android不">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-3c19e25bec23ae1a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-682a47055173face?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-296dc3db09ecc9c0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-4f4ac539c4d45a49?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-c559fc450208c6d0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-7dadf90e78c14b97?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-1f899b0ae03f1576?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-cc8e3645cceebf35?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-fdf0bb4eeef724b1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.783Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="玩转Android状态栏">
+<meta name="twitter:description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下： 
+经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接
+Android各版本状态栏区别首先我们需要注意，Android不">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-3c19e25bec23ae1a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/"/>
+
+
+
+
+
+  <title> 玩转Android状态栏 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                玩转Android状态栏
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-14T08:45:35+08:00">
+                2017-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/14/玩转Android状态栏/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/14/玩转Android状态栏/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下：<br> <img src="http://upload-images.jianshu.io/upload_images/5125122-3c19e25bec23ae1a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接</p>
+<h2 id="Android各版本状态栏区别"><a href="#Android各版本状态栏区别" class="headerlink" title="Android各版本状态栏区别"></a>Android各版本状态栏区别</h2><p>首先我们需要注意，Android不是各个版本都支持设置状态栏的颜色，只有在5.0以上才支持。另外6.0以上才支持设置状态栏黑色图标（避免白色状态栏及白色图标导致看不清电量 时间等问题）</p>
+<p> <img src="http://upload-images.jianshu.io/upload_images/5125122-682a47055173face?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<table>
+<thead>
+<tr>
+<th>系统版本</th>
+<th>是否支持设置状态栏颜色</th>
+<th>是否允许设置状态栏黑色图标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.4</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>5.0</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>6.0+</td>
+<td>是</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<h2 id="各个ROM状态栏区别"><a href="#各个ROM状态栏区别" class="headerlink" title="各个ROM状态栏区别"></a>各个ROM状态栏区别</h2><h3 id="是不是设置了状态栏透明就真透明了？"><a href="#是不是设置了状态栏透明就真透明了？" class="headerlink" title="是不是设置了状态栏透明就真透明了？"></a>是不是设置了状态栏透明就真透明了？</h3><p>这个问题一开始也困扰了我，后面分析，在原生的系统虽然设置了状态栏透明，但是状态栏区域也会有一层半透明的遮罩（估计就是考虑到白色状态栏引起的问题），但是测试发现部分国产ROM设置穿透栏透明则会完全透明（例如MIUI）</p>
+<p>原生系统效果如下：<br> <img src="http://upload-images.jianshu.io/upload_images/5125122-296dc3db09ecc9c0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>MIUI系统效果如下：<br> <img src="http://upload-images.jianshu.io/upload_images/5125122-4f4ac539c4d45a49?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h3 id="是不是6-0都支持系统状态栏黑条图标？"><a href="#是不是6-0都支持系统状态栏黑条图标？" class="headerlink" title="是不是6.0都支持系统状态栏黑条图标？"></a>是不是6.0都支持系统状态栏黑条图标？</h3><p>原生6.0以上有API支持，但是国产各ROM经过定制，有的需要特定的设置才能实现</p>
+<p>原生系统设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public void setLightStatusBar(Window window, boolean lightStatusBar) &#123;</div><div class="line">          // 设置浅色状态栏时的界面显示</div><div class="line">          View decor = window.getDecorView();</div><div class="line">          int ui = decor.getSystemUiVisibility();</div><div class="line">          if (lightStatusBar) &#123;</div><div class="line">              ui |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;</div><div class="line">          &#125; else &#123;</div><div class="line">              ui &amp;= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;</div><div class="line">          &#125;</div><div class="line">          decor.setSystemUiVisibility(ui);</div><div class="line"></div><div class="line">      &#125;</div></pre></td></tr></table></figure>
+<p>小米：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public static boolean MIUISetStatusBarLightMode(Window window, boolean dark) &#123;</div><div class="line">        boolean result = false;</div><div class="line">        if (window != null) &#123;</div><div class="line">            Class clazz = window.getClass();</div><div class="line">            try &#123;</div><div class="line">                int darkModeFlag = 0;</div><div class="line">                Class layoutParams = Class.forName(&quot;android.view.MiuiWindowManager$LayoutParams&quot;);</div><div class="line">                Field field = layoutParams.getField(&quot;EXTRA_FLAG_STATUS_BAR_DARK_MODE&quot;);</div><div class="line">                darkModeFlag = field.getInt(layoutParams);</div><div class="line">                Method extraFlagField = clazz.getMethod(&quot;setExtraFlags&quot;, int.class, int.class);</div><div class="line">                if (dark) &#123;</div><div class="line">                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体</div><div class="line">                &#125; else &#123;</div><div class="line">                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体</div><div class="line">                &#125;</div><div class="line">                result = true;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        return result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>魅族：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public static boolean FlymeSetStatusBarLightMode(Window window, boolean dark) &#123;</div><div class="line">        boolean result = false;</div><div class="line">        if (window != null) &#123;</div><div class="line">            try &#123;</div><div class="line">                WindowManager.LayoutParams lp = window.getAttributes();</div><div class="line">                Field darkFlag = WindowManager.LayoutParams.class</div><div class="line">                        .getDeclaredField(&quot;MEIZU_FLAG_DARK_STATUS_BAR_ICON&quot;);</div><div class="line">                Field meizuFlags = WindowManager.LayoutParams.class</div><div class="line">                        .getDeclaredField(&quot;meizuFlags&quot;);</div><div class="line">                darkFlag.setAccessible(true);</div><div class="line">                meizuFlags.setAccessible(true);</div><div class="line">                int bit = darkFlag.getInt(null);</div><div class="line">                int value = meizuFlags.getInt(lp);</div><div class="line">                if (dark) &#123;</div><div class="line">                    value |= bit;</div><div class="line">                &#125; else &#123;</div><div class="line">                    value &amp;= ~bit;</div><div class="line">                &#125;</div><div class="line">                meizuFlags.setInt(lp, value);</div><div class="line">                window.setAttributes(lp);</div><div class="line">                result = true;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        return result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>华为手机：<br>部分测试发现华为的EMUI手机状态栏会跟系统桌面的状态栏一样，设置了没用，这里如果要特殊设置状态栏颜色，只能参考4.4的处理方式（后续介绍）</p>
+<p> <img src="http://upload-images.jianshu.io/upload_images/5125122-c559fc450208c6d0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h2 id="如何进行定制状态栏"><a href="#如何进行定制状态栏" class="headerlink" title="如何进行定制状态栏"></a>如何进行定制状态栏</h2><h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><ul>
+<li>4.4</li>
+</ul>
+<p>通过上述的版本及分析，可见完善的的状态栏兼容是一个大工程，需要综合考虑系统版本及各个厂商ROM等因素。5.0以上有系统API进行支持，这里我们主要来分析一些4.4的实现原理。<br>简单来说，4.4的实现方式就是使用透明的状态栏，然后做一个和状态栏一样高度的View，加入到Windows的DecorView，然后给这个View设置背景色，达到实现状态栏颜色。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);</div><div class="line"></div><div class="line">       ViewGroup decorViewGroup = (ViewGroup) window.getDecorView();</div><div class="line">       View statusBarView = decorViewGroup.findViewWithTag(STATUS_BAR_VIEW_TAG);</div><div class="line">       if (statusBarView == null) &#123;</div><div class="line">           statusBarView = new StatusBarView(window.getContext());</div><div class="line">           statusBarView.setTag(STATUS_BAR_VIEW_TAG);</div><div class="line">           FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(</div><div class="line">                   FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);</div><div class="line">           params.gravity = Gravity.TOP;</div><div class="line">           statusBarView.setLayoutParams(params);</div><div class="line">           decorViewGroup.addView(statusBarView);</div><div class="line">       &#125;</div><div class="line">       statusBarView.setBackgroundColor(color);</div><div class="line">       StatusBarCompat.internalSetFitsSystemWindows(window, true);</div></pre></td></tr></table></figure></p>
+<p> <img src="http://upload-images.jianshu.io/upload_images/5125122-7dadf90e78c14b97?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<ul>
+<li>5.0</li>
+</ul>
+<p>注意5.0一般不用使用白色的状态栏（因为不能设置状态栏灰色图标），可在资源文件定义一个rgb，区分版本，5.0使用白灰色<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@TargetApi(Build.VERSION_CODES.LOLLIPOP)</div><div class="line">@Override</div><div class="line">public void setStatusBarColor(Window window, int color) &#123;</div><div class="line">    //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏</div><div class="line">    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);</div><div class="line">    //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色</div><div class="line">    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);</div><div class="line">    //设置状态栏颜色</div><div class="line">    window.setStatusBarColor(color);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> <img src="http://upload-images.jianshu.io/upload_images/5125122-1f899b0ae03f1576?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<ul>
+<li><p>6.0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@TargetApi(Build.VERSION_CODES.M)</div><div class="line">  @Override</div><div class="line">  public void setStatusBarColor(Window window, int color) &#123;</div><div class="line">      //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏</div><div class="line">      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);</div><div class="line">      //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色</div><div class="line">      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);</div><div class="line">      //设置状态栏颜色</div><div class="line">      window.setStatusBarColor(color);</div><div class="line"></div><div class="line">      // 去掉系统状态栏下的windowContentOverlay</div><div class="line">      View v = window.findViewById(android.R.id.content);</div><div class="line">      if (v != null) &#123;</div><div class="line">          v.setForeground(null);</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-cc8e3645cceebf35?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+</li>
+</ul>
+<h3 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h3><p>这里不重复造轮子，先提供一下github上比较完善的处理方案</p>
+<p><a href="https://github.com/msdx/status-bar-compat" target="_blank" rel="external">status-bar-compat</a></p>
+<p>StatusBarCompat是一个用于设置系统状态栏颜色的兼容库，兼容Android 4.4.2(API 19)以上，使用简单，仅需要一行代码的调用。</p>
+<p><a href="https://github.com/jgilfelt/SystemBarTint" target="_blank" rel="external">SystemBarTint</a></p>
+<p>支持4.4以上的，主要使用透明状态栏的方式实现</p>
+<p>推荐使用status-bar-compat，已考虑到整体的版本兼容机及各厂ROM，调用简单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">在Activity的setContentView()方法调用之后，调用以下方法即可。</div><div class="line"></div><div class="line">    StatusBarCompat.setStatusBarColor(this, color, lightStatusBar);</div><div class="line">或者是</div><div class="line"></div><div class="line">    StatusBarCompat.setStatusBarColor(this, color);</div></pre></td></tr></table></figure>
+<p>本文主要源码使用status-bar-compat中的代码进行说明</p>
+<h2 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h2><h3 id="关于全屏及非全屏界面切换导致页面移动问题"><a href="#关于全屏及非全屏界面切换导致页面移动问题" class="headerlink" title="关于全屏及非全屏界面切换导致页面移动问题"></a>关于全屏及非全屏界面切换导致页面移动问题</h3><p>例如在应用中有全屏的看图页面，点击返回为非全屏（带状态栏）页面，非全屏页面由于现实状态，会出现页面抖动。目前暂无完善的处理方案，项目中暂时使用的方式是延迟全屏页面的finish，先显示状态栏后再关闭</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">复写onBackPressed</div><div class="line"></div><div class="line"> getActivity().getWindow().clearFlags(</div><div class="line">                WindowManager.LayoutParams.FLAG_FULLSCREEN);</div><div class="line">        if(getView()!=null)&#123;</div><div class="line">            getView().postDelayed(new Runnable() &#123;</div><div class="line">                @Override</div><div class="line">                public void run() &#123;</div><div class="line">                    getActivity().finish();</div><div class="line">                &#125;</div><div class="line">            &#125;,10);</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<h3 id="状态栏一片白色"><a href="#状态栏一片白色" class="headerlink" title="状态栏一片白色"></a>状态栏一片白色</h3><p>上面已有分析，要注意如果状态栏为白色，需要设置状态栏的图标颜色。status-bar-compat中会把颜色转换成灰度值，然后自己控制状态栏图标颜色<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public static void setStatusBarColor(Activity activity, @ColorInt int color) &#123;</div><div class="line">      boolean isLightColor = toGrey(color) &gt; 225;</div><div class="line">      setStatusBarColor(activity, color, isLightColor);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * 把颜色转换成灰度值。</div><div class="line">   * 代码来自 Flyme 示例代码</div><div class="line">   */</div><div class="line">  public static int toGrey(@ColorInt int color) &#123;</div><div class="line">      int blue = Color.blue(color);</div><div class="line">      int green = Color.green(color);</div><div class="line">      int red = Color.red(color);</div><div class="line">      return (red * 38 + green * 75 + blue * 15) &gt;&gt; 7;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="部分第三方组件的弹层和白色状态栏显得比较突兀"><a href="#部分第三方组件的弹层和白色状态栏显得比较突兀" class="headerlink" title="部分第三方组件的弹层和白色状态栏显得比较突兀"></a>部分第三方组件的弹层和白色状态栏显得比较突兀</h3><p> <img src="http://upload-images.jianshu.io/upload_images/5125122-fdf0bb4eeef724b1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>这个目前也尚无方法，考虑可以在弹层出现时，动态修改状态的颜色，但是工作量比较大，可先适当调整弹层的rgb，减低透明度</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.jianshu.com/p/a9f2174b7714" target="_blank" rel="external">Android 6.0 以上实现状态栏白底黑字</a></p>
+<p><a href="https://github.com/msdx/status-bar-compat" target="_blank" rel="external">status-bar-compat</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/Java并发编程-锁及并发容器/" rel="next" title="Java并发编程-锁及并发容器">
+                <i class="fa fa-chevron-left"></i> Java并发编程-锁及并发容器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/29/回顾2017，展望2018/" rel="prev" title="回顾2017，展望2018">
+                回顾2017，展望2018 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/12/14/玩转Android状态栏/"
+           data-title="玩转Android状态栏" data-url="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android各版本状态栏区别"><span class="nav-number">2.</span> <span class="nav-text">Android各版本状态栏区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各个ROM状态栏区别"><span class="nav-number">3.</span> <span class="nav-text">各个ROM状态栏区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#是不是设置了状态栏透明就真透明了？"><span class="nav-number">3.1.</span> <span class="nav-text">是不是设置了状态栏透明就真透明了？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#是不是6-0都支持系统状态栏黑条图标？"><span class="nav-number">3.2.</span> <span class="nav-text">是不是6.0都支持系统状态栏黑条图标？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何进行定制状态栏"><span class="nav-number">4.</span> <span class="nav-text">如何进行定制状态栏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析"><span class="nav-number">4.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现方案"><span class="nav-number">4.2.</span> <span class="nav-text">实现方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坑"><span class="nav-number">5.</span> <span class="nav-text">坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于全屏及非全屏界面切换导致页面移动问题"><span class="nav-number">5.1.</span> <span class="nav-text">关于全屏及非全屏界面切换导致页面移动问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态栏一片白色"><span class="nav-number">5.2.</span> <span class="nav-text">状态栏一片白色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分第三方组件的弹层和白色状态栏显得比较突兀"><span class="nav-number">5.3.</span> <span class="nav-text">部分第三方组件的弹层和白色状态栏显得比较突兀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

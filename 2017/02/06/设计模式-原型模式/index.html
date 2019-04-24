@@ -1,0 +1,798 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.原型模式的定义及使用场景定义：用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象
+使用场景：
+类初始化需要消耗非常多的资源，这个资源包括数据、硬件资源等，通过原型拷贝避免这些消耗
+通过new产生一个对象需要非常繁琐的数据准备或访问权限，这时可以使用原型模式
+一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用，即保护性拷贝">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-原型模式">
+<meta property="og:url" content="https://junbin1011.github.io/2017/02/06/设计模式-原型模式/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.原型模式的定义及使用场景定义：用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象
+使用场景：
+类初始化需要消耗非常多的资源，这个资源包括数据、硬件资源等，通过原型拷贝避免这些消耗
+通过new产生一个对象需要非常繁琐的数据准备或访问权限，这时可以使用原型模式
+一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用，即保护性拷贝">
+<meta property="og:image" content="http://img.blog.csdn.net/20170206083811700?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.785Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-原型模式">
+<meta name="twitter:description" content="1.原型模式的定义及使用场景定义：用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象
+使用场景：
+类初始化需要消耗非常多的资源，这个资源包括数据、硬件资源等，通过原型拷贝避免这些消耗
+通过new产生一个对象需要非常繁琐的数据准备或访问权限，这时可以使用原型模式
+一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用，即保护性拷贝">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170206083811700?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/02/06/设计模式-原型模式/"/>
+
+
+
+
+
+  <title> 设计模式-原型模式 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/06/设计模式-原型模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式-原型模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-06T08:40:17+08:00">
+                2017-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/06/设计模式-原型模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/06/设计模式-原型模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-原型模式的定义及使用场景"><a href="#1-原型模式的定义及使用场景" class="headerlink" title="1.原型模式的定义及使用场景"></a>1.原型模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li>类初始化需要消耗非常多的资源，这个资源包括数据、硬件资源等，通过原型拷贝避免这些消耗</li>
+<li>通过new产生一个对象需要非常繁琐的数据准备或访问权限，这时可以使用原型模式</li>
+<li>一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用，即保护性拷贝</li>
+</ul>
+<p><img src="http://img.blog.csdn.net/20170206083811700?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<h1 id="2-原型模式的优缺点"><a href="#2-原型模式的优缺点" class="headerlink" title="2.原型模式的优缺点"></a>2.原型模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><p><strong>性能优良</strong><br>原型模式是在内存二进制流的拷贝，要比直接new一个对象性能好，特别是要在一个循环体内产生大量的对象时，原型模式可以更好地体现其优点</p>
+<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2><p><strong>逃避构造函数的约束</strong><br>这既是他的优点也是缺点，直接在内存中拷贝，构造函数不会执行。需要在实际应用时考虑</p>
+<h1 id="3-注意实现"><a href="#3-注意实现" class="headerlink" title="3.注意实现"></a>3.注意实现</h1><ul>
+<li>构造函数默认不执行</li>
+<li>浅拷贝及深拷贝</li>
+<li>Object类提供的方法clone只是拷贝本对象，其对象内部的数组、引用对象等都不拷贝，还是指向原型对象的内部元素地址，这种拷贝为浅拷贝。如需要深拷贝，对应的成员也需指向clone方法</li>
+<li>要使用clone方法，类的成员变量上不要增加final关键字<h1 id="4-原型模式的实现方式"><a href="#4-原型模式的实现方式" class="headerlink" title="4.原型模式的实现方式"></a>4.原型模式的实现方式</h1></li>
+</ul>
+<p>ProtoType：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">public class ProtoType implements Cloneable &#123;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public ProtoType() &#123;  </div><div class="line">        System.out.println(&quot;ProtoType is excute...&quot;);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    private int id;  </div><div class="line">    private String name;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public int getId() &#123;  </div><div class="line">        return id;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setId(int id) &#123;  </div><div class="line">        this.id = id;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public String getName() &#123;  </div><div class="line">        return name;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setName(String name) &#123;  </div><div class="line">        this.name = name;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    protected ProtoType clone() &#123;  </div><div class="line">        ProtoType protoType = null;  </div><div class="line">        try &#123;  </div><div class="line">            protoType = (ProtoType) super.clone();  </div><div class="line">        &#125; catch (CloneNotSupportedException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">        return protoType;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public String toString() &#123;  </div><div class="line">        return &quot;ProtoType&#123;&quot; +  </div><div class="line">                &quot;id=&quot; + id +  </div><div class="line">                &quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +  </div><div class="line">                &apos;&#125;&apos;;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Text：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public static void main(String args[]) &#123;  </div><div class="line">        ProtoType type = new ProtoType();  </div><div class="line">        type.setId(1);  </div><div class="line">        type.setName(&quot;张三&quot;);  </div><div class="line">        System.out.println(type);  </div><div class="line">        ProtoType clone = type.clone();  </div><div class="line">        clone.setId(2);  </div><div class="line">        clone.setName(&quot;李四&quot;);  </div><div class="line">        System.out.println(clone);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Objec的clone源码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line">* Creates and returns a copy of this &#123;@code Object&#125;. The default </div><div class="line">* implementation returns a so-called &quot;shallow&quot; copy: It creates a new </div><div class="line">* instance of the same class and then copies the field values (including </div><div class="line">* object references) from this instance to the new instance. A &quot;deep&quot; copy, </div><div class="line">* in contrast, would also recursively clone nested objects. A subclass that </div><div class="line">* needs to implement this kind of cloning should call &#123;@code super.clone()&#125; </div><div class="line">* to create the new instance and then create deep copies of the nested, </div><div class="line">* mutable objects. </div><div class="line">* </div><div class="line">* @return a copy of this object. </div><div class="line">* @throws CloneNotSupportedException </div><div class="line">* if this object&apos;s class does not implement the &#123;@code </div><div class="line">* Cloneable&#125; interface. </div><div class="line">*/  </div><div class="line">protected Object clone() throws CloneNotSupportedException &#123;  </div><div class="line">if (!(this instanceof Cloneable)) &#123;  </div><div class="line">throw new CloneNotSupportedException(&quot;Class &quot; + getClass().getName() +  </div><div class="line">&quot; doesn&apos;t implement Cloneable&quot;);  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"></div><div class="line">return internalClone();  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"></div><div class="line">/* </div><div class="line">* Native helper method for cloning. </div><div class="line">*/  </div><div class="line">private native Object internalClone();</div></pre></td></tr></table></figure></p>
+<p>可见执行了一个native方法执行二进制流的拷贝</p>
+<h1 id="5-原型模式在Android中的实际应用"><a href="#5-原型模式在Android中的实际应用" class="headerlink" title="5.原型模式在Android中的实际应用"></a>5.原型模式在Android中的实际应用</h1><p>Intent：  </p>
+<pre><code> @Override  
+ public Object clone() {  
+ return new Intent(this);  
+ }  
+
+
+/** 
+ * Copy constructor. 
+ */  
+ public Intent(Intent o) {  
+ this.mAction = o.mAction;  
+ this.mData = o.mData;  
+ this.mType = o.mType;  
+ this.mPackage = o.mPackage;  
+ this.mComponent = o.mComponent;  
+ this.mFlags = o.mFlags;  
+ this.mContentUserHint = o.mContentUserHint;  
+ if (o.mCategories != null) {  
+ this.mCategories = new ArraySet&lt;String&gt;(o.mCategories);  
+ }  
+ if (o.mExtras != null) {  
+ this.mExtras = new Bundle(o.mExtras);  
+ }  
+ if (o.mSourceBounds != null) {  
+ this.mSourceBounds = new Rect(o.mSourceBounds);  
+ }  
+ if (o.mSelector != null) {  
+ this.mSelector = new Intent(o.mSelector);  
+ }  
+ if (o.mClipData != null) {  
+ this.mClipData = new ClipData(o.mClipData);  
+ }  
+ }
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/03/设计模式-代理模式/" rel="next" title="设计模式-代理模式">
+                <i class="fa fa-chevron-left"></i> 设计模式-代理模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/07/设计模式-中介者模式/" rel="prev" title="设计模式-中介者模式">
+                设计模式-中介者模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/06/设计模式-原型模式/"
+           data-title="设计模式-原型模式" data-url="https://junbin1011.github.io/2017/02/06/设计模式-原型模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-原型模式的定义及使用场景"><span class="nav-number">1.</span> <span class="nav-text">1.原型模式的定义及使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义："><span class="nav-number">1.1.</span> <span class="nav-text">定义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景："><span class="nav-number">1.2.</span> <span class="nav-text">使用场景：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-原型模式的优缺点"><span class="nav-number">2.</span> <span class="nav-text">2.原型模式的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1优点"><span class="nav-number">2.1.</span> <span class="nav-text">2.1优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2缺点"><span class="nav-number">2.2.</span> <span class="nav-text">2.2缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-注意实现"><span class="nav-number">3.</span> <span class="nav-text">3.注意实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-原型模式的实现方式"><span class="nav-number">4.</span> <span class="nav-text">4.原型模式的实现方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-原型模式在Android中的实际应用"><span class="nav-number">5.</span> <span class="nav-text">5.原型模式在Android中的实际应用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

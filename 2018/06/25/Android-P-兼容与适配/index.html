@@ -1,0 +1,878 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="P 新特性Android P 在Google IO2018正式发版，全新的手势操作选项。底部虚拟键将由小白点和一颗返回键取代。通过轻触回到主页、长按呼出语音助手。新的特性主要有：
+
+利用 Wi-Fi RTT 进行室内定位
+刘海平API支持
+通知栏功能增强
+多摄像头支持和摄像头更新
+HDR VP9 视频、HEIF 图像压缩和 Media API
+
+详细可参考Google官方文档介绍。
+P 兼容优化根">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android P 兼容与适配">
+<meta property="og:url" content="https://junbin1011.github.io/2018/06/25/Android-P-兼容与适配/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="P 新特性Android P 在Google IO2018正式发版，全新的手势操作选项。底部虚拟键将由小白点和一颗返回键取代。通过轻触回到主页、长按呼出语音助手。新的特性主要有：
+
+利用 Wi-Fi RTT 进行室内定位
+刘海平API支持
+通知栏功能增强
+多摄像头支持和摄像头更新
+HDR VP9 视频、HEIF 图像压缩和 Media API
+
+详细可参考Google官方文档介绍。
+P 兼容优化根">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-34d87cf21befeb0f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-e3d33530cafa41c1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-3eebb34f19680621?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-550b01b1ed53df69?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.768Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android P 兼容与适配">
+<meta name="twitter:description" content="P 新特性Android P 在Google IO2018正式发版，全新的手势操作选项。底部虚拟键将由小白点和一颗返回键取代。通过轻触回到主页、长按呼出语音助手。新的特性主要有：
+
+利用 Wi-Fi RTT 进行室内定位
+刘海平API支持
+通知栏功能增强
+多摄像头支持和摄像头更新
+HDR VP9 视频、HEIF 图像压缩和 Media API
+
+详细可参考Google官方文档介绍。
+P 兼容优化根">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-34d87cf21befeb0f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2018/06/25/Android-P-兼容与适配/"/>
+
+
+
+
+
+  <title> Android P 兼容与适配 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/06/25/Android-P-兼容与适配/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android P 兼容与适配
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-25T10:15:17+08:00">
+                2018-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/25/Android-P-兼容与适配/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/06/25/Android-P-兼容与适配/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="P-新特性"><a href="#P-新特性" class="headerlink" title="P 新特性"></a>P 新特性</h1><p>Android P 在Google IO2018正式发版，全新的手势操作选项。底部虚拟键将由小白点和一颗返回键取代。通过轻触回到主页、长按呼出语音助手。新的特性主要有：</p>
+<ul>
+<li>利用 Wi-Fi RTT 进行室内定位</li>
+<li>刘海平API支持</li>
+<li>通知栏功能增强</li>
+<li>多摄像头支持和摄像头更新</li>
+<li>HDR VP9 视频、HEIF 图像压缩和 Media API</li>
+</ul>
+<p>详细可参考<a href="https://developer.android.google.cn/preview/features" target="_blank" rel="external">Google官方文档</a>介绍。</p>
+<h1 id="P-兼容优化"><a href="#P-兼容优化" class="headerlink" title="P 兼容优化"></a>P 兼容优化</h1><p>根据官方的API迁移指南，对应用比较影响的有如下几点：</p>
+<h2 id="non-SDK接口的使用"><a href="#non-SDK接口的使用" class="headerlink" title="non-SDK接口的使用"></a>non-SDK接口的使用</h2><p>一般来说，SDK 接口是指在 Android 框架<a href="https://developer.android.google.cn/reference/packages" target="_blank" rel="external">软件包索引</a>中记录的接口。 对非 SDK 接口的处理是 API 抽象化的实现细节；其会随时更改，恕不另行通。</p>
+<p>Android P 引入了针对非 SDK 接口的新使用限制，无论是直接使用还是通过反射或 JNI 间接使用。 无论应用是引用非 SDK 接口还是尝试使用反射或 JNI 获取其句柄，均适用这些限制。</p>
+<h3 id="名单分类"><a href="#名单分类" class="headerlink" title="名单分类"></a>名单分类</h3><ul>
+<li>Light grey list: targetSDK&gt;=P时，警告；</li>
+<li>Dark grey list: targetSDK<p时，警告；>=p时，不允许调用；</p时，警告；></li>
+<li>Black list:三方应用不允许调用； </li>
+</ul>
+<p><a href="https://android.googlesource.com/platform/frameworks/base/+/master/config/" target="_blank" rel="external">名单查看</a></p>
+<h3 id="具体影响"><a href="#具体影响" class="headerlink" title="具体影响"></a>具体影响</h3><table>
+<thead>
+<tr>
+<th>访问方式</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dalvik 指令引用字段</td>
+<td>引发 NoSuchFieldError</td>
+</tr>
+<tr>
+<td>Dalvik 指令引用函数</td>
+<td>引发 NoSuchMethodError</td>
+</tr>
+<tr>
+<td>通过 Class.getDeclaredField() 或 Class.getField() 反射</td>
+<td>引发 NoSuchFieldException</td>
+</tr>
+<tr>
+<td>通过 Class.getDeclaredMethod() 或 Class.getMethod() 反射</td>
+<td>引发 NoSuchMethodException</td>
+</tr>
+<tr>
+<td>通过 Class.getDeclaredFields() 或 Class.getFields() 反射</td>
+<td>结果中未出现非 SDK 成员</td>
+</tr>
+<tr>
+<td>通过 Class.getDeclaredMethods() 或 Class.getMethods() 反射</td>
+<td>结果中未出现非 SDK 成员</td>
+</tr>
+<tr>
+<td>通过 env-&gt;GetFieldID() 调用 JNI</td>
+<td>返回 NULL，引发 NoSuchFieldError</td>
+</tr>
+<tr>
+<td>通过 env-&gt;GetMethodID() 调用 JNI</td>
+<td>返回 NULL，引发 NoSuchMethodError</td>
+</tr>
+</tbody>
+</table>
+<h2 id="挖孔屏适配"><a href="#挖孔屏适配" class="headerlink" title="挖孔屏适配"></a>挖孔屏适配</h2><p>谷歌P版本提供了统一的挖孔屏方案和三方适配挖孔屏方案：</p>
+<ul>
+<li>对于有状态栏的页面，不会受到挖孔屏特性的影响；</li>
+<li>全屏显示的页面，系统挖孔屏方案会对应用界面做下移避开挖孔区显示；</li>
+<li>已经适配的P的应用的全屏页面可以通过谷歌提供的适配方案使用挖孔区，真正做到全屏显示</li>
+</ul>
+<p>总的来说，就是P版本已经坐了兼容，全屏显示和状态栏显示，都会避开挖空区域显示。<br>但注意对于沉浸式的显示要注意，避免挖空挡住UI布局，需要做好适配。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-34d87cf21befeb0f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例一"><br><img src="http://upload-images.jianshu.io/upload_images/5125122-e3d33530cafa41c1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="示例二"></p>
+<h2 id="P版本三方适配挖孔屏方案"><a href="#P版本三方适配挖孔屏方案" class="headerlink" title="P版本三方适配挖孔屏方案"></a>P版本三方适配挖孔屏方案</h2><p>1、 新增挖孔屏挖孔尺寸和位置接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class WindowInsets &#123;</div><div class="line">DisplayCutout getDisplayCutout();</div><div class="line">&#125;</div><div class="line">class DisplayCutout &#123;</div><div class="line">int getSafeInsetLeft();</div><div class="line">int getSafeInsetTop();</div><div class="line">int getSafeInsetRight();</div><div class="line">int getSafeInsetBottom();</div><div class="line">Region getBounds();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2、新窗口布局模式，允许应用程序请求是否在挖孔区域布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class WindowManager.LayoutParams &#123;</div><div class="line">int layoutInDisplayCutoutMode;</div><div class="line">final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;</div><div class="line">final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;</div><div class="line">final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;</div><div class="line">	&#125;</div><div class="line">layoutInDisplayCutoutMode值说明：</div><div class="line"></div><div class="line">a）LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT：默认情况下，全屏窗口不会使用到挖孔区域，非全屏窗口可正常使用挖孔区域。</div><div class="line">b）LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS：窗口声明使用挖孔区域</div><div class="line">c）LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER：窗口声明不使用挖孔区域</div></pre></td></tr></table></figure>
+<h2 id="Battery-Improvements"><a href="#Battery-Improvements" class="headerlink" title="Battery Improvements"></a>Battery Improvements</h2><p>谷歌在P版本之前没有一个完整的功耗解决方案，OEM厂商分别开发各自的功耗方案，管控手段都包括了清理应用，功耗得到优化，但是同时也影响了三方应用的一些功能正常使用，谷歌为了解决这个问题在P版本提出了自己的功耗解决方案。</p>
+<h3 id="主要方案："><a href="#主要方案：" class="headerlink" title="主要方案："></a>主要方案：</h3><ul>
+<li>AAB（Auto Awesome Battery)：</li>
+</ul>
+<p>1、通过ML算法将应用进行分类，不同类型的应用功耗管控策略不一样</p>
+<p>2、 Firebase Cloud Messaging (FCM):管控三方消息接收的频率</p>
+<p>3、谷歌提供了统一的应用的管控方法：Forced App Standby (FAS)，谷歌不会通过清理应用来优化功耗</p>
+<ul>
+<li><p>Extreme Battery Saver（EBS）谷歌超级省电模式；</p>
+</li>
+<li><p>Smart screen brightness：屏幕亮度调节优化算法。</p>
+</li>
+</ul>
+<h3 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h3><p>谷歌功耗方案对三方应用各种管控，存在导致应用后台功能无法正常使用的可能，特别是：IM、邮箱、闹钟、音乐（直播）、地图导航、运动健康、下载、日历等应用影响比较大。目前通过谷歌提供的调试命令验证：所有的应用都有可能会被分到管控的类型，对三方的后台功能是有影响的。</p>
+<h2 id="不允许共享WebView数据目录"><a href="#不允许共享WebView数据目录" class="headerlink" title="不允许共享WebView数据目录"></a>不允许共享WebView数据目录</h2><p>应用程序不能再跨进程共享单个WebView数据目录。如果您的应用有多个使用WebView，CookieManager或android.webkit包中的其他API的进程，则当第二个进程调用WebView方法时，您的应用将崩溃。</p>
+<p>该特性只影响已经适配P的应用，也就是targetSDK Version&gt;=P。</p>
+<h2 id="移除对-Build-serial-的直接访问"><a href="#移除对-Build-serial-的直接访问" class="headerlink" title="移除对 Build.serial 的直接访问"></a>移除对 Build.serial 的直接访问</h2><p>现在，需要 Build.serial 标识符的应用必须请求 READ_PHONE_STATE 权限，然后使用 Android P 中新增的新 Build.getSerial() 函数</p>
+<h2 id="SELinux-禁止访问应用的数据目录"><a href="#SELinux-禁止访问应用的数据目录" class="headerlink" title="SELinux 禁止访问应用的数据目录"></a>SELinux 禁止访问应用的数据目录</h2><p>系统强制每个应用的 SELinux 沙盒对每个应用的私有数据目录强制执行逐个应用的 SELinux 限制。现在，不允许直接通过路径访问其他应用的数据目录。应用可以继续使用进程间通信 (IPC) 机制（包括通过传递 FD）共享数据</p>
+<h1 id="项目升级P实操"><a href="#项目升级P实操" class="headerlink" title="项目升级P实操"></a>项目升级P实操</h1><h2 id="使用模拟器"><a href="#使用模拟器" class="headerlink" title="使用模拟器"></a>使用模拟器</h2><p>1、使用Android studio 3.1或者更高的版本<br>2、升级Android  API 28版本，SDK Tools升级至Android SDK Build-Tools 28<br>3、下载API 28的模拟机镜像<br>4、设置启动模拟机</p>
+<p>这里遇到一个坑，模拟机一直起不来。注意Graphics设置为Software-GLES 2.0</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-3eebb34f19680621?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h2 id="更新项目Gradle配置"><a href="#更新项目Gradle配置" class="headerlink" title="更新项目Gradle配置"></a>更新项目Gradle配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">androidTargetSdkVersion = 28</div><div class="line">androidCompileSdkVersion = 28</div></pre></td></tr></table></figure>
+<h2 id="模拟机开发者选项设置"><a href="#模拟机开发者选项设置" class="headerlink" title="模拟机开发者选项设置"></a>模拟机开发者选项设置</h2><p>开发者选项支持设置模拟刘海屏缺口，项目可通过设置，进行应用的测试。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-550b01b1ed53df69?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h2 id="项目升级遇到问题"><a href="#项目升级遇到问题" class="headerlink" title="项目升级遇到问题"></a>项目升级遇到问题</h2><p>这里注意我们应用是直接在24升级到28.</p>
+<p>1、java.lang.SecurityException: Failed to find provider null for user 0; expected to find a valid ContentProvider for this authority</p>
+<p>问题原因：项目使用了ActiveAndroid，在 8.0 或 8.1 系统上使用 26 或以上的版本的 SDK 时，调用 ContentResolver 的 notifyChange 方法通知数据更新，或者调用 ContentResolver 的 registerContentObserver 方法监听数据变化时，会出现上述异常。</p>
+<p>解决方案：<br>在清单文件配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;provider</div><div class="line">        android:name=&quot;com.activeandroid.content.ContentProvider&quot;</div><div class="line">        android:authorities=&quot;com.ylmf.androidclient&quot;</div><div class="line">        android:enabled=&quot;true&quot;</div><div class="line">        android:exported=&quot;false&quot;&gt;</div><div class="line">&lt;/provider&gt;</div></pre></td></tr></table></figure></p>
+<p>2、CLEARTEXT communication to life.115.com not permitted by network security policy</p>
+<p>问题原因： Android P 限制了明文流量的网络请求，非加密的流量请求都会被系统禁止掉</p>
+<p>解决方案：</p>
+<p>在资源文件新建xml目录，新建文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;network-security-config&gt;</div><div class="line">    &lt;base-config cleartextTrafficPermitted=&quot;true&quot; /&gt;</div><div class="line">&lt;/network-security-config&gt;</div></pre></td></tr></table></figure></p>
+<p>清单文件配置：android:networkSecurityConfig=”@xml/network_security_config”</p>
+<p>但还是建议都使用https进行传输</p>
+<p>3、8.0，静态广播无法正常接收</p>
+<p>问题原因： Android 8.0 引入了新的广播接收器限制，因此您应该移除所有为隐式广播 Intent 注册的广播接收器</p>
+<p>解决方案：<br>使用动态广播代替静态广播</p>
+<p>4、Caused by: java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation</p>
+<p>问题原因： Android 8.0 非全屏透明页面不允许设置方向</p>
+<p>解决方案：android:windowIsTranslucent设置为false</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>1、随着Google新的版本发布，项目应尽快跟进兼容。否则后面有多个版本的迭代，遗留的坑会比较多</p>
+<p>2、项目可在独立分支升级兼容，然后进行业务功能测试，发现问题进行针对性处理。可先解决一些闪退，功能不正常的问题。</p>
+<p>3、多参考Google官方的版本适配介绍，有详细的技术指导</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://developer.android.google.cn/preview/" target="_blank" rel="external">Google官方文档</a></p>
+<p><a href="https://devcenter.huawei.com/consumer/cn/devservice/doc/50115" target="_blank" rel="external">Android P版本应用兼容性适配技术指导</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/29/记一次Android内存泄漏的优化经历/" rel="next" title="记一次Android内存泄漏的优化经历">
+                <i class="fa fa-chevron-left"></i> 记一次Android内存泄漏的优化经历
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/06/项目模块重构分享与思考/" rel="prev" title="项目模块重构分享与思考">
+                项目模块重构分享与思考 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/06/25/Android-P-兼容与适配/"
+           data-title="Android P 兼容与适配" data-url="https://junbin1011.github.io/2018/06/25/Android-P-兼容与适配/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#P-新特性"><span class="nav-number">1.</span> <span class="nav-text">P 新特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P-兼容优化"><span class="nav-number">2.</span> <span class="nav-text">P 兼容优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#non-SDK接口的使用"><span class="nav-number">2.1.</span> <span class="nav-text">non-SDK接口的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#名单分类"><span class="nav-number">2.1.1.</span> <span class="nav-text">名单分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体影响"><span class="nav-number">2.1.2.</span> <span class="nav-text">具体影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挖孔屏适配"><span class="nav-number">2.2.</span> <span class="nav-text">挖孔屏适配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P版本三方适配挖孔屏方案"><span class="nav-number">2.3.</span> <span class="nav-text">P版本三方适配挖孔屏方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Battery-Improvements"><span class="nav-number">2.4.</span> <span class="nav-text">Battery Improvements</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要方案："><span class="nav-number">2.4.1.</span> <span class="nav-text">主要方案：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#影响"><span class="nav-number">2.4.2.</span> <span class="nav-text">影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不允许共享WebView数据目录"><span class="nav-number">2.5.</span> <span class="nav-text">不允许共享WebView数据目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移除对-Build-serial-的直接访问"><span class="nav-number">2.6.</span> <span class="nav-text">移除对 Build.serial 的直接访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SELinux-禁止访问应用的数据目录"><span class="nav-number">2.7.</span> <span class="nav-text">SELinux 禁止访问应用的数据目录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目升级P实操"><span class="nav-number">3.</span> <span class="nav-text">项目升级P实操</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用模拟器"><span class="nav-number">3.1.</span> <span class="nav-text">使用模拟器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新项目Gradle配置"><span class="nav-number">3.2.</span> <span class="nav-text">更新项目Gradle配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟机开发者选项设置"><span class="nav-number">3.3.</span> <span class="nav-text">模拟机开发者选项设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目升级遇到问题"><span class="nav-number">3.4.</span> <span class="nav-text">项目升级遇到问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">4.1.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.2.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

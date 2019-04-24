@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="架构," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言背景云盘产品，文件模块的业务功能相对复杂，包含文件的显示、排序、筛选、加密隐藏、批量移动复制等功能。项目代码可以追溯到14年以前，中间也有N多人的接手，目前还是存在非常多问题，维护及扩展也是相对比较吃力。
+最近由于产品功能正在策划，大约有一周时间可以对项目进行优化。故决定对文件模块进行梳理重构。在开始之前，这里先抛出几个问题，相信大部分的同学也可能有类型的疑问，在文末的终结也会谈一下自己的看法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目模块重构分享与思考">
+<meta property="og:url" content="https://junbin1011.github.io/2018/07/06/项目模块重构分享与思考/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="前言背景云盘产品，文件模块的业务功能相对复杂，包含文件的显示、排序、筛选、加密隐藏、批量移动复制等功能。项目代码可以追溯到14年以前，中间也有N多人的接手，目前还是存在非常多问题，维护及扩展也是相对比较吃力。
+最近由于产品功能正在策划，大约有一周时间可以对项目进行优化。故决定对文件模块进行梳理重构。在开始之前，这里先抛出几个问题，相信大部分的同学也可能有类型的疑问，在文末的终结也会谈一下自己的看法">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-6cb1c532f1fb3390?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-398303170798530c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-b2da226c7cfa08af?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目模块重构分享与思考">
+<meta name="twitter:description" content="前言背景云盘产品，文件模块的业务功能相对复杂，包含文件的显示、排序、筛选、加密隐藏、批量移动复制等功能。项目代码可以追溯到14年以前，中间也有N多人的接手，目前还是存在非常多问题，维护及扩展也是相对比较吃力。
+最近由于产品功能正在策划，大约有一周时间可以对项目进行优化。故决定对文件模块进行梳理重构。在开始之前，这里先抛出几个问题，相信大部分的同学也可能有类型的疑问，在文末的终结也会谈一下自己的看法">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-6cb1c532f1fb3390?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2018/07/06/项目模块重构分享与思考/"/>
+
+
+
+
+
+  <title> 项目模块重构分享与思考 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/07/06/项目模块重构分享与思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                项目模块重构分享与思考
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-06T15:16:58+08:00">
+                2018-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/06/项目模块重构分享与思考/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/07/06/项目模块重构分享与思考/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>云盘产品，文件模块的业务功能相对复杂，包含文件的显示、排序、筛选、加密隐藏、批量移动复制等功能。项目代码可以追溯到14年以前，中间也有N多人的接手，目前还是存在非常多问题，维护及扩展也是相对比较吃力。</p>
+<p>最近由于产品功能正在策划，大约有一周时间可以对项目进行优化。故决定对文件模块进行梳理重构。在开始之前，这里先抛出几个问题，相信大部分的同学也可能有类型的疑问，在文末的终结也会谈一下自己的看法。</p>
+<ol>
+<li>业务需求频繁，开发功能都来不及，哪里有时间进行代码重构</li>
+<li>公司并不看重代码质量，首先要满足功能开发。重构这个事情，做了也不一定被认同。等一下重构后，产生新的问题，后果更严重</li>
+<li>这代码改起来真是蛋疼，好几个类功能都一样，新增或者修改都需要改几个地方。但是没办法，为了赶时间，暂时先这么干吧</li>
+<li>想重构，但是却不知道如何下手。有时候有点空闲的时间，又感觉不够。所以一直没有动</li>
+</ol>
+<h2 id="文件模块情况"><a href="#文件模块情况" class="headerlink" title="文件模块情况"></a>文件模块情况</h2><h3 id="简单类关系图"><a href="#简单类关系图" class="headerlink" title="简单类关系图"></a>简单类关系图</h3><p>这里简单介绍一些文件模块目前的一些问题。先看一些类的关系图。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-6cb1c532f1fb3390?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h3 id="类说明"><a href="#类说明" class="headerlink" title="类说明"></a>类说明</h3><table>
+<thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MyFileFragment</td>
+<td>显示文件及文件操作的Fragment</td>
+</tr>
+<tr>
+<td>FileMainActivity</td>
+<td>文件主页面，依赖MyFileFragment</td>
+</tr>
+<tr>
+<td>BaseList2Activity</td>
+<td>文件列表基类，显示文件</td>
+</tr>
+<tr>
+<td>MyFileActivity</td>
+<td>作用和MyFileFragment相同，全局很多跳转到文件页面都是使用该类,继承了BaseList2Activity</td>
+</tr>
+<tr>
+<td>DiskMusicActivity</td>
+<td>音乐模块，从网盘导入音乐文件，是一个提供音乐文件选择页面，继承了MyFileActivity</td>
+</tr>
+<tr>
+<td>AddAttachmentActivity</td>
+<td>聊天模块，从网盘选择图片，是一个提供图片文件选择页面，继承了MyFileActivity</td>
+</tr>
+<tr>
+<td>DiskSearchActivity</td>
+<td>文件搜索页面，继承了MyFileActivity</td>
+</tr>
+<tr>
+<td>FileListBaseFragment</td>
+<td>文件展示页面，与BaseList2Activity类似</td>
+</tr>
+<tr>
+<td>FileChooseActivity</td>
+<td>网盘文件选择页面，是一个提供选择文件页面，依赖FileListBaseFragment</td>
+</tr>
+</tbody>
+</table>
+<h3 id="主要存在问题"><a href="#主要存在问题" class="headerlink" title="主要存在问题"></a>主要存在问题</h3><p>在项目的开发维护工程中，主要存在的地方如下：</p>
+<p>1、存在多个功能相似的页面，例如MyFileFragment及MyFileActivity，功能高度相同。全局跳转到文件页面使用了MyFileActivity，文件主入口使用了FileMainActivity。由于历史原因，一直维护着2个类，新增功能和修改功能都要维护2个地方</p>
+<p>2、文件列表显示存在多个类，BaseList2Activity、FileListBaseFragment、MyFileFragment</p>
+<p>3、文件选择也有多个页面，音乐选择一个DiskMusicActivity、图片选择一个AddAttachmentActivity、还有附件选择一个FileChooseActivity</p>
+<p>经常出现产品加一个功能，要几个类修改，并且有时候修Bug容易遗漏地方。</p>
+<h1 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>在准备开始动手重构之前，先梳理了一下思路。</p>
+<p>1、先搞清楚目前存在问题，哪里不爽。分析解决问题的方案</p>
+<p>2、尽量不要动到原有的业务逻辑，着重于结构的升级</p>
+<p>3、分解重构执行步骤，尽量细化成小任务，每个任务不相互影响。由于时间有限，争取每完成一个小步骤的重构，都能达到上线的状态</p>
+<h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><p>根据目前存在的问题及重构思路。本次重构主要解决3个大问题。</p>
+<p>1、在项目中要干掉MyFileActivity，统一使用MyFileFragment。不要再同时维护2个相同的功能的类</p>
+<p>2、统一文件列表的显示，避免出现多个显示文件的类</p>
+<p>3、全局应该统一一个文件选择的页面。避免出现选择音乐一个界面、选择图片一个界面、选择附件又一个界面</p>
+<h3 id="阶段一"><a href="#阶段一" class="headerlink" title="阶段一"></a>阶段一</h3><p>阶段一主要有优化处理1、2点。这里先上一下简单类结构关系图</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-398303170798530c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>1、将MyFileActivity移除，新增BridgeFileActivity（继承了FileMainActivity），替代MyFileActivity。将全局文件跳转统一替换到BridgeFileActivity，BridgeFileActivity最终依赖了MyFileFragment。这样将文件主要操作的代码统一在了MyFileFragment，避免维护多个相同功能的类。</p>
+<p>2、将文件的基础显示都FileListBaseFragment中，MyFileFragment继承于它。MyFileFragment扩展文件的操作功能。如删除、复制、移动、加密等功能</p>
+<p>3、由于MyFileActivity的移除，原继承于它的DiskMusicActivity、DiskSearchActivity等都需要进行改造。重新定义DiskMusicFragment、DiskSearchFragment继承于MyFileFragment。将原来的Activity依赖于新定义的Fragment。</p>
+<p>至此完成第一阶段，对原业务都未进行修改。只是将跳转入口进行替换。成功移除了MyFileActivity。解决上述问题1、2。</p>
+<h3 id="阶段二"><a href="#阶段二" class="headerlink" title="阶段二"></a>阶段二</h3><p>阶段二主要优化第三点。同样先上下简单类结构关系图</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-b2da226c7cfa08af?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>1、对FileChooseActivity进行扩展，使用Builder模式进行配置，支持文件类型的筛选显示。废除DiskMusicActivity、AddAttachmentActivity。</p>
+<p>音乐筛选页面代码跳转：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FileChooseActivity.IntentBuilder builder = new FileChooseActivity.IntentBuilder(this);</div><div class="line">       builder.setChoiceMode(ChoiceMode.MULTI)</div><div class="line">               .setEventBusFlag(Signature.signature(this))</div><div class="line">               .setShowLocalFileList(false)</div><div class="line">               .setYywSelectType(FileChoiceParams.MUSIC)</div><div class="line">               .setSupportCheckAll(true)</div><div class="line">               .launch();</div></pre></td></tr></table></figure></p>
+<p>图片筛选页面代码跳转：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">FileChooseActivity.IntentBuilder builder = new FileChooseActivity.IntentBuilder(this);</div><div class="line">       builder.setChoiceMode(ChoiceMode.MULTI)</div><div class="line">               .setEventBusFlag(Signature.signature(this))</div><div class="line">               .setShowLocalFileList(false)</div><div class="line">               .setMaxLimit(15)</div><div class="line">               .setYywSelectType(FileChoiceParams.PIC)</div><div class="line">               .setSupportCheckAll(false)</div><div class="line">               .launch();</div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>回到一开始抛出的问题，这里做一下自己的总结思考。</p>
+<p>1、业务需求多，时间赶这是常态，时间要靠自己规划及提高效率挤出来。在开发的时候也要充分考虑，不能盲目追求功能实现。 一般项目上线后，新功能策划都有一段空白期，善于利用</p>
+<p>2、不管公司重不重视代码重构。首先多思考、优化重构，对自己也是一种提升。相信在重构的过程，自己也可以有所收获</p>
+<p>3、项目存在种种的历史遗留问题，有时候重构与不重构就是一个长痛和短痛的取舍。自己负责的模块代码不优化，加需求，改Bug，最终坑的还是自己</p>
+<p>4、项目重构是不断演化的过程，没有一蹴而就。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/25/Android-P-兼容与适配/" rel="next" title="Android P 兼容与适配">
+                <i class="fa fa-chevron-left"></i> Android P 兼容与适配
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/02/OkHttp源码学习随笔/" rel="prev" title="OkHttp源码学习随笔">
+                OkHttp源码学习随笔 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/07/06/项目模块重构分享与思考/"
+           data-title="项目模块重构分享与思考" data-url="https://junbin1011.github.io/2018/07/06/项目模块重构分享与思考/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模块情况"><span class="nav-number">1.2.</span> <span class="nav-text">文件模块情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单类关系图"><span class="nav-number">1.2.1.</span> <span class="nav-text">简单类关系图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类说明"><span class="nav-number">1.2.2.</span> <span class="nav-text">类说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要存在问题"><span class="nav-number">1.2.3.</span> <span class="nav-text">主要存在问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重构"><span class="nav-number">2.</span> <span class="nav-text">重构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">2.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行"><span class="nav-number">2.2.</span> <span class="nav-text">执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阶段一"><span class="nav-number">2.2.1.</span> <span class="nav-text">阶段一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阶段二"><span class="nav-number">2.2.2.</span> <span class="nav-text">阶段二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,959 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言
+设计模式这个东西，听起来很玄乎。有时候看起来似懂非懂。平时编码中可能大部分也没考虑应该用怎样的设计来编码。
+如果你是一个外包的人员，干完就撤。有可能确实不需要用到什么设计模式，满足功能则可。如果你是一个有产品迭代的开发人员或者代码维护人员。也许你有过背后吐槽这代码真是乱得可以，干不动了的经验。
+在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android程序员，你应该知道的设计模式">
+<meta property="og:url" content="https://junbin1011.github.io/2017/09/14/Android程序员，你应该知道的设计模式/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="前言
+设计模式这个东西，听起来很玄乎。有时候看起来似懂非懂。平时编码中可能大部分也没考虑应该用怎样的设计来编码。
+如果你是一个外包的人员，干完就撤。有可能确实不需要用到什么设计模式，满足功能则可。如果你是一个有产品迭代的开发人员或者代码维护人员。也许你有过背后吐槽这代码真是乱得可以，干不动了的经验。
+在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-d59992dd7add23e0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-df5cd619b5875553?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.772Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android程序员，你应该知道的设计模式">
+<meta name="twitter:description" content="前言
+设计模式这个东西，听起来很玄乎。有时候看起来似懂非懂。平时编码中可能大部分也没考虑应该用怎样的设计来编码。
+如果你是一个外包的人员，干完就撤。有可能确实不需要用到什么设计模式，满足功能则可。如果你是一个有产品迭代的开发人员或者代码维护人员。也许你有过背后吐槽这代码真是乱得可以，干不动了的经验。
+在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-d59992dd7add23e0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/09/14/Android程序员，你应该知道的设计模式/"/>
+
+
+
+
+
+  <title> Android程序员，你应该知道的设计模式 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/09/14/Android程序员，你应该知道的设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android程序员，你应该知道的设计模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T09:32:54+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/14/Android程序员，你应该知道的设计模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/14/Android程序员，你应该知道的设计模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><img src="http://upload-images.jianshu.io/upload_images/5125122-d59992dd7add23e0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片来自百度搜索"></p>
+<p>设计模式这个东西，听起来很玄乎。有时候看起来似懂非懂。平时编码中可能大部分也没考虑应该用怎样的设计来编码。</p>
+<p>如果你是一个外包的人员，干完就撤。有可能确实不需要用到什么设计模式，满足功能则可。如果你是一个有产品迭代的开发人员或者代码维护人员。也许你有过背后吐槽这代码真是乱得可以，干不动了的经验。</p>
+<p>在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。拥抱变化也就是意味着在满足需求且不破坏系统稳定性的前提下保持高可扩展性、高内聚、低耦合，在经历了各版本的变更之后依旧保持清晰、灵活、稳定的系统架构。</p>
+<p>虽然在实际的应该开发中，要饱受产品的折磨和摧残、需要在极其有限的研发时间里完成功能、上线。为了赶工，这里Copy一份代码，哪里黏贴一个类。如果有多个项目，甚至经常在这个项目挪点功能，那个项目移植个模块，到最后干不动了，苦的还是自己。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-df5cd619b5875553?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>排除一切不可抗力因素，我们还是需要保持良好的编码习惯，在动手编码前多思考，尽量让结构更加灵活、低耦合。本文主要是对一些编码的设计原则及设计模式进行整理，便于学习及复习。</p>
+<h1 id="面向对象的设计原则"><a href="#面向对象的设计原则" class="headerlink" title="面向对象的设计原则"></a>面向对象的设计原则</h1><table>
+<thead>
+<tr>
+<th>原则</th>
+<th>定义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单一责任原则</td>
+<td>就一个类而言，应该只有一个引起变化的原因</td>
+<td>责任界限比较难划分，尽量满足单一责任原则。接口一定要做到单一责任原则，类的设计尽量做到只有一个引起变化的原因</td>
+</tr>
+<tr>
+<td>里氏替换原则</td>
+<td>所有引用父类的地方，必要能透明的使用其子类</td>
+<td>在项目中，采用里氏替换原则，应尽量避免子类的个性（拥有自己的业务实现方法）</td>
+</tr>
+<tr>
+<td>依赖倒置原则</td>
+<td>模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，其依赖关系是通过接口或抽象类产生的</td>
+<td>每个类尽量都有接口或抽象类，或者抽象类和两者都具备，任何类尽量都不应该从具体的类派生</td>
+</tr>
+<tr>
+<td>依赖倒置原则</td>
+<td>模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，其依赖关系是通过接口或抽象类产生的</td>
+<td>每个类尽量都有接口或抽象类，或者抽象类和两者都具备，任何类尽量都不应该从具体的类派生</td>
+</tr>
+<tr>
+<td>接口隔离原则</td>
+<td>客户端不应该依赖它不需要的接口，类间的依赖关系应该建立在最小的接口上</td>
+<td>接口隔离原则是对接口的定义，同时也是对类的定义，接口和类尽量使用原子接口和原子类来组织</td>
+</tr>
+<tr>
+<td>迪米特原则</td>
+<td>一个对象应该对自己需要耦合或调用的类知道最少，尽量不要对外公布太多的public方法和非静态的public变量</td>
+<td>迪米特法则的核心观念就是类间解耦，提高类的复用率，可能产生大量的中转或者跳转类，导致系统的复杂性提高</td>
+</tr>
+<tr>
+<td>开放封闭原则</td>
+<td>软件中的对象（类、模块、函数等）应该对于扩展是开放的，但是，对于修改是封闭的</td>
+<td>通过接口或者抽象类约束扩展，封装变化，对扩展进行边界开放</td>
+</tr>
+</tbody>
+</table>
+<p>详细可参考：<a href="http://huangjunbin.com/2017/01/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%AD%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank" rel="external">设计模式-面向对象的六大设计原则</a></p>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="代码中常用的设计模式"><a href="#代码中常用的设计模式" class="headerlink" title="代码中常用的设计模式"></a>代码中常用的设计模式</h2><table>
+<thead>
+<tr>
+<th>设计模式</th>
+<th>速记</th>
+<th>例子</th>
+<th>详解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单例模式</td>
+<td>确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源</td>
+<td>实际开发中，好多数据库Dao操作、或者Service都是直接采用单例的方式，应注意线程安全及内存泄漏问题</td>
+<td><a href="http://huangjunbin.com/2017/01/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">单例模式 </a></td>
+</tr>
+<tr>
+<td>建造者模式</td>
+<td>Builder模式是一步一步创建一个复制对象的创建型模式，他允许用户在不知道内部构建细节的情况下，可以更精细地控制对象的构造流程</td>
+<td>new AlertDialog.Builder(self).setTitle(“列表框”).setItems(new String[] {“列表项1”,”列表项2”,”列表项3”}, null).setNegativeButton(“确定”, null) .show();有时候Activity的启动构造参数复杂，也可使用Builder模式进行控制</td>
+<td><a href="http://huangjunbin.com/2017/01/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">建造者模式</a></td>
+</tr>
+<tr>
+<td>适配器模式</td>
+<td>适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法再一起工作的两个类能够在一起工作</td>
+<td>ListView作为重要的控件，它需要能够显示各种各样的视图（ItemView），每个人需要的显示效果各不同。Android的做法是增加一个Adapter层来隔离变化，将ListView需要的关于Item View接口抽象到Adapter对象中，并且在ListView内部调用Adapter这些接口完成布局操作。这样只用用户实现了Adapter的接口，并且将该Adapter设置给ListView，ListView就可以按照用户设定的UI效果、数量、数据来显示每一项数据</td>
+<td><a href="http://huangjunbin.com/2017/02/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">适配器模式</a></td>
+</tr>
+<tr>
+<td>观察者模式</td>
+<td>观察者模式是一个使用率非常高的模式，它最常用的地方是GUI系统，订阅-发布系统。因为这个模式的一个重要作用就是解耦，将被观察者和观察者解耦，使得它们之间的依赖性更小</td>
+<td>广播、EventBus、Rxjava，一些上传下载进度回调监听</td>
+<td><a href="http://huangjunbin.com/2017/02/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">观察者模式 </a></td>
+</tr>
+<tr>
+<td>外观模式</td>
+<td>外观模式（Facade）在开发过程中的运用频率非常高，尤其是在现阶段各个第三方SDK充斥在我们的周边，而这些SDK很大概率会使用外观模式，通过一个外观类使得整个系统的接口只有一个统一的高层接口，这样能够降低用户的使用成本，也对用户屏蔽了很多实现细节</td>
+<td>例如Context统一了很多系统资源的范围，实际开发过程中使用的图片库、网络库等，提供统一的Facade，避免更换影响全局</td>
+<td><a href="http://huangjunbin.com/2017/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">外观模式 </a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="经常用但却不知道的设计模式"><a href="#经常用但却不知道的设计模式" class="headerlink" title="经常用但却不知道的设计模式"></a>经常用但却不知道的设计模式</h2><table>
+<thead>
+<tr>
+<th>设计模式</th>
+<th>速记</th>
+<th>例子</th>
+<th>详解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模板模式</td>
+<td>定义一个操作中的算法框架，而将一些步骤延迟到子类中，使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</td>
+<td>AsyncTask，在使用AsyncTask时，我们都知道把耗时的方法放在doInBackground（Params… params）中，在doInBackground之前，如果还想做一些类似初始化的操作，可以把实现卸载onPreExecutre方法中，当doInBackground方法执行完成后，会执行onPostExecutre方法</td>
+<td><a href="http://huangjunbin.com/2017/01/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">模板模式 </a></td>
+</tr>
+<tr>
+<td>中介者模式</td>
+<td>该模式将对象之间的多对多关系变成一对多关系</td>
+<td>Android的Activity实际就是一个中介者模式，形形式式的View交互都在Activity中统一执行，View之间彼此不交互（你有可能点一个Button,让一个ImageView变化图片，但这个逻辑不会写在Button中）</td>
+<td><a href="http://huangjunbin.com/2017/02/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">中介者模式 </a></td>
+</tr>
+<tr>
+<td>责任链模式</td>
+<td>责任链模式是行为型设计模式之一。使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止</td>
+<td>在Android源码中比较类似的实现就是对于触摸事件的分发处理。每当用户接触屏幕时，Android都会将对应的事件包装成一个事件对象从ViewTree的顶部至上而下地分发传递。ViewGroup事件投递的递归调用就类似于一条责任链，一旦寻找到责任者，那么将由责任者持有并消费掉该次事件，具体地体现在View的onTouchEvent方法中返回值的设置，如果onTouchEvent返回false，那么意味着当前View不会是该次事件的复制人，将不会对其持有；如果为true则相反，此时View会持有该事件并不再向外传递</td>
+<td><a href="http://huangjunbin.com/2017/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">责任链模式 </a></td>
+</tr>
+<tr>
+<td>装饰模式</td>
+<td>装饰模式也称为包装模式，结构型设计模式之一，其使用一种对客户端透明的方式来动态地扩展对象的功能，同时它也是继承关系的一种替代方案之一。动态地给一个对象添加一些额外的职责</td>
+<td>Context类本身是一个纯abstract类，他有两个具体的实现子类：ContextImpl和ContextWrapper。其中ContextWrapper类，只是一个包装而已，ContextWrapper构造函数中必须包含一个真正的Context引用，同时ContextWrapper提供了attachBaseContext（）用于给ContextWrapper对象中指定真正的Context对象，调用ContextWrapper的方法都会被转向其所包含的真正的Context对象</td>
+<td><a href="http://huangjunbin.com/2017/02/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">装饰模式 </a></td>
+</tr>
+<tr>
+<td>组合模式</td>
+<td>组合模式也称为部分整体模式，结构型设计模式之一，组合模式比较简单，它将一组相似的对象看作一个对象处理，并根据一个树状结构来组合对象，然后提供一个统一的方法去访问相应的对象</td>
+<td>Android源码中关于组合模式有一个非常经典的实现，我们几乎每天都会使用到，那就是View和ViewGroup的嵌套组合</td>
+<td><a href="http://huangjunbin.com/2017/02/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">组合模式 </a></td>
+</tr>
+<tr>
+<td>备忘录模式</td>
+<td>备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露</td>
+<td>在Android开发中，状态模式应用是Android中的状态保持，也就是里面的onSaveInstanceState和onRestoreInstanceState。当Activity不是正常方式退出，且Activity在随后的时间内被系统杀死之前会调用这两个方法让开发人员可以有机会存储Activity的相关信息，并且在下次放好Activity的时候恢复这些数据</td>
+<td><a href="http://huangjunbin.com/2017/03/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">备忘录模式 </a></td>
+</tr>
+<tr>
+<td>享元模式</td>
+<td>享元模式是池技术的重要实现方式，使用共享对象可有效地支持大量的细粒度的对象</td>
+<td>数据库链接池、长连接池</td>
+<td><a href="http://huangjunbin.com/2017/03/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">享元模式 </a></td>
+</tr>
+<tr>
+<td>迭代器模式</td>
+<td>迭代器模式提供一种方法顺序访问一个容器对象的各个元素，而又不需要暴露该对象的内部表示</td>
+<td>JDK中各种集合的遍历</td>
+<td><a href="http://huangjunbin.com/2017/02/23/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">迭代器模式</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他设计模式"><a href="#其他设计模式" class="headerlink" title="其他设计模式"></a>其他设计模式</h2><table>
+<thead>
+<tr>
+<th>设计模式</th>
+<th>速记</th>
+<th>详解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工厂模式</td>
+<td>工厂模式是创建型设计模式之一。定义一个用户创建对象的接口，让子类决定实例化那个类。工厂模式是new一个对象的替代品，所以在所有需要生成对象的地方都可以使用</td>
+<td><a href="http://huangjunbin.com/2017/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">工厂模式</a></td>
+</tr>
+<tr>
+<td>抽象工厂模式</td>
+<td>抽象工厂也是创建型设计模式之一。为创建一组相关或者是相互依赖的对象提供一个接口，而不需要指定他们的具体类。一个对象族有相同约束时可以使用抽象工厂模式</td>
+<td><a href="http://huangjunbin.com/2017/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">抽象工厂模式</a></td>
+</tr>
+<tr>
+<td>代理模式</td>
+<td>为其他对象提供一种代理以控制对这个对象的访问，有静态代码和动态代理</td>
+<td><a href="http://huangjunbin.com/2017/02/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">代理模式</a></td>
+</tr>
+<tr>
+<td>原型模式</td>
+<td>用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象</td>
+<td><a href="http://huangjunbin.com/2017/02/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">原型模式</a></td>
+</tr>
+<tr>
+<td>策略模式</td>
+<td>策略模式定义了一系列的算法，并将每一个算法封装起来，而且使他们还可以互相替换。策略模式让算法独立于使用它的客户而独立变化</td>
+<td><a href="http://huangjunbin.com/2017/02/21/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">策略模式</a></td>
+</tr>
+<tr>
+<td>访问者模式</td>
+<td>封装一些作用于某种数据结构中的各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作</td>
+<td><a href="http://huangjunbin.com/2017/03/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">访问者模式</a></td>
+</tr>
+<tr>
+<td>状态模式</td>
+<td>状态模式中的行为是由状态来决定的，不同的状态下又不同的行为。状态模式和策略模式的结构几乎完全一样，但他们的目的，本质却完全不一样。状态模式的行为是平行的、不可替换的，策略模式的行为是彼此独立、互相替换的</td>
+<td><a href="http://huangjunbin.com/2017/03/04/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">状态模式</a></td>
+</tr>
+<tr>
+<td>解释器模式</td>
+<td>解释器模式是一种用得比较少的行为模式，其提供了一种解释语言的语法或表达式的方式，该模式定义了一个表达式接口，通过该接口解释一个特定的上下文</td>
+<td><a href="http://huangjunbin.com/2017/03/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">解释器模式</a></td>
+</tr>
+<tr>
+<td>桥梁模式</td>
+<td>桥梁模式也称为桥接模式，是结构型设计模式之一。将抽象和实现解耦，使得两者可以独立地变化</td>
+<td><a href="http://huangjunbin.com/2017/03/08/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">桥梁模式</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="装饰模式、代理模式、外观模式区别"><a href="#装饰模式、代理模式、外观模式区别" class="headerlink" title="装饰模式、代理模式、外观模式区别"></a>装饰模式、代理模式、外观模式区别</h2><p>代理模式注重的是隔离限制，关注于控制对对象的访问，让外部不能访问你实际的调用对象，比如权限控制。代理和真实对象之间的的关系通常在编译时就已经确定了。<br>装饰模式注重的是功能的拓展，关注于在一个对象上动态的添加方法，在同一个方法下实现更多的功能。装饰者能够在运行时递归地被构造。<br>适配器模式注重的是接口的兼容。<br>外观模式注重的是多个类的集成、统一适配。</p>
+<h2 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h2><p>《设计模式之禅》<br>《Android源码设计模式解析与实战》</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/12/你应该知道的JDK知识/" rel="next" title="你应该知道的JDK知识">
+                <i class="fa fa-chevron-left"></i> 你应该知道的JDK知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/23/Java并发编程-基础原理/" rel="prev" title="Java并发编程-基础原理">
+                Java并发编程-基础原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/09/14/Android程序员，你应该知道的设计模式/"
+           data-title="Android程序员，你应该知道的设计模式" data-url="https://junbin1011.github.io/2017/09/14/Android程序员，你应该知道的设计模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象的设计原则"><span class="nav-number">2.</span> <span class="nav-text">面向对象的设计原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计模式"><span class="nav-number">3.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码中常用的设计模式"><span class="nav-number">3.1.</span> <span class="nav-text">代码中常用的设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经常用但却不知道的设计模式"><span class="nav-number">3.2.</span> <span class="nav-text">经常用但却不知道的设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他设计模式"><span class="nav-number">3.3.</span> <span class="nav-text">其他设计模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰模式、代理模式、外观模式区别"><span class="nav-number">4.1.</span> <span class="nav-text">装饰模式、代理模式、外观模式区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐书籍"><span class="nav-number">4.2.</span> <span class="nav-text">推荐书籍</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

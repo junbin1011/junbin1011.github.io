@@ -1,0 +1,783 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Android性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="问题背景通过线上收集的日志分析，存在部分OOM的日志，故通过leakcanary进行内存泄漏追踪。
+引用链日志在开发的过程中，leakcanary报出了内存泄漏，详细的日志如下：
+并且全局有其他Activity也存在相同引用链的内存泄漏，日志如下：
+
+使用MAT进行分析，引用链也相同，日志如下：
+
+影响通过AS自带的Profiler进行分析，发现此内存泄漏非常严重，进入多次Activity，页面F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次Android内存泄漏的优化经历">
+<meta property="og:url" content="https://junbin1011.github.io/2018/05/29/记一次Android内存泄漏的优化经历/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="问题背景通过线上收集的日志分析，存在部分OOM的日志，故通过leakcanary进行内存泄漏追踪。
+引用链日志在开发的过程中，leakcanary报出了内存泄漏，详细的日志如下：
+并且全局有其他Activity也存在相同引用链的内存泄漏，日志如下：
+
+使用MAT进行分析，引用链也相同，日志如下：
+
+影响通过AS自带的Profiler进行分析，发现此内存泄漏非常严重，进入多次Activity，页面F">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-bb502cdd6ebdcf05?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-5fdfff03a83d0179?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-4e08f3d369209a5c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-01966d641b635fec?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-2190c7733503d493?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-002cd0b33b6bf529?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.784Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次Android内存泄漏的优化经历">
+<meta name="twitter:description" content="问题背景通过线上收集的日志分析，存在部分OOM的日志，故通过leakcanary进行内存泄漏追踪。
+引用链日志在开发的过程中，leakcanary报出了内存泄漏，详细的日志如下：
+并且全局有其他Activity也存在相同引用链的内存泄漏，日志如下：
+
+使用MAT进行分析，引用链也相同，日志如下：
+
+影响通过AS自带的Profiler进行分析，发现此内存泄漏非常严重，进入多次Activity，页面F">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-bb502cdd6ebdcf05?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2018/05/29/记一次Android内存泄漏的优化经历/"/>
+
+
+
+
+
+  <title> 记一次Android内存泄漏的优化经历 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/05/29/记一次Android内存泄漏的优化经历/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                记一次Android内存泄漏的优化经历
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T11:12:50+08:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/29/记一次Android内存泄漏的优化经历/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/29/记一次Android内存泄漏的优化经历/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>通过线上收集的日志分析，存在部分OOM的日志，故通过leakcanary进行内存泄漏追踪。</p>
+<h2 id="引用链日志"><a href="#引用链日志" class="headerlink" title="引用链日志"></a>引用链日志</h2><p>在开发的过程中，leakcanary报出了内存泄漏，详细的日志如下：<br><img src="http://upload-images.jianshu.io/upload_images/5125122-bb502cdd6ebdcf05?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>并且全局有其他Activity也存在相同引用链的内存泄漏，日志如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-5fdfff03a83d0179?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>使用MAT进行分析，引用链也相同，日志如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-4e08f3d369209a5c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h2 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h2><p>通过AS自带的Profiler进行分析，发现此内存泄漏非常严重，进入多次Activity，页面Finish掉后，GC均无法进行回收,实例会一直存在。这样如果用户多次操作页面，那么很容易触发OOM的异常。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-01966d641b635fec?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>FileMainActivity大致的结构如下，一个Activity里面，包含了一个Fragment，Fragment是一个列表。</p>
+<p>通过引用链可以发现为ViewRootImpl$ViewRootHandler导致Activity没有回收。初步怀疑是否由于handler导致。但通过排查FileMainActivity代码，内部的handler是使用static内部类，同时也使用了软引用持有，并没有导致触发的原因。</p>
+<p>通过搜索引擎，也无相关的博文介绍。问题一度陷入停滞。</p>
+<p>但鉴于问题的严重性，决定采用排除法进行验证，当然过程耗时长，主要的思路如下：</p>
+<p>1、Activity里面不集成Fragment，然后运行，重复进入退出，分析GC，发现不会存在内存泄漏；<br>（问题初步定为为Fragment里的代码存在内存泄漏）</p>
+<p>2、恢复Fragment代码，onActivityCreate中的代码大致为，初始化控件、请求网络数据、显示列表。通过依次屏蔽3个方法，再进入验证<br>（问题发现在屏蔽了显示列表的方法后，不会存在内存泄漏。问题定位在显示列表的方法中）</p>
+<p>3、通过依次屏蔽显示列表的方法中，定位问题出在一句代码，引起了内存泄漏<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mPullToRefreshLayout.refreshComplete();</div></pre></td></tr></table></figure></p>
+<p>4、mPullToRefreshLayout是一个第三方的下拉刷新控件，<a href="https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh/blob/master/README-cn.md" target="_blank" rel="external">PtrFrameLayout</a>。refreshComplete的源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * Call this when data is loaded.</div><div class="line">     * The UI will perform complete at once or after a delay, depends on the time elapsed is greater then &#123;@link #mLoadingMinTime&#125; or not.</div><div class="line">     */</div><div class="line">    final public void refreshComplete() &#123;</div><div class="line">        if (DEBUG) &#123;</div><div class="line">            PtrCLog.i(LOG_TAG, &quot;refreshComplete&quot;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (mRefreshCompleteHook != null) &#123;</div><div class="line">            mRefreshCompleteHook.reset();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        int delay = (int) (mLoadingMinTime - (System.currentTimeMillis() - mLoadingStartTime));</div><div class="line">        if (delay &lt;= 0) &#123;</div><div class="line">            if (DEBUG) &#123;</div><div class="line">                PtrCLog.d(LOG_TAG, &quot;performRefreshComplete at once&quot;);</div><div class="line">            &#125;</div><div class="line">            performRefreshComplete();</div><div class="line">        &#125; else &#123;</div><div class="line">            postDelayed(new MyRunnable(this, 1), delay);</div><div class="line">            if (DEBUG) &#123;</div><div class="line">                PtrCLog.d(LOG_TAG, &quot;performRefreshComplete after delay: %s&quot;, delay);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>5、里面存在关键代码postDelayed，故怀疑可能此处代码产生内存泄漏。通过断点打印发现如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-2190c7733503d493?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p><strong>最终定位问题如下：<br>由于PtrFrameLayout的refreshComplete方法中的postDelayed导致了内存泄漏，由于delay很长，导致Activity不会被回收。</strong></p>
+<h1 id="处理"><a href="#处理" class="headerlink" title="处理"></a>处理</h1><p>几经波折，终于定位到问题。那么现在就好处理了。通过分析我们发现这里主要的问题就是delay值很大导致。我们分析发现如下代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int delay = (int) (mLoadingMinTime - (System.currentTimeMillis() - mLoadingStartTime));</div></pre></td></tr></table></figure></p>
+<p>发现了long强制转成了int，这里面导致了数据溢出，从而影响了delay最后的运算。这里通过如下处理则可修复内存泄漏的问题:<br><img src="http://upload-images.jianshu.io/upload_images/5125122-002cd0b33b6bf529?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>修复后，通过proflier分析，Activity已正常被GC回收，至此解决问题。</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>1、分析内存泄漏需要多用工具，leakcanary、AS自带的Profile及Mat工具</p>
+<p>2、需要耐心及细心，优化内存泄漏是一个挺麻烦，但也很重要的事情</p>
+<h1 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h1><p><a href="https://www.jianshu.com/p/402225fce4b2" target="_blank" rel="external">Android性能优化-内存泄漏（上）</a></p>
+<p><a href="https://www.jianshu.com/p/2c9fc4e871a4" target="_blank" rel="external">Android性能优化-内存泄漏（下）</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Android性能优化/" rel="tag"># Android性能优化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/09/Android应用架构前世今生/" rel="next" title="Android应用架构前世今生">
+                <i class="fa fa-chevron-left"></i> Android应用架构前世今生
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/25/Android-P-兼容与适配/" rel="prev" title="Android P 兼容与适配">
+                Android P 兼容与适配 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/05/29/记一次Android内存泄漏的优化经历/"
+           data-title="记一次Android内存泄漏的优化经历" data-url="https://junbin1011.github.io/2018/05/29/记一次Android内存泄漏的优化经历/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用链日志"><span class="nav-number">1.2.</span> <span class="nav-text">引用链日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#影响"><span class="nav-number">1.3.</span> <span class="nav-text">影响</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#处理"><span class="nav-number">3.</span> <span class="nav-text">处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#推荐"><span class="nav-number">5.</span> <span class="nav-text">推荐</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

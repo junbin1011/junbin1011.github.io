@@ -1,0 +1,862 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,源码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="blockcanary是什么？blockcanary是国内开发者MarkZhai开发的一套性能监控组件，它对主线程操作进行了完全透明的监控，并能输出有效的信息，帮助开发分析、定位到问题所在，迅速优化应用
+
+下图为官方原理介绍示例图：
+
+ 
+简介Github地址:blockcanary
+特点
+非侵入式
+使用简单
+实时监控
+提供完善的堆栈及内存信息
+
+Android渲染机制Android系统每隔16m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="blockcanary源码学习随笔">
+<meta property="og:url" content="https://junbin1011.github.io/2018/08/23/blockcanary源码学习随笔/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="blockcanary是什么？blockcanary是国内开发者MarkZhai开发的一套性能监控组件，它对主线程操作进行了完全透明的监控，并能输出有效的信息，帮助开发分析、定位到问题所在，迅速优化应用
+
+下图为官方原理介绍示例图：
+
+ 
+简介Github地址:blockcanary
+特点
+非侵入式
+使用简单
+实时监控
+提供完善的堆栈及内存信息
+
+Android渲染机制Android系统每隔16m">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5125122-acf032fbb605a40a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-c9cc07935c67c8c6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.778Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="blockcanary源码学习随笔">
+<meta name="twitter:description" content="blockcanary是什么？blockcanary是国内开发者MarkZhai开发的一套性能监控组件，它对主线程操作进行了完全透明的监控，并能输出有效的信息，帮助开发分析、定位到问题所在，迅速优化应用
+
+下图为官方原理介绍示例图：
+
+ 
+简介Github地址:blockcanary
+特点
+非侵入式
+使用简单
+实时监控
+提供完善的堆栈及内存信息
+
+Android渲染机制Android系统每隔16m">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5125122-acf032fbb605a40a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2018/08/23/blockcanary源码学习随笔/"/>
+
+
+
+
+
+  <title> blockcanary源码学习随笔 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/08/23/blockcanary源码学习随笔/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                blockcanary源码学习随笔
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T16:40:26+08:00">
+                2018-08-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/23/blockcanary源码学习随笔/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/23/blockcanary源码学习随笔/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="blockcanary是什么？"><a href="#blockcanary是什么？" class="headerlink" title="blockcanary是什么？"></a>blockcanary是什么？</h1><p>blockcanary是国内开发者<a href="https://github.com/markzhai" target="_blank" rel="external">MarkZhai</a>开发的一套性能监控组件，它对主线程操作进行了完全透明的监控，并能输出有效的信息，帮助开发分析、定位到问题所在，迅速优化应用</p>
+<blockquote>
+<p>下图为官方原理介绍示例图：</p>
+</blockquote>
+<p> <img src="https://upload-images.jianshu.io/upload_images/5125122-acf032fbb605a40a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Github地址:<a href="https://github.com/markzhai/AndroidPerformanceMonitor" target="_blank" rel="external">blockcanary</a></p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
+<li>非侵入式</li>
+<li>使用简单</li>
+<li>实时监控</li>
+<li>提供完善的堆栈及内存信息</li>
+</ul>
+<h2 id="Android渲染机制"><a href="#Android渲染机制" class="headerlink" title="Android渲染机制"></a>Android渲染机制</h2><p>Android系统每隔16ms发出VSYNC信号，触发对UI进行渲染， 如果每次渲染都成功，这样就能够达到流畅的画面所需要的60fps，为了能够实现60fps，这意味着程序的大多数操作都必须在16ms内完成。如果超过了16ms那么可能就出现丢帧的情况。</p>
+<p>本文主要对blockcanary的原理进行分析，关于渲染的详细机制及优化，推荐参考如下文章：</p>
+<p><a href="https://www.jianshu.com/p/3474a769f170" target="_blank" rel="external">Android性能优化-渲染优化</a></p>
+<h1 id="blockcanary怎么用？"><a href="#blockcanary怎么用？" class="headerlink" title="blockcanary怎么用？"></a>blockcanary怎么用？</h1><p>1、gradle引入库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">debugImplementation &apos;com.github.markzhai:blockcanary-android:1.5.0&apos;</div><div class="line">releaseImplementation &apos;com.github.markzhai:blockcanary-no-op:1.5.0&apos;</div></pre></td></tr></table></figure>
+<p>2、自定义Application并且在onCreate中进行初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class ExampleApplication extends Application &#123;</div><div class="line"></div><div class="line">    @Override public void onCreate() &#123;</div><div class="line">        super.onCreate();</div><div class="line">        BlockCanary.install(this, new BlockCanaryContext()).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="blockcanary核心执行流程是怎样？"><a href="#blockcanary核心执行流程是怎样？" class="headerlink" title="blockcanary核心执行流程是怎样？"></a>blockcanary核心执行流程是怎样？</h1><p>blockcanary的核心原理是通过自定义一个Printer，设置到主线程ActivityThread的MainLooper中。MainLooper在dispatch消息前后都会调用Printer进行打印。从而获取前后执行的时间差值，判断是否超过设置的阈值。如果超过，则会将记录的栈信息及cpu信息发通知到前台。</p>
+<h2 id="关键类功能说明"><a href="#关键类功能说明" class="headerlink" title="关键类功能说明"></a>关键类功能说明</h2><table>
+<thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> BlockCanary</td>
+<td>外观类，提供初始化及开始、停止监听</td>
+</tr>
+<tr>
+<td> BlockCanaryContext</td>
+<td>配置上下文，可配置id、当前网络信息、卡顿阈值、log保存路径等</td>
+</tr>
+<tr>
+<td> BlockCanaryInternals</td>
+<td>blockcanary核心的调度类，内部包含了monitor（设置到MainLooper的printer）、stackSampler（栈信息处理器）、cpuSampler（cpu信息处理器）、mInterceptorChain（注册的拦截器）、以及onBlockEvent的回调及拦截器的分发</td>
+</tr>
+<tr>
+<td> LooperMonitor</td>
+<td>继承了Printer接口，用于设置到MainLooper中。通过复写println的方法来获取MainLooper的dispatch前后的执行时间差，并控制stackSampler和cpuSampler的信息采集。</td>
+</tr>
+<tr>
+<td> StackSampler</td>
+<td>用于获取线程的栈信息，将采集的栈信息存储到一个以key为时间戳的LinkHashMap中。通过mCurrentThread.getStackTrace()获取当前线程的StackTraceElement</td>
+</tr>
+<tr>
+<td> CpuSampler</td>
+<td>用于获取cpu信息，将采集的cpu信息存储到一个以key为时间戳的LinkHashMap中。通过读取/proc/stat文件获取cpu的信息</td>
+</tr>
+<tr>
+<td> DisplayService</td>
+<td>继承了BlockInterceptor拦截器，onBlock回调会触发发送前台通知</td>
+</tr>
+<tr>
+<td> DisplayActivity</td>
+<td>用于显示记录的异常信息Activity</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码执行流程"><a href="#代码执行流程" class="headerlink" title="代码执行流程"></a>代码执行流程</h2><p>  leakcanary的核心流程主要包含3个步骤。</p>
+<p> 1、init-初始化</p>
+<p> 2、monitor-监听MainLooper的dispatch时间差，推送前台通知</p>
+<p> 3、dump-采集线程栈信息及cpu信息</p>
+<p> 这里先上一下整体的流程图，建议结合源码进行查看。</p>
+<p> <img src="http://upload-images.jianshu.io/upload_images/5125122-c9cc07935c67c8c6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p> 下面我们通过上述3个步骤相关的源码来进行分析。</p>
+<h3 id="1、init"><a href="#1、init" class="headerlink" title="1、init"></a>1、init</h3><p>根据Application中的使用，我们首先看install方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) &#123;</div><div class="line">      //BlockCanaryContext.init会将保存应用的applicationContext和用户设置的配置参数</div><div class="line">      BlockCanaryContext.init(context, blockCanaryContext);</div><div class="line">      //etEnabled将根据用户的通知栏消息配置开启</div><div class="line">      setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().displayNotification());</div><div class="line">      return get();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>接着看get方法的实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//使用单例创建了一个BlockCanary对象</div><div class="line">public static BlockCanary get() &#123;</div><div class="line">    if (sInstance == null) &#123;</div><div class="line">        synchronized (BlockCanary.class) &#123;</div><div class="line">            if (sInstance == null) &#123;</div><div class="line">                sInstance = new BlockCanary();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return sInstance;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着我们看BlockCanary的对象的构造方法实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">private BlockCanary() &#123;</div><div class="line">        //初始化lockCanaryInternals调度类</div><div class="line">        BlockCanaryInternals.setContext(BlockCanaryContext.get());</div><div class="line">        mBlockCanaryCore = BlockCanaryInternals.getInstance();</div><div class="line">        //为BlockCanaryInternals添加拦截器（责任链）BlockCanaryContext对BlockInterceptor是空实现</div><div class="line">        mBlockCanaryCore.addBlockInterceptor(BlockCanaryContext.get());</div><div class="line">        if (!BlockCanaryContext.get().displayNotification()) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        //DisplayService只在开启通知栏消息的时候添加，当卡顿发生时将通过DisplayService发起通知栏消息</div><div class="line">        mBlockCanaryCore.addBlockInterceptor(new DisplayService());</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>接着我们看BlockCanaryInternals的构造方法，实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">public BlockCanaryInternals() &#123;</div><div class="line">        //初始化栈采集器</div><div class="line">        stackSampler = new StackSampler(</div><div class="line">                Looper.getMainLooper().getThread(),</div><div class="line">                sContext.provideDumpInterval());</div><div class="line">        //初始化cpu采集器</div><div class="line">        cpuSampler = new CpuSampler(sContext.provideDumpInterval());</div><div class="line"></div><div class="line">        //初始化LooperMonitor，并实现了onBlockEvent的回调，该回调会在触发阈值后被调用</div><div class="line">        setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() &#123;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void onBlockEvent(long realTimeStart, long realTimeEnd,</div><div class="line">                                     long threadTimeStart, long threadTimeEnd) &#123;</div><div class="line">                ArrayList&lt;String&gt; threadStackEntries = stackSampler</div><div class="line">                        .getThreadStackEntries(realTimeStart, realTimeEnd);</div><div class="line">                if (!threadStackEntries.isEmpty()) &#123;</div><div class="line">                    BlockInfo blockInfo = BlockInfo.newInstance()</div><div class="line">                            .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)</div><div class="line">                            .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))</div><div class="line">                            .setRecentCpuRate(cpuSampler.getCpuRateInfo())</div><div class="line">                            .setThreadStackEntries(threadStackEntries)</div><div class="line">                            .flushString();</div><div class="line">                    LogWriter.save(blockInfo.toString());</div><div class="line"></div><div class="line">                    if (mInterceptorChain.size() != 0) &#123;</div><div class="line">                        for (BlockInterceptor interceptor : mInterceptorChain) &#123;</div><div class="line">                            interceptor.onBlock(getContext().provideContext(), blockInfo);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;, getContext().provideBlockThreshold(), getContext().stopWhenDebugging()));</div><div class="line"></div><div class="line">        LogWriter.cleanObsolete();</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="2、monitor"><a href="#2、monitor" class="headerlink" title="2、monitor"></a>2、monitor</h3><p>首先我们先看下系统的Looper的loop()方法中对于printer的使用，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">for (;;) &#123;</div><div class="line">         Message msg = queue.next(); // might block</div><div class="line">         if (msg == null) &#123;</div><div class="line">             // No message indicates that the message queue is quitting.</div><div class="line">             return;</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         // 执行dispatchMessage前，执行Printer的println方法</div><div class="line">         final Printer logging = me.mLogging;</div><div class="line">         if (logging != null) &#123;</div><div class="line">             logging.println(&quot;&gt;&gt;&gt;&gt;&gt; Dispatching to &quot; + msg.target + &quot; &quot; +</div><div class="line">                     msg.callback + &quot;: &quot; + msg.what);</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         final long traceTag = me.mTraceTag;</div><div class="line">         long slowDispatchThresholdMs = me.mSlowDispatchThresholdMs;</div><div class="line">         long slowDeliveryThresholdMs = me.mSlowDeliveryThresholdMs;</div><div class="line">         if (thresholdOverride &gt; 0) &#123;</div><div class="line">             slowDispatchThresholdMs = thresholdOverride;</div><div class="line">             slowDeliveryThresholdMs = thresholdOverride;</div><div class="line">         &#125;</div><div class="line">         final boolean logSlowDelivery = (slowDeliveryThresholdMs &gt; 0) &amp;&amp; (msg.when &gt; 0);</div><div class="line">         final boolean logSlowDispatch = (slowDispatchThresholdMs &gt; 0);</div><div class="line"></div><div class="line">         final boolean needStartTime = logSlowDelivery || logSlowDispatch;</div><div class="line">         final boolean needEndTime = logSlowDispatch;</div><div class="line"></div><div class="line">         if (traceTag != 0 &amp;&amp; Trace.isTagEnabled(traceTag)) &#123;</div><div class="line">             Trace.traceBegin(traceTag, msg.target.getTraceName(msg));</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         final long dispatchStart = needStartTime ? SystemClock.uptimeMillis() : 0;</div><div class="line">         final long dispatchEnd;</div><div class="line">         try &#123;</div><div class="line">             msg.target.dispatchMessage(msg);</div><div class="line">             dispatchEnd = needEndTime ? SystemClock.uptimeMillis() : 0;</div><div class="line">         &#125; finally &#123;</div><div class="line">             if (traceTag != 0) &#123;</div><div class="line">                 Trace.traceEnd(traceTag);</div><div class="line">             &#125;</div><div class="line">         &#125;</div><div class="line">         if (logSlowDelivery) &#123;</div><div class="line">             if (slowDeliveryDetected) &#123;</div><div class="line">                 if ((dispatchStart - msg.when) &lt;= 10) &#123;</div><div class="line">                     Slog.w(TAG, &quot;Drained&quot;);</div><div class="line">                     slowDeliveryDetected = false;</div><div class="line">                 &#125;</div><div class="line">             &#125; else &#123;</div><div class="line">                 if (showSlowLog(slowDeliveryThresholdMs, msg.when, dispatchStart, &quot;delivery&quot;,</div><div class="line">                         msg)) &#123;</div><div class="line">                     // Once we write a slow delivery log, suppress until the queue drains.</div><div class="line">                     slowDeliveryDetected = true;</div><div class="line">                 &#125;</div><div class="line">             &#125;</div><div class="line">         &#125;</div><div class="line">         if (logSlowDispatch) &#123;</div><div class="line">             showSlowLog(slowDispatchThresholdMs, dispatchStart, dispatchEnd, &quot;dispatch&quot;, msg);</div><div class="line">         &#125;</div><div class="line">       // 执行dispatchMessage后，执行Printer的println方法</div><div class="line">         if (logging != null) &#123;</div><div class="line">             logging.println(&quot;&lt;&lt;&lt;&lt;&lt; Finished to &quot; + msg.target + &quot; &quot; + msg.callback);</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         // Make sure that during the course of dispatching the</div><div class="line">         // identity of the thread wasn&apos;t corrupted.</div><div class="line">         final long newIdent = Binder.clearCallingIdentity();</div><div class="line">         if (ident != newIdent) &#123;</div><div class="line">             Log.wtf(TAG, &quot;Thread identity changed from 0x&quot;</div><div class="line">                     + Long.toHexString(ident) + &quot; to 0x&quot;</div><div class="line">                     + Long.toHexString(newIdent) + &quot; while dispatching to &quot;</div><div class="line">                     + msg.target.getClass().getName() + &quot; &quot;</div><div class="line">                     + msg.callback + &quot; what=&quot; + msg.what);</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         msg.recycleUnchecked();</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
+<p>当install进行初始化完成后，接着会调用start()方法，实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public void start() &#123;</div><div class="line">      if (!mMonitorStarted) &#123;</div><div class="line">          mMonitorStarted = true;</div><div class="line">          //把mBlockCanaryCore中的monitor设置MainLooper中进行监听</div><div class="line">          Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.monitor);</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>当MainLooper执行dispatch的前后会调用printer的println方法，所以这里我们看LooperMonitor对println方法的实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"> @Override</div><div class="line">    public void println(String x) &#123;</div><div class="line">        //如果再debug模式，不执行监听</div><div class="line">        if (mStopWhenDebugging &amp;&amp; Debug.isDebuggerConnected()) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        if (!mPrintingStarted) &#123;//dispatchMesage前执行的println</div><div class="line">            //记录开始时间</div><div class="line">            mStartTimestamp = System.currentTimeMillis();</div><div class="line">            mStartThreadTimestamp = SystemClock.currentThreadTimeMillis();</div><div class="line">            mPrintingStarted = true;</div><div class="line">            //开始采集栈及cpu信息</div><div class="line">            startDump();</div><div class="line">        &#125; else &#123;//dispatchMesage后执行的println</div><div class="line">            //获取结束时间</div><div class="line">            final long endTime = System.currentTimeMillis();</div><div class="line">            mPrintingStarted = false;</div><div class="line">            //判断耗时是否超过阈值</div><div class="line">            if (isBlock(endTime)) &#123;</div><div class="line">                notifyBlockEvent(endTime);</div><div class="line">            &#125;</div><div class="line">            stopDump();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> //判断是否超过阈值</div><div class="line"> private boolean isBlock(long endTime) &#123;</div><div class="line">        return endTime - mStartTimestamp &gt; mBlockThresholdMillis;</div><div class="line">    &#125;</div><div class="line">//回调监听</div><div class="line"> private void notifyBlockEvent(final long endTime) &#123;</div><div class="line">        final long startTime = mStartTimestamp;</div><div class="line">        final long startThreadTime = mStartThreadTimestamp;</div><div class="line">        final long endThreadTime = SystemClock.currentThreadTimeMillis();</div><div class="line">        HandlerThreadFactory.getWriteLogThreadHandler().post(new Runnable() &#123;</div><div class="line">            @Override</div><div class="line">            public void run() &#123;</div><div class="line">                mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>当发现时间差超过阈值后，会回调onBlockEvent。具体的实现在BlockCanaryInternals的构造方法中，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() &#123;</div><div class="line"></div><div class="line">           @Override</div><div class="line">           public void onBlockEvent(long realTimeStart, long realTimeEnd,</div><div class="line">                                    long threadTimeStart, long threadTimeEnd) &#123;</div><div class="line">               //根据开始及结束时间，从栈的map当中获取记录信息</div><div class="line">               ArrayList&lt;String&gt; threadStackEntries = stackSampler</div><div class="line">                       .getThreadStackEntries(realTimeStart, realTimeEnd);</div><div class="line">               if (!threadStackEntries.isEmpty()) &#123;</div><div class="line">                   //构建 BlockInfo对象，设置相关的信息</div><div class="line">                   BlockInfo blockInfo = BlockInfo.newInstance()</div><div class="line">                           .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)</div><div class="line">                           .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))</div><div class="line">                           .setRecentCpuRate(cpuSampler.getCpuRateInfo())</div><div class="line">                           .setThreadStackEntries(threadStackEntries)</div><div class="line">                           .flushString();</div><div class="line">                   //记录信息</div><div class="line">                   LogWriter.save(blockInfo.toString());</div><div class="line">                   //遍历拦截器，通知</div><div class="line">                   if (mInterceptorChain.size() != 0) &#123;</div><div class="line">                       for (BlockInterceptor interceptor : mInterceptorChain) &#123;</div><div class="line">                           interceptor.onBlock(getContext().provideContext(), blockInfo);</div><div class="line">                       &#125;</div><div class="line">                   &#125;</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">       &#125;, getContext().provideBlockThreshold(), getContext().stopWhenDebugging()));</div></pre></td></tr></table></figure></p>
+<p>最后我们看拦截器的实现DisplayService，会发送前台的通知，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">  public void onBlock(Context context, BlockInfo blockInfo) &#123;</div><div class="line">      Intent intent = new Intent(context, DisplayActivity.class);</div><div class="line">      intent.putExtra(&quot;show_latest&quot;, blockInfo.timeStart);</div><div class="line">      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);</div><div class="line">      PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, FLAG_UPDATE_CURRENT);</div><div class="line">      String contentTitle = context.getString(R.string.block_canary_class_has_blocked, blockInfo.timeStart);</div><div class="line">      String contentText = context.getString(R.string.block_canary_notification_message);</div><div class="line">      show(context, contentTitle, contentText, pendingIntent);</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="3、dump"><a href="#3、dump" class="headerlink" title="3、dump"></a>3、dump</h3><p>从上面的流程我们可以知道，当dispatchMessage前的println触发时，会执行dump的start方法，当dispatchMessage后的println触发时，会执行dump的stop方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private void startDump() &#123;</div><div class="line">       if (null != BlockCanaryInternals.getInstance().stackSampler) &#123;</div><div class="line">           BlockCanaryInternals.getInstance().stackSampler.start();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       if (null != BlockCanaryInternals.getInstance().cpuSampler) &#123;</div><div class="line">           BlockCanaryInternals.getInstance().cpuSampler.start();</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   private void stopDump() &#123;</div><div class="line">       if (null != BlockCanaryInternals.getInstance().stackSampler) &#123;</div><div class="line">           BlockCanaryInternals.getInstance().stackSampler.stop();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       if (null != BlockCanaryInternals.getInstance().cpuSampler) &#123;</div><div class="line">           BlockCanaryInternals.getInstance().cpuSampler.stop();</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>下面我们分Stacksampler和CpuSampler进行介绍。</p>
+<p>1、Stacksampler</p>
+<p>start()的执行流程如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">public void start() &#123;</div><div class="line">       if (mShouldSample.get()) &#123;</div><div class="line">           return;</div><div class="line">       &#125;</div><div class="line">       mShouldSample.set(true);</div><div class="line"></div><div class="line">       HandlerThreadFactory.getTimerThreadHandler().removeCallbacks(mRunnable);</div><div class="line">       //通过一个HandlerThread延时执行了mRunnable</div><div class="line">       HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable,</div><div class="line">               BlockCanaryInternals.getInstance().getSampleDelay());</div><div class="line">   &#125;</div><div class="line">  //mRunnable在基类AbstractSampler中定义</div><div class="line"> private Runnable mRunnable = new Runnable() &#123;</div><div class="line">       @Override</div><div class="line">       public void run() &#123;</div><div class="line">           //抽象方法</div><div class="line">           doSample();</div><div class="line">           //继续执行采集</div><div class="line">           if (mShouldSample.get()) &#123;</div><div class="line">               HandlerThreadFactory.getTimerThreadHandler()</div><div class="line">                       .postDelayed(mRunnable, mSampleInterval);</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   &#125;;</div><div class="line">//Stacksampler的doSample()实现</div><div class="line"> @Override</div><div class="line">   protected void doSample() &#123;</div><div class="line">       StringBuilder stringBuilder = new StringBuilder();</div><div class="line">       //通过mCurrentThread.getStackTrace()获取StackTraceElement，加入到StringBuilder</div><div class="line">       for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) &#123;</div><div class="line">           stringBuilder</div><div class="line">                   .append(stackTraceElement.toString())</div><div class="line">                   .append(BlockInfo.SEPARATOR);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       synchronized (sStackMap) &#123;</div><div class="line">       //Lru算法，控制LinkHashMap的长度</div><div class="line">           if (sStackMap.size() == mMaxEntryCount &amp;&amp; mMaxEntryCount &gt; 0) &#123;</div><div class="line">               sStackMap.remove(sStackMap.keySet().iterator().next());</div><div class="line">           &#125;</div><div class="line">           //加入到map中</div><div class="line">           sStackMap.put(System.currentTimeMillis(), stringBuilder.toString());</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>stop()的执行流程如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public void stop() &#123;</div><div class="line">       if (!mShouldSample.get()) &#123;</div><div class="line">           return;</div><div class="line">       &#125;</div><div class="line">       //设置控制变量</div><div class="line">       mShouldSample.set(false);</div><div class="line">       //取消handler消息</div><div class="line">       HandlerThreadFactory.getTimerThreadHandler().removeCallbacks(mRunnable);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>2、CpuSampler</p>
+<p>其他执行流程均与StackSampler一致，这里主要分析doSample的实现，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">//主要通过获取/proc/stat文件 去获取cpu的信息</div><div class="line"> protected void doSample() &#123;</div><div class="line">       BufferedReader cpuReader = null;</div><div class="line">       BufferedReader pidReader = null;</div><div class="line"></div><div class="line">       try &#123;</div><div class="line">           cpuReader = new BufferedReader(new InputStreamReader(</div><div class="line">                   new FileInputStream(&quot;/proc/stat&quot;)), BUFFER_SIZE);</div><div class="line">           String cpuRate = cpuReader.readLine();</div><div class="line">           if (cpuRate == null) &#123;</div><div class="line">               cpuRate = &quot;&quot;;</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           if (mPid == 0) &#123;</div><div class="line">               mPid = android.os.Process.myPid();</div><div class="line">           &#125;</div><div class="line">           pidReader = new BufferedReader(new InputStreamReader(</div><div class="line">                   new FileInputStream(&quot;/proc/&quot; + mPid + &quot;/stat&quot;)), BUFFER_SIZE);</div><div class="line">           String pidCpuRate = pidReader.readLine();</div><div class="line">           if (pidCpuRate == null) &#123;</div><div class="line">               pidCpuRate = &quot;&quot;;</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           parse(cpuRate, pidCpuRate);</div><div class="line">       &#125; catch (Throwable throwable) &#123;</div><div class="line">           Log.e(TAG, &quot;doSample: &quot;, throwable);</div><div class="line">       &#125; finally &#123;</div><div class="line">           try &#123;</div><div class="line">               if (cpuReader != null) &#123;</div><div class="line">                   cpuReader.close();</div><div class="line">               &#125;</div><div class="line">               if (pidReader != null) &#123;</div><div class="line">                   pidReader.close();</div><div class="line">               &#125;</div><div class="line">           &#125; catch (IOException exception) &#123;</div><div class="line">               Log.e(TAG, &quot;doSample: &quot;, exception);</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<h1 id="blockcanary是如何进行卡顿的判定？"><a href="#blockcanary是如何进行卡顿的判定？" class="headerlink" title="blockcanary是如何进行卡顿的判定？"></a>blockcanary是如何进行卡顿的判定？</h1><p> blockcanary的核心原理是通过自定义一个Printer，设置到主线程ActivityThread的MainLooper中。MainLooper在dispatch消息前后都会调用Printer进行打印。从而获取前后执行的时间差值，判断是否超过设置的阈值。如果超过，则判定为卡顿。</p>
+<h1 id="leakcanary是如何获取线程的堆栈信息？"><a href="#leakcanary是如何获取线程的堆栈信息？" class="headerlink" title="leakcanary是如何获取线程的堆栈信息？"></a>leakcanary是如何获取线程的堆栈信息？</h1><p> 通过mCurrentThread.getStackTrace()方法，遍历获取StackTraceElement，转化为一个StringBuilder的value，并存储到一个key为时间戳的LinkHashMap中。</p>
+<h1 id="leakcanary是如何获取cpu的信息？"><a href="#leakcanary是如何获取cpu的信息？" class="headerlink" title="leakcanary是如何获取cpu的信息？"></a>leakcanary是如何获取cpu的信息？</h1><p> 通过读取/proc/stat文件，获取所有CPU活动的信息来计算CPU使用率。解析出信息后，转化为一个StringBuilder的value，并存储到一个key为时间戳的LinkHashMap中。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>blockcanary充分的利用了Loop的机制，在MainLooper的loop方法中执行dispatchMessage前后都会执行printer的println进行输出，并且提供了方法设置printer。通过分析前后打印的时差与阈值进行比对，从而判定是否卡顿。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p> <a href="https://www.jianshu.com/p/3474a769f170" target="_blank" rel="external">Android性能优化-渲染优化</a></p>
+<p> <a href="https://www.jianshu.com/p/e58992439793" target="_blank" rel="external">Android UI卡顿监测框架BlockCanary原理分析</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/21/leakcanary源码学习随笔/" rel="next" title="leakcanary源码学习随笔">
+                <i class="fa fa-chevron-left"></i> leakcanary源码学习随笔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/05/rxjava2-x源码学习随笔/" rel="prev" title="rxjava2.x源码学习随笔">
+                rxjava2.x源码学习随笔 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/08/23/blockcanary源码学习随笔/"
+           data-title="blockcanary源码学习随笔" data-url="https://junbin1011.github.io/2018/08/23/blockcanary源码学习随笔/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#blockcanary是什么？"><span class="nav-number">1.</span> <span class="nav-text">blockcanary是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">1.2.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android渲染机制"><span class="nav-number">1.3.</span> <span class="nav-text">Android渲染机制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#blockcanary怎么用？"><span class="nav-number">2.</span> <span class="nav-text">blockcanary怎么用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#blockcanary核心执行流程是怎样？"><span class="nav-number">3.</span> <span class="nav-text">blockcanary核心执行流程是怎样？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关键类功能说明"><span class="nav-number">3.1.</span> <span class="nav-text">关键类功能说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码执行流程"><span class="nav-number">3.2.</span> <span class="nav-text">代码执行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、init"><span class="nav-number">3.2.1.</span> <span class="nav-text">1、init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、monitor"><span class="nav-number">3.2.2.</span> <span class="nav-text">2、monitor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、dump"><span class="nav-number">3.2.3.</span> <span class="nav-text">3、dump</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#blockcanary是如何进行卡顿的判定？"><span class="nav-number">4.</span> <span class="nav-text">blockcanary是如何进行卡顿的判定？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leakcanary是如何获取线程的堆栈信息？"><span class="nav-number">5.</span> <span class="nav-text">leakcanary是如何获取线程的堆栈信息？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leakcanary是如何获取cpu的信息？"><span class="nav-number">6.</span> <span class="nav-text">leakcanary是如何获取cpu的信息？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">7.1.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.2.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

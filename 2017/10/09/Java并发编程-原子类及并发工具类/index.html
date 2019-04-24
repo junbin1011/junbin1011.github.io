@@ -1,0 +1,792 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="原子类Java从JDK 1.5开始提供了java.util.concurrent.atomic包（以下简称Atomic包），这个包中的原子操作类提供了一种用法简单、性能高效、线程安全地更新一个变量的方式。因为变量的类型有很多种，所以在Atomic包里一共提供了13个类，属于4种类型的原子更新方式，分别是原子更新基本类型、原子更新数组、原子更新引用和原子更新属性（字段）。Atomic包里的类基本都是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程-原子类及并发工具类">
+<meta property="og:url" content="https://junbin1011.github.io/2017/10/09/Java并发编程-原子类及并发工具类/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="原子类Java从JDK 1.5开始提供了java.util.concurrent.atomic包（以下简称Atomic包），这个包中的原子操作类提供了一种用法简单、性能高效、线程安全地更新一个变量的方式。因为变量的类型有很多种，所以在Atomic包里一共提供了13个类，属于4种类型的原子更新方式，分别是原子更新基本类型、原子更新数组、原子更新引用和原子更新属性（字段）。Atomic包里的类基本都是">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.776Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发编程-原子类及并发工具类">
+<meta name="twitter:description" content="原子类Java从JDK 1.5开始提供了java.util.concurrent.atomic包（以下简称Atomic包），这个包中的原子操作类提供了一种用法简单、性能高效、线程安全地更新一个变量的方式。因为变量的类型有很多种，所以在Atomic包里一共提供了13个类，属于4种类型的原子更新方式，分别是原子更新基本类型、原子更新数组、原子更新引用和原子更新属性（字段）。Atomic包里的类基本都是">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/10/09/Java并发编程-原子类及并发工具类/"/>
+
+
+
+
+
+  <title> Java并发编程-原子类及并发工具类 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/10/09/Java并发编程-原子类及并发工具类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java并发编程-原子类及并发工具类
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T14:22:41+08:00">
+                2017-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/09/Java并发编程-原子类及并发工具类/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/10/09/Java并发编程-原子类及并发工具类/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="原子类"><a href="#原子类" class="headerlink" title="原子类"></a>原子类</h1><p>Java从JDK 1.5开始提供了java.util.concurrent.atomic包（以下简称Atomic包），这个包中<br>的原子操作类提供了一种用法简单、性能高效、线程安全地更新一个变量的方式。<br>因为变量的类型有很多种，所以在Atomic包里一共提供了13个类，属于4种类型的原子更<br>新方式，分别是原子更新基本类型、原子更新数组、原子更新引用和原子更新属性（字段）。<br>Atomic包里的类基本都是使用Unsafe实现的包装类</p>
+<p>java.util.concurrent.atomic中的类可以分成4组：</p>
+<ul>
+<li>标量类（Scalar）：AtomicBoolean，AtomicInteger，AtomicLong，AtomicReference</li>
+<li>数组类：AtomicIntegerArray，AtomicLongArray，AtomicReferenceArray</li>
+<li>更新器类：AtomicLongFieldUpdater，AtomicIntegerFieldUpdater，AtomicReferenceFieldUpdater</li>
+<li>复合变量类：AtomicMarkableReference，AtomicStampedReference</li>
+</ul>
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>CAS（Compare-And-Swap）算法保证数据操作的原子性。</p>
+<p>CAS 算法是硬件对于并发操作共享数据的支持。</p>
+<p>CAS 包含了三个操作数：<br>　　内存值 V<br>　　预估值 A<br>　　更新值 B</p>
+<p>当且仅当 V == A 时，V 将被赋值为 B，否则循环着不断进行判断 V 与 A 是否相等。</p>
+<p>CAS的全称为Compare-And-Swap，是一条CPU的原子指令，其作用是让CPU比较后原子地更新某个位置的值，经过调查发现，其实现方式是基于硬件平台的汇编指令，就是说CAS是靠硬件实现的，JVM只是封装了汇编调用，那些AtomicInteger类便是使用了这些封装后的接口。<br>atomic包的原子包下使用这种方案。例如AtomicInteger的getAndIncrement自增+1的方法，经查看源码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public final int getAndIncrement() &#123;</div><div class="line">for (;;) &#123;</div><div class="line">int current = get();</div><div class="line">int next = current + 1;</div><div class="line">if (compareAndSet(current, next))</div><div class="line">return current;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">public final boolean compareAndSet(int expect, int update) &#123;</div><div class="line">return unsafe.compareAndSwapInt(this, valueOffset, expect, update);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>源码中for循环体的第一步先取得AtomicInteger里存储的数值，第二步对AtomicInteger的当前数值进行加1操作，关键的第三步调用compareAndSet方法来进行原子更新操作，该方法先检查当前数值是否等于current，等于意味着AtomicInteger的值没有被其他线程修改过，则将AtomicInteger的当前数值更新成next的值，如果不等compareAndSet方法会返回false，程序会进入for循环重新进行compareAndSet操作</p>
+<p>Unsafe只提供了3种CAS方法：compareAndSwapObject、compare-AndSwapInt和compareAndSwapLong，具体实现都是使用了native方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* 如果当前数值是expected，则原子的将Java变量更新成x</div><div class="line">* @return 如果更新成功则返回true</div><div class="line">*/</div><div class="line">public final native boolean compareAndSwapObject(Object o,</div><div class="line">long offset,</div><div class="line">Object expected,</div><div class="line">Object x);</div><div class="line">public final native boolean compareAndSwapInt(Object o, long offset,</div><div class="line">int expected,</div><div class="line">int x);</div><div class="line">public final native boolean compareAndSwapLong(Object o, long offset,</div><div class="line">long expected,</div><div class="line">long x);</div></pre></td></tr></table></figure>
+<h2 id="标量类"><a href="#标量类" class="headerlink" title="标量类"></a>标量类</h2><ul>
+<li>AtomicBoolean：原子更新布尔变量</li>
+<li>AtomicInteger：原子更新整型变量</li>
+<li>AtomicLong：原子更新长整型变量</li>
+<li>AtomicReference：原子更新引用类型</li>
+</ul>
+<p>具体到每个类的源代码中，提供的方法基本相同，这里以AtomicInteger为例进行说明<br>AtomicInteger源码主要的方法如下，原理主要都要都是采用了CAS，这里不再累述<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">public class AtomicInteger extends Number implements java.io.Serializable &#123;</div><div class="line">   </div><div class="line">    public AtomicInteger(int initialValue) &#123;</div><div class="line">        value = initialValue;</div><div class="line">    &#125;</div><div class="line"> //返回当前的值</div><div class="line">    public final int get() &#123;</div><div class="line">        return value;</div><div class="line">    &#125;</div><div class="line">    //最终会设置成新值</div><div class="line">    public final void set(int newValue) &#123;</div><div class="line">        value = newValue;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public final void lazySet(int newValue) &#123;</div><div class="line">        unsafe.putOrderedInt(this, valueOffset, newValue);</div><div class="line">    &#125;</div><div class="line">      //原子更新为新值并返回旧值</div><div class="line">    public final int getAndSet(int newValue) &#123;</div><div class="line">        for (;;) &#123;</div><div class="line">            int current = get();</div><div class="line">            if (compareAndSet(current, newValue))</div><div class="line">                return current;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">     //如果输入的值等于预期值，则以原子方式更新为新值</div><div class="line">    public final boolean compareAndSet(int expect, int update) &#123;</div><div class="line">        return unsafe.compareAndSwapInt(this, valueOffset, expect, update);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> //原子自增</div><div class="line">    public final int getAndIncrement() &#123;</div><div class="line">        for (;;) &#123;</div><div class="line">            int current = get();</div><div class="line">            int next = current + 1;</div><div class="line">            if (compareAndSet(current, next))</div><div class="line">                return current;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">//原子方式将当前值与输入值相加并返回结果</div><div class="line">    public final int getAndAdd(int delta) &#123;</div><div class="line">        for (;;) &#123;</div><div class="line">            int current = get();</div><div class="line">            int next = current + delta;</div><div class="line">            if (compareAndSet(current, next))</div><div class="line">                return current;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="数组类"><a href="#数组类" class="headerlink" title="数组类"></a>数组类</h2><ul>
+<li>AtomicIntegerArray：原子更新整型数组的某个元素</li>
+<li>AtomicLongArray：原子更新长整型数组的某个元素</li>
+<li>AtomicReferenceArray：原子更新引用类型数组的某个元素</li>
+</ul>
+<p>AtomicIntegerArray类主要是提供原子的方式更新数组里的整型，其常用方法如下。</p>
+<ul>
+<li>int addAndGet（int i，int delta）：以原子方式将输入值与数组中索引i的元素相加。</li>
+<li>boolean compareAndSet（int i，int expect，int update）：如果当前值等于预期值，则以原子方式将数组位置i的元素设置成update值。</li>
+</ul>
+<p>以上几个类提供的方法几乎一样，所以这里以AtomicIntegerArray为例进行讲解 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">public class AtomicIntegerArray implements java.io.Serializable &#123;</div><div class="line">    private static final long serialVersionUID = 2862133569453604235L;</div><div class="line"></div><div class="line">    private static final Unsafe unsafe = Unsafe.getUnsafe();</div><div class="line">    private static final int base = unsafe.arrayBaseOffset(int[].class);</div><div class="line">    private static final int shift;</div><div class="line">    private final int[] array;</div><div class="line"> </div><div class="line"></div><div class="line">    private long checkedByteOffset(int i) &#123;</div><div class="line">        if (i &lt; 0 || i &gt;= array.length)</div><div class="line">            throw new IndexOutOfBoundsException(&quot;index &quot; + i);</div><div class="line"></div><div class="line">        return byteOffset(i);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static long byteOffset(int i) &#123;</div><div class="line">        return ((long) i &lt;&lt; shift) + base;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">     </div><div class="line">    public AtomicIntegerArray(int length) &#123;</div><div class="line">        array = new int[length];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">   </div><div class="line">    public final int get(int i) &#123;</div><div class="line">        return getRaw(checkedByteOffset(i));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private int getRaw(long offset) &#123;</div><div class="line">        return unsafe.getIntVolatile(array, offset);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    public final void set(int i, int newValue) &#123;</div><div class="line">        unsafe.putIntVolatile(array, checkedByteOffset(i), newValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">   </div><div class="line">    public final void lazySet(int i, int newValue) &#123;</div><div class="line">        unsafe.putOrderedInt(array, checkedByteOffset(i), newValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    public final int getAndSet(int i, int newValue) &#123;</div><div class="line">        long offset = checkedByteOffset(i);</div><div class="line">        while (true) &#123;</div><div class="line">            int current = getRaw(offset);</div><div class="line">            if (compareAndSetRaw(offset, current, newValue))</div><div class="line">                return current;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public final boolean compareAndSet(int i, int expect, int update) &#123;</div><div class="line">        return compareAndSetRaw(checkedByteOffset(i), expect, update);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private boolean compareAndSetRaw(long offset, int expect, int update) &#123;</div><div class="line">        return unsafe.compareAndSwapInt(array, offset, expect, update);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">     </div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里关键的实现也还是使用了CAS的策略，具体通过unsafe的native方法进行实现</p>
+<h3 id="原子更新字段类"><a href="#原子更新字段类" class="headerlink" title="原子更新字段类"></a>原子更新字段类</h3><p> 如果需原子地更新某个类里的某个字段时，就需要使用原子更新字段类，Atomic包提供<br>了以下3个类进行原子字段更新。</p>
+<ul>
+<li>AtomicIntegerFieldUpdater：原子更新整型的字段的更新器。</li>
+<li>AtomicLongFieldUpdater：原子更新长整型字段的更新器。</li>
+<li>AtomicStampedReference：原子更新带有版本号的引用类型。该类将整数值与引用关联起<br>来，可用于原子的更新数据和数据的版本号，可以解决使用CAS进行原子更新时可能出现的<br>ABA问题。<br>要想原子地更新字段类需要两步。第一步，因为原子更新字段类都是抽象类，每次使用的<br>时候必须使用静态方法newUpdater()创建一个更新器，并且需要设置想要更新的类和属性。第<br>二步，更新类的字段（属性）必须使用public volatile修饰符</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public class AtomicIntegerFieldUpdaterTest &#123;</div><div class="line">// 创建原子更新器，并设置需要更新的对象类和对象的属性</div><div class="line">private static AtomicIntegerFieldUpdater&lt;User&gt; a = AtomicIntegerFieldUpdater.</div><div class="line">newUpdater(User.class， &quot;old&quot;);</div><div class="line">public static void main(String[] args) &#123;</div><div class="line">// 设置柯南的年龄是10岁</div><div class="line">User conan = new User(&quot;conan&quot;， 10);</div><div class="line">// 柯南长了一岁，但是仍然会输出旧的年龄</div><div class="line">System.out.println(a.getAndIncrement(conan));</div><div class="line">// 输出柯南现在的年龄</div><div class="line">System.out.println(a.get(conan));</div><div class="line">&#125;</div><div class="line">public static class User &#123;</div><div class="line">private String name;</div><div class="line">public volatile int old;</div><div class="line">public User(String name， int old) &#123;</div><div class="line">this.name = name;</div><div class="line">this.old = old;</div><div class="line">&#125;</div><div class="line">public String getName() &#123;</div><div class="line">return name;</div><div class="line">&#125;</div><div class="line">public int getOld() &#123;</div><div class="line">return old;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>代码执行后输出如下。</p>
+<p>10</p>
+<p>11</p>
+<h1 id="并发工具类"><a href="#并发工具类" class="headerlink" title="并发工具类"></a>并发工具类</h1><h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>CountDownLatch类是一个同步计数器,构造时默认接收一个初始值，每调用一次countDown()方法，计数器减1。计数器&gt;0时，await()方法会阻塞;当计数器=0时会得到await()会立即得到响应<br>CountDownLatch类位于java.util.concurrent包下，利用它可以实现类似计数器的功能。比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">     public static void main(String[] args) &#123;   </div><div class="line">         final CountDownLatch latch = new CountDownLatch(2);</div><div class="line">          </div><div class="line">         new Thread()&#123;</div><div class="line">             public void run() &#123;</div><div class="line">                 try &#123;</div><div class="line">                     System.out.println(&quot;子线程&quot;+Thread.currentThread().getName()+&quot;正在执行&quot;);</div><div class="line">                    Thread.sleep(3000);</div><div class="line">                    System.out.println(&quot;子线程&quot;+Thread.currentThread().getName()+&quot;执行完毕&quot;);</div><div class="line">                    latch.countDown();</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">             &#125;;</div><div class="line">         &#125;.start();</div><div class="line">          </div><div class="line">         new Thread()&#123;</div><div class="line">             public void run() &#123;</div><div class="line">                 try &#123;</div><div class="line">                     System.out.println(&quot;子线程&quot;+Thread.currentThread().getName()+&quot;正在执行&quot;);</div><div class="line">                     Thread.sleep(3000);</div><div class="line">                     System.out.println(&quot;子线程&quot;+Thread.currentThread().getName()+&quot;执行完毕&quot;);</div><div class="line">                     latch.countDown();</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">             &#125;;</div><div class="line">         &#125;.start();</div><div class="line">          </div><div class="line">         try &#123;</div><div class="line">             System.out.println(&quot;等待2个子线程执行完毕...&quot;);</div><div class="line">            latch.await();</div><div class="line">            System.out.println(&quot;2个子线程已经执行完毕&quot;);</div><div class="line">            System.out.println(&quot;继续执行主线程&quot;);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
+<p>执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">线程Thread-0正在执行</div><div class="line">线程Thread-1正在执行</div><div class="line">等待2个子线程执行完毕...</div><div class="line">线程Thread-0执行完毕</div><div class="line">线程Thread-1执行完毕</div><div class="line">2个子线程已经执行完毕</div><div class="line">继续执行主线程</div></pre></td></tr></table></figure></p>
+<h2 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h2><p>CyclicBarrier的字面意思是可循环使用（Cyclic）的屏障（Barrier）。它要做的事情是，让一组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会<br>开门，所有被屏障拦截的线程才会继续运行。当所有等待线程都被释放以后，CyclicBarrier可以被重用。CyclicBarrier类位于java.util.concurrent包下，CyclicBarrier提供2个构造器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public CyclicBarrier(int parties, Runnable barrierAction) &#123;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">public CyclicBarrier(int parties) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>参数parties指让多少个线程或者任务等待至barrier状态；参数barrierAction为当这些线程都达到barrier状态时会执行的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        int N = 4;</div><div class="line">        CyclicBarrier barrier  = new CyclicBarrier(N);</div><div class="line">        for(int i=0;i&lt;N;i++)</div><div class="line">            new Writer(barrier).start();</div><div class="line">    &#125;</div><div class="line">    static class Writer extends Thread&#123;</div><div class="line">        private CyclicBarrier cyclicBarrier;</div><div class="line">        public Writer(CyclicBarrier cyclicBarrier) &#123;</div><div class="line">            this.cyclicBarrier = cyclicBarrier;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;正在写入数据...&quot;);</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(5000);      //以睡眠来模拟写入数据操作</div><div class="line">                System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;写入数据完毕，等待其他线程写入完毕&quot;);</div><div class="line">                cyclicBarrier.await();</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;catch(BrokenBarrierException e)&#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            System.out.println(&quot;所有线程写入完毕，继续处理其他任务...&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　执行结果：<br>　<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">　线程Thread-0正在写入数据...</div><div class="line">线程Thread-3正在写入数据...</div><div class="line">线程Thread-2正在写入数据...</div><div class="line">线程Thread-1正在写入数据...</div><div class="line">线程Thread-2写入数据完毕，等待其他线程写入完毕</div><div class="line">线程Thread-0写入数据完毕，等待其他线程写入完毕</div><div class="line">线程Thread-3写入数据完毕，等待其他线程写入完毕</div><div class="line">线程Thread-1写入数据完毕，等待其他线程写入完毕</div><div class="line">所有线程写入完毕，继续处理其他任务...</div><div class="line">所有线程写入完毕，继续处理其他任务...</div><div class="line">所有线程写入完毕，继续处理其他任务...</div><div class="line">所有线程写入完毕，继续处理其他任务...</div></pre></td></tr></table></figure></p>
+<h2 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h2><p>Semaphore（信号量）是用来控制同时访问特定资源的线程数量，它通过协调各个线程，以保证合理的使用公共资源。Semaphore可以控同时访问的线程个数，通过acquire()获取一个许可，如果没有就等待，而 release() 释放一个许可。</p>
+<p>假若一个工厂有5台机器，但是有8个工人，一台机器同时只能被一个工人使用，只有使用完了，其他工人才能继续使用。那么我们就可以通过Semaphore来实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        int N = 8;            //工人数</div><div class="line">        Semaphore semaphore = new Semaphore(5); //机器数目</div><div class="line">        for(int i=0;i&lt;N;i++)</div><div class="line">            new Worker(i,semaphore).start();</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    static class Worker extends Thread&#123;</div><div class="line">        private int num;</div><div class="line">        private Semaphore semaphore;</div><div class="line">        public Worker(int num,Semaphore semaphore)&#123;</div><div class="line">            this.num = num;</div><div class="line">            this.semaphore = semaphore;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            try &#123;</div><div class="line">                semaphore.acquire();</div><div class="line">                System.out.println(&quot;工人&quot;+this.num+&quot;占用一个机器在生产...&quot;);</div><div class="line">                Thread.sleep(2000);</div><div class="line">                System.out.println(&quot;工人&quot;+this.num+&quot;释放出机器&quot;);</div><div class="line">                semaphore.release();           </div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">工人0占用一个机器在生产...</div><div class="line">工人1占用一个机器在生产...</div><div class="line">工人2占用一个机器在生产...</div><div class="line">工人4占用一个机器在生产...</div><div class="line">工人5占用一个机器在生产...</div><div class="line">工人0释放出机器</div><div class="line">工人2释放出机器</div><div class="line">工人3占用一个机器在生产...</div><div class="line">工人7占用一个机器在生产...</div><div class="line">工人4释放出机器</div><div class="line">工人5释放出机器</div><div class="line">工人1释放出机器</div><div class="line">工人6占用一个机器在生产...</div><div class="line">工人3释放出机器</div><div class="line">工人7释放出机器</div><div class="line">工人6释放出机器</div></pre></td></tr></table></figure></p>
+<h2 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h2><p>Exchanger（交换者）是一个用于线程间协作的工具类。Exchanger用于进行线程间的数据交换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程通过exchange方法交换数据，如果第一个线程先执行exchange()方法，它会一直等待第二个线程也执行exchange方法，当两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产出来的数据传递给对方。当在运行不对称的活动时很有用。比如说，一个线程向buffer中填充数据，另一个线程从buffer中消费数据；这些线程可以用Exchange来交换数据。这个交换对于两个线程来说都是全的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">package com.clzhang.sample.thread;</div><div class="line"></div><div class="line">import java.util.*;</div><div class="line">import java.util.concurrent.Exchanger;</div><div class="line"></div><div class="line">public class SyncExchanger &#123;</div><div class="line">    private static final Exchanger exchanger = new Exchanger();</div><div class="line"></div><div class="line">    class DataProducer implements Runnable &#123;</div><div class="line">        private List list = new ArrayList();</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            for (int i = 0; i &lt; 5; i++) &#123;</div><div class="line">                System.out.println(&quot;生产了一个数据，耗时1秒&quot;);</div><div class="line">                list.add(new Date());</div><div class="line">                try &#123;</div><div class="line">                    Thread.sleep(1000);</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            try &#123;</div><div class="line">                list = (List) exchanger.exchange(list);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            for (Iterator iterator = list.iterator(); iterator.hasNext();) &#123;</div><div class="line">                System.out.println(&quot;Producer &quot; + iterator.next());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    class DataConsumer implements Runnable &#123;</div><div class="line">        private List list = new ArrayList();</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            for (int i = 0; i &lt; 5; i++) &#123;</div><div class="line">                list.add(&quot;这是一个收条。&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            try &#123;</div><div class="line">                list = (List) exchanger.exchange(list);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            for (Iterator iterator = list.iterator(); iterator.hasNext();) &#123;</div><div class="line">                Date d = (Date) iterator.next();</div><div class="line">                System.out.println(&quot;Consumer: &quot; + d);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SyncExchanger ins = new SyncExchanger();</div><div class="line">        new Thread(ins.new DataProducer()).start();</div><div class="line">        new Thread(ins.new DataConsumer()).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">生产了一个数据，耗时1秒</div><div class="line">生产了一个数据，耗时1秒</div><div class="line">生产了一个数据，耗时1秒</div><div class="line">生产了一个数据，耗时1秒</div><div class="line">生产了一个数据，耗时1秒</div><div class="line">Producer 这是一个收条。</div><div class="line">Producer 这是一个收条。</div><div class="line">Producer 这是一个收条。</div><div class="line">Producer 这是一个收条。</div><div class="line">Producer 这是一个收条。</div><div class="line">Consumer: Thu Sep 12 17:21:39 CST 2013</div><div class="line">Consumer: Thu Sep 12 17:21:40 CST 2013</div><div class="line">Consumer: Thu Sep 12 17:21:41 CST 2013</div><div class="line">Consumer: Thu Sep 12 17:21:42 CST 2013</div><div class="line">Consumer: Thu Sep 12 17:21:43 CST 2013</div></pre></td></tr></table></figure></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://book.douban.com/subject/26591326/" target="_blank" rel="external">《Java并发编程的艺术》</a></p>
+<p><a href="http://www.cnblogs.com/dolphin0520/p/3920397.html" target="_blank" rel="external">Java并发编程：CountDownLatch、CyclicBarrier和Semaphore</a></p>
+<p><a href="http://blog.csdn.net/u011116672/article/details/51068828" target="_blank" rel="external"> Java并发编程系列之十九：原子操作类</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/27/Java并发编程-多线程/" rel="next" title="Java并发编程-多线程">
+                <i class="fa fa-chevron-left"></i> Java并发编程-多线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/10/Java并发编程-锁及并发容器/" rel="prev" title="Java并发编程-锁及并发容器">
+                Java并发编程-锁及并发容器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/10/09/Java并发编程-原子类及并发工具类/"
+           data-title="Java并发编程-原子类及并发工具类" data-url="https://junbin1011.github.io/2017/10/09/Java并发编程-原子类及并发工具类/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原子类"><span class="nav-number">1.</span> <span class="nav-text">原子类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS"><span class="nav-number">1.1.</span> <span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标量类"><span class="nav-number">1.2.</span> <span class="nav-text">标量类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组类"><span class="nav-number">1.3.</span> <span class="nav-text">数组类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原子更新字段类"><span class="nav-number">1.3.1.</span> <span class="nav-text">原子更新字段类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并发工具类"><span class="nav-number">2.</span> <span class="nav-text">并发工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">2.1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CyclicBarrier"><span class="nav-number">2.2.</span> <span class="nav-text">CyclicBarrier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Semaphore"><span class="nav-number">2.3.</span> <span class="nav-text">Semaphore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exchanger"><span class="nav-number">2.4.</span> <span class="nav-text">Exchanger</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

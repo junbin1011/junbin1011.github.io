@@ -1,0 +1,771 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.备忘录模式的定义及使用场景备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露。
+定义：在不破坏封闭的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样，以后就可将该对象回复到原先保存的状态
+使用场景：
+需要保存一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-备忘录模式">
+<meta property="og:url" content="https://junbin1011.github.io/2017/03/01/设计模式-备忘录模式/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.备忘录模式的定义及使用场景备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露。
+定义：在不破坏封闭的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样，以后就可将该对象回复到原先保存的状态
+使用场景：
+需要保存一个">
+<meta property="og:image" content="http://img.blog.csdn.net/20170301095411447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.785Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-备忘录模式">
+<meta name="twitter:description" content="1.备忘录模式的定义及使用场景备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露。
+定义：在不破坏封闭的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样，以后就可将该对象回复到原先保存的状态
+使用场景：
+需要保存一个">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170301095411447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/03/01/设计模式-备忘录模式/"/>
+
+
+
+
+
+  <title> 设计模式-备忘录模式 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/03/01/设计模式-备忘录模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式-备忘录模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-01T10:02:18+08:00">
+                2017-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/01/设计模式-备忘录模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/01/设计模式-备忘录模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-备忘录模式的定义及使用场景"><a href="#1-备忘录模式的定义及使用场景" class="headerlink" title="1.备忘录模式的定义及使用场景"></a>1.备忘录模式的定义及使用场景</h1><p>备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露。</p>
+<h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>在不破坏封闭的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样，以后就可将该对象回复到原先保存的状态</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li>需要保存一个对象在某一个时刻的状态或部分状态</li>
+<li>需要用一个接口来让其他对象得到这些状态，将会暴露对象的实现细节并破坏对象的封装性，一个对象不希望外界直接访问其内部状态，通过中间对象可以间接访问其内部状态</li>
+</ul>
+<p><img src="http://img.blog.csdn.net/20170301095411447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h1 id="2-备忘录模式的优缺点"><a href="#2-备忘录模式的优缺点" class="headerlink" title="2. 备忘录模式的优缺点"></a>2. 备忘录模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
+<li>给用户提供了一种可以恢复状态的机制，可以使用户能够比较方便地回到某个历史的状态</li>
+<li>实现了信息的封装，使得用户不需要关心状态的保持细节<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>消耗资源，如果类的成员变量过多，势必会占用比较大的资源，而且每一次保存都会消耗一定的内存<h1 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h1></li>
+<li>备忘录的生命期<br>备忘录创建出来就要在“最近”的代码中使用，要主动管理它的生命周期，建立就要使用，不使用就要立刻删除其引用，等待垃圾回收器对它的回收处理</li>
+<li>备忘录的性能<br>不要在频繁建立备份的场景中使用备忘录模式（比如一个for循环中），主要原因是一是控制不了备忘录建立的对象数量；而是大对象的建立是要消耗资源的，系统的性能需要考虑。<h1 id="4-备忘录模式的实现方式"><a href="#4-备忘录模式的实现方式" class="headerlink" title="4. 备忘录模式的实现方式"></a>4. 备忘录模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class Memento &#123;</div><div class="line">    //发起人的内部状态</div><div class="line">    private String state=&quot;&quot;;</div><div class="line"></div><div class="line">    public Memento(String state) &#123;</div><div class="line">        this.state = state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getState() &#123;</div><div class="line">        return state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setState(String state) &#123;</div><div class="line">        this.state = state;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class Caretaker &#123;</div><div class="line">    //备忘录对象</div><div class="line">    private  Memento memento;</div><div class="line"></div><div class="line">    public Memento getMemento() &#123;</div><div class="line">        return memento;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setMemento(Memento memento) &#123;</div><div class="line">        this.memento = memento;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class Originator &#123;</div><div class="line">    //内部状态</div><div class="line">    private String state = &quot;&quot;;</div><div class="line"></div><div class="line">    public String getState() &#123;</div><div class="line">        return state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setState(String state) &#123;</div><div class="line">        this.state = state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //创建一个备忘录</div><div class="line">    public Memento createMemento() &#123;</div><div class="line">        return new Memento(state);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //恢复一个备忘录</div><div class="line">    public void restoreMemento(Memento memento) &#123;</div><div class="line">        this.setState(memento.getState());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"></div><div class="line">    public static void main(String args[]) &#123;</div><div class="line">        //定义出发起人</div><div class="line">        Originator originator = new Originator();</div><div class="line">        originator.setState(&quot;初始：1111111111111&quot;);</div><div class="line">        //定义出备忘录管理员</div><div class="line">        Caretaker caretaker = new Caretaker();</div><div class="line">        System.out.println(originator.getState());</div><div class="line">        //创建一个备忘录</div><div class="line">        caretaker.setMemento(originator.createMemento());</div><div class="line">        originator.setState(&quot;改变：22222222222222&quot;);</div><div class="line">        System.out.println(originator.getState());</div><div class="line">        originator.setState(&quot;恢复：restoreMemento&quot;);</div><div class="line">        originator.restoreMemento(caretaker.getMemento());</div><div class="line">        System.out.println(originator.getState());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="5-备忘录模式在Android中的实际应用"><a href="#5-备忘录模式在Android中的实际应用" class="headerlink" title="5. 备忘录模式在Android中的实际应用"></a>5. 备忘录模式在Android中的实际应用</h1><p>在Android开发中，状态模式应用是Android中的状态保持，也就是里面的onSaveInstanceState和onRestoreInstanceState。当Activity不是正常方式退出，且Activity在随后的时间内被系统杀死之前会调用这两个方法让开发人员可以有机会存储Activity的相关信息，并且在下次放好Activity的时候恢复这些数据。<br>Activity：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">protected void onSaveInstanceState(Bundle outState) &#123;</div><div class="line"> outState.putBundle(WINDOW_HIERARCHY_TAG, mWindow.saveHierarchyState()); //保存当前窗口的视图树的状态</div><div class="line"> Parcelable p = mFragments.saveAllState(); //存储Fragment的状态</div><div class="line"> if (p != null) &#123;</div><div class="line"> outState.putParcelable(FRAGMENTS_TAG, p);</div><div class="line"> &#125;</div><div class="line"> getApplication().dispatchActivitySaveInstanceState(this, outState);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>Window的实现为PhoneWindow：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"> /** &#123;@inheritDoc&#125; */</div><div class="line">  @Override</div><div class="line">  public Bundle saveHierarchyState() &#123;</div><div class="line">  Bundle outState = new Bundle();</div><div class="line">  if (mContentParent == null) &#123;</div><div class="line">  return outState;</div><div class="line">  &#125;</div><div class="line">//通过SparseArray类来存储，这相当于一个key为整型的map</div><div class="line">  SparseArray&lt;Parcelable&gt; states = new SparseArray&lt;Parcelable&gt;();</div><div class="line">//mContentParent就是调用Activity的setContentView函数设置的内容视图，它是内容视图的根节点，在这里存储整棵树的结构</div><div class="line">  mContentParent.saveHierarchyState(states);</div><div class="line">//将视图树结构放到outState中</div><div class="line">  outState.putSparseParcelableArray(VIEWS_TAG, states);</div><div class="line"></div><div class="line">  // 保存当前界面中获取了焦点的View</div><div class="line">  View focusedView = mContentParent.findFocus();</div><div class="line">  if (focusedView != null) &#123;</div><div class="line">  if (focusedView.getId() != View.NO_ID) &#123;</div><div class="line">  outState.putInt(FOCUSED_ID_TAG, focusedView.getId());</div><div class="line">  &#125; else &#123;</div><div class="line">  if (false) &#123;</div><div class="line">  Log.d(TAG, &quot;couldn&apos;t save which view has focus because the focused view &quot;</div><div class="line">  + focusedView + &quot; has no id.&quot;);</div><div class="line">  &#125;</div><div class="line">  &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 存储整个面板的状态</div><div class="line">  SparseArray&lt;Parcelable&gt; panelStates = new SparseArray&lt;Parcelable&gt;();</div><div class="line">  savePanelState(panelStates);</div><div class="line">  if (panelStates.size() &gt; 0) &#123;</div><div class="line">  outState.putSparseParcelableArray(PANELS_TAG, panelStates);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">//存储actionBar的状态</div><div class="line">  if (mDecorContentParent != null) &#123;</div><div class="line">  SparseArray&lt;Parcelable&gt; actionBarStates = new SparseArray&lt;Parcelable&gt;();</div><div class="line">  mDecorContentParent.saveToolbarHierarchyState(actionBarStates);</div><div class="line">  outState.putSparseParcelableArray(ACTION_BAR_TAG, actionBarStates);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return outState;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>在saveHierarchyState函数中，主要是存储了与当前UI、ActionBar相关的View状态。mContentParent就是我们通过Activity的setContentView函数设置的内容视图，他是这个内容视图的根节点。mContentParent是一个ViewGroup对象，但是saveHierachyState是在父类View中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void saveHierarchyState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line"> dispatchSaveInstanceState(container);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">protected void dispatchSaveInstanceState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line">if (mID != NO_ID &amp;&amp; (mViewFlags &amp; SAVE_DISABLED_MASK) == 0) &#123;</div><div class="line">mPrivateFlags &amp;= ~PFLAG_SAVE_STATE_CALLED;</div><div class="line">Parcelable state = onSaveInstanceState();</div><div class="line">if ((mPrivateFlags &amp; PFLAG_SAVE_STATE_CALLED) == 0) &#123;</div><div class="line">throw new IllegalStateException(</div><div class="line">&quot;Derived class did not call super.onSaveInstanceState()&quot;);</div><div class="line">&#125;</div><div class="line">if (state != null) &#123;</div><div class="line">// Log.i(&quot;View&quot;, &quot;Freezing #&quot; + Integer.toHexString(mID)</div><div class="line">// + &quot;: &quot; + state);</div><div class="line">container.put(mID, state); //将自身状态放到container中 key 为id value为自身状态</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//View类默认的存储的状态为空</div><div class="line"> protected Parcelable onSaveInstanceState() &#123;</div><div class="line">  mPrivateFlags |= PFLAG_SAVE_STATE_CALLED;</div><div class="line">  if (mStartActivityRequestWho != null) &#123;</div><div class="line">  BaseSavedState state = new BaseSavedState(AbsSavedState.EMPTY_STATE);</div><div class="line">  state.mStartActivityRequestWhoSaved = mStartActivityRequestWho;</div><div class="line">  return state;</div><div class="line">  &#125;</div><div class="line">  return BaseSavedState.EMPTY_STATE;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>恢复数据的调用过程如下，基本流程与保存类似<br>Activity:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">protected void onRestoreInstanceState(Bundle savedInstanceState) &#123;</div><div class="line">if (mWindow != null) &#123;</div><div class="line">Bundle windowState = savedInstanceState.getBundle(WINDOW_HIERARCHY_TAG);</div><div class="line">if (windowState != null) &#123;</div><div class="line">mWindow.restoreHierarchyState(windowState);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>PhoneWindow:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">/** &#123;@inheritDoc&#125; */</div><div class="line"> @Override</div><div class="line"> public void restoreHierarchyState(Bundle savedInstanceState) &#123;</div><div class="line"> if (mContentParent == null) &#123;</div><div class="line"> return;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> SparseArray&lt;Parcelable&gt; savedStates</div><div class="line"> = savedInstanceState.getSparseParcelableArray(VIEWS_TAG);</div><div class="line"> if (savedStates != null) &#123;</div><div class="line"> mContentParent.restoreHierarchyState(savedStates);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> // restore the focused view</div><div class="line"> int focusedViewId = savedInstanceState.getInt(FOCUSED_ID_TAG, View.NO_ID);</div><div class="line"> if (focusedViewId != View.NO_ID) &#123;</div><div class="line"> View needsFocus = mContentParent.findViewById(focusedViewId);</div><div class="line"> if (needsFocus != null) &#123;</div><div class="line"> needsFocus.requestFocus();</div><div class="line"> &#125; else &#123;</div><div class="line"> Log.w(TAG,</div><div class="line"> &quot;Previously focused view reported id &quot; + focusedViewId</div><div class="line"> + &quot; during save, but can&apos;t be found during restore.&quot;);</div><div class="line"> &#125;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> // restore the panels</div><div class="line"> SparseArray&lt;Parcelable&gt; panelStates = savedInstanceState.getSparseParcelableArray(PANELS_TAG);</div><div class="line"> if (panelStates != null) &#123;</div><div class="line"> restorePanelState(panelStates);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> if (mDecorContentParent != null) &#123;</div><div class="line"> SparseArray&lt;Parcelable&gt; actionBarStates =</div><div class="line"> savedInstanceState.getSparseParcelableArray(ACTION_BAR_TAG);</div><div class="line"> if (actionBarStates != null) &#123;</div><div class="line"> doPendingInvalidatePanelMenu();</div><div class="line"> mDecorContentParent.restoreToolbarHierarchyState(actionBarStates);</div><div class="line"> &#125; else &#123;</div><div class="line"> Log.w(TAG, &quot;Missing saved instance states for action bar views! &quot; +</div><div class="line"> &quot;State will not be restored.&quot;);</div><div class="line"> &#125;</div><div class="line"> &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>View:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void restoreHierarchyState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line">  dispatchRestoreInstanceState(container);</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* Called by &#123;@link #restoreHierarchyState(android.util.SparseArray)&#125; to retrieve the</div><div class="line">* state for this view and its children. May be overridden to modify how restoring</div><div class="line">* happens to a view&apos;s children; for example, some views may want to not store state</div><div class="line">* for their children.</div><div class="line">*</div><div class="line">* @param container The SparseArray which holds previously saved state.</div><div class="line">*</div><div class="line">* @see #dispatchSaveInstanceState(android.util.SparseArray)</div><div class="line">* @see #restoreHierarchyState(android.util.SparseArray)</div><div class="line">* @see #onRestoreInstanceState(android.os.Parcelable)</div><div class="line">*/</div><div class="line">protected void dispatchRestoreInstanceState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line">if (mID != NO_ID) &#123;</div><div class="line">Parcelable state = container.get(mID);</div><div class="line">if (state != null) &#123;</div><div class="line">// Log.i(&quot;View&quot;, &quot;Restoreing #&quot; + Integer.toHexString(mID)</div><div class="line">// + &quot;: &quot; + state);</div><div class="line">mPrivateFlags &amp;= ~PFLAG_SAVE_STATE_CALLED;</div><div class="line">onRestoreInstanceState(state);</div><div class="line">if ((mPrivateFlags &amp; PFLAG_SAVE_STATE_CALLED) == 0) &#123;</div><div class="line">throw new IllegalStateException(</div><div class="line">&quot;Derived class did not call super.onRestoreInstanceState()&quot;);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">protected void onRestoreInstanceState(Parcelable state) &#123;</div><div class="line">mPrivateFlags |= PFLAG_SAVE_STATE_CALLED;</div><div class="line">if (state != null &amp;&amp; !(state instanceof AbsSavedState)) &#123;</div><div class="line">throw new IllegalArgumentException(&quot;Wrong state class, expecting View State but &quot;</div><div class="line">+ &quot;received &quot; + state.getClass().toString() + &quot; instead. This usually happens &quot;</div><div class="line">+ &quot;when two views of different type have the same id in the same hierarchy. &quot;</div><div class="line">+ &quot;This view&apos;s id is &quot; + ViewDebug.resolveId(mContext, getId()) + &quot;. Make sure &quot;</div><div class="line">+ &quot;other views do not use the same id.&quot;);</div><div class="line">&#125;</div><div class="line">if (state != null &amp;&amp; state instanceof BaseSavedState) &#123;</div><div class="line">mStartActivityRequestWho = ((BaseSavedState) state).mStartActivityRequestWhoSaved;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这个过程中，Activity扮演了Caretaker角色，负责存储、恢复UI的状态信息；Activity、Fragement、View、ViewGroup等对象为Originator角色，也就是需要存储状态的对象；Memento则是由Bundle类扮演。</p>
+<p>Activity在停止之前会根据Activity的退出情景来选择是否需要存储状态，在重新启动该Activity时会判断ActivityClientRecord对象中是否存储了Activity的状态，如果含有状态则调用Activity的onRestoreInstanceState函数，从而使得Activity的UI效果与上次保持一致，这样一来，就保证了在非正常退出Activity时不会丢失数据的情况，很好地提升了用户体验。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/28/设计模式-外观模式/" rel="next" title="设计模式-外观模式">
+                <i class="fa fa-chevron-left"></i> 设计模式-外观模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/03/设计模式-访问者模式/" rel="prev" title="设计模式-访问者模式">
+                设计模式-访问者模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/01/设计模式-备忘录模式/"
+           data-title="设计模式-备忘录模式" data-url="https://junbin1011.github.io/2017/03/01/设计模式-备忘录模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-备忘录模式的定义及使用场景"><span class="nav-number">1.</span> <span class="nav-text">1.备忘录模式的定义及使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义："><span class="nav-number">1.1.</span> <span class="nav-text">定义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景："><span class="nav-number">1.2.</span> <span class="nav-text">使用场景：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-备忘录模式的优缺点"><span class="nav-number">2.</span> <span class="nav-text">2. 备忘录模式的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1优点"><span class="nav-number">2.1.</span> <span class="nav-text">2.1优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2缺点"><span class="nav-number">2.2.</span> <span class="nav-text">2.2缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-注意事项"><span class="nav-number">3.</span> <span class="nav-text">3.注意事项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-备忘录模式的实现方式"><span class="nav-number">4.</span> <span class="nav-text">4. 备忘录模式的实现方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-备忘录模式在Android中的实际应用"><span class="nav-number">5.</span> <span class="nav-text">5. 备忘录模式在Android中的实际应用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,数据结构与算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.顺序表的查找1）顺序查找顺序查找又称为线性查找，是一种最简单的查找方法。        从表的一端开始，向另一端逐个按要查找的值key 与关键码key进行比较，若找到，查找成功，并给出数据元素在表中的位置；若整个表检测完，仍未找到与关键码相同的key值，则查找失败，给出失败信息。说白了就是，从头到尾，一个一个地比，找着相同的就成功，找不到就失败。很明显的缺点就是查找效率低。
+【适用性】：适用于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="查找算法-顺序查找、有序查找">
+<meta property="og:url" content="https://junbin1011.github.io/2016/12/06/查找算法-顺序查找、有序查找/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.顺序表的查找1）顺序查找顺序查找又称为线性查找，是一种最简单的查找方法。        从表的一端开始，向另一端逐个按要查找的值key 与关键码key进行比较，若找到，查找成功，并给出数据元素在表中的位置；若整个表检测完，仍未找到与关键码相同的key值，则查找失败，给出失败信息。说白了就是，从头到尾，一个一个地比，找着相同的就成功，找不到就失败。很明显的缺点就是查找效率低。
+【适用性】：适用于">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.782Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="查找算法-顺序查找、有序查找">
+<meta name="twitter:description" content="1.顺序表的查找1）顺序查找顺序查找又称为线性查找，是一种最简单的查找方法。        从表的一端开始，向另一端逐个按要查找的值key 与关键码key进行比较，若找到，查找成功，并给出数据元素在表中的位置；若整个表检测完，仍未找到与关键码相同的key值，则查找失败，给出失败信息。说白了就是，从头到尾，一个一个地比，找着相同的就成功，找不到就失败。很明显的缺点就是查找效率低。
+【适用性】：适用于">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2016/12/06/查找算法-顺序查找、有序查找/"/>
+
+
+
+
+
+  <title> 查找算法-顺序查找、有序查找 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2016/12/06/查找算法-顺序查找、有序查找/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                查找算法-顺序查找、有序查找
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-06T16:15:51+08:00">
+                2016-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/06/查找算法-顺序查找、有序查找/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/06/查找算法-顺序查找、有序查找/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-顺序表的查找"><a href="#1-顺序表的查找" class="headerlink" title="1.顺序表的查找"></a>1.顺序表的查找</h1><h2 id="1）顺序查找"><a href="#1）顺序查找" class="headerlink" title="1）顺序查找"></a>1）顺序查找</h2><p>顺序查找又称为线性查找，是一种最简单的查找方法。<br>        从表的一端开始，向另一端逐个按要查找的值key 与关键码key进行比较，若找到，查找成功，并给出数据元素在表中的位置；若整个表检测完，仍未找到与关键码相同的key值，则查找失败，给出失败信息。<br>说白了就是，从头到尾，一个一个地比，找着相同的就成功，找不到就失败。很明显的缺点就是查找效率低。</p>
+<p>【适用性】：适用于线性表的顺序存储结构和链式存储结构。<br> 平均查找长度=（n+1）/2.</p>
+<p>【顺序查找优缺点】：<br>缺点:是当n 很大时，平均查找长度较大，效率低；</p>
+<p>优点:是对表中数据元素的存储没有要求。另外，对于线性链表，只能进行顺序查找。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public static int orederSearch(int[] array, int key) &#123;  </div><div class="line">       if (array.length &gt; 0) &#123;  </div><div class="line">           for (int i = 0; i &lt; array.length; i++) &#123;  </div><div class="line">               if (array[i] == key) &#123;  </div><div class="line">                   return i;  </div><div class="line">               &#125;  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">       return -1;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h1 id="2-有序表的查找"><a href="#2-有序表的查找" class="headerlink" title="2.有序表的查找"></a>2.有序表的查找</h1><h2 id="1）折半查找"><a href="#1）折半查找" class="headerlink" title="1）折半查找"></a>1）折半查找</h2><p> 在有序表中，取中间元素作为比较对象，若给定值与中间元素的关键码key相等，则查找成功；若给定值小于中间元素的关键码，则在中间元素的左半区继续查找；若给定值大于中间元素的关键码，则在中间元素的右半区继续查找。不断重复上述查找过程，直到查找成功，或所查找的区域无数据元素，查找失败。时间复杂度为o(logn)</p>
+<p>折半查找的前提条件是需要有序的顺序存储，对于静态查找表，一次排序后不再变化，这样的算法已经比较好。但是对于需要频繁执行插入或删除操作的数据集来说，维护有序的排序会带来不小的工作量，不建议使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public static int binarySearch(int[] array, int key) &#123;  </div><div class="line">    if (array.length &gt; 0) &#123;  </div><div class="line">        int low, high, mid;  </div><div class="line">        low = 0;  </div><div class="line">        high = array.length - 1;  </div><div class="line">        while (low &lt;= high) &#123;  </div><div class="line">            mid = (low + high) / 2;//折半  </div><div class="line">            if (key &lt; array[mid])  </div><div class="line">                high = mid - 1;  </div><div class="line">            else if (key &gt; array[mid])  </div><div class="line">                low = mid + 1;  </div><div class="line">            else  </div><div class="line">                return mid;  </div><div class="line">  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    return -1;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2）插值查找"><a href="#2）插值查找" class="headerlink" title="2）插值查找"></a>2）插值查找</h2><p> 插值查找是根据要查找的关键字key与查找表中最大最小记录的关键字比较后的 查找方法，其核心就在于插值的计算公式 (key-a[low])/(a[high]-a[low])*(high-low)。时间复杂度o(logn)但对于表长较大而关键字分布比较均匀的查找表来说，效率较高</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public static int interpolationSearch(int[] array, int key) &#123;  </div><div class="line">       if (array.length &gt; 0) &#123;  </div><div class="line">           int low, high, mid;  </div><div class="line">           low = 0;  </div><div class="line">           high = array.length - 1;  </div><div class="line">           while (low &lt;= high) &#123;  </div><div class="line">               mid = low + (high - low) * (key - array[low]) / (array[high] - array[low]);//插值  </div><div class="line">               if (key &lt; array[mid])  </div><div class="line">                   high = mid - 1;  </div><div class="line">               else if (key &gt; array[mid])  </div><div class="line">                   low = mid + 1;  </div><div class="line">               else  </div><div class="line">                   return mid;  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">  </div><div class="line">       return -1;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h1 id="3）斐波那契查找"><a href="#3）斐波那契查找" class="headerlink" title="3）斐波那契查找"></a>3）斐波那契查找</h1><p>斐波那契查找的前提是待查找的查找表必须顺序存储并且有序。时间复杂度o(logn)<br>斐波那契查找与折半查找很相似，他是根据斐波那契序列的特点对有序表进行分割的。</p>
+<p>他要求开始表中记录的个数为某个斐波那契数小1，及n=Fk-1;</p>
+<p>开始将k值与第F(k-1）位置的记录进行比较(及mid=low+F(k-1)-1),比较结果也分为三种</p>
+<p>1）相等，mid位置的元素即为所求</p>
+<p>2）&gt; ,low=mid+1,k-=2;<br>    说明:low=mid+1说明待查找的元素在[mid+1,hign]范围内，k-=2 说明范围[mid+1,high]内的元素个数为n-（F(k-1))= Fk-1-F(k-1)=Fk-F(k-1)-1=F(k-2)-1个，所以可以递归的应用斐波那契查找</p>
+<p>3)&lt; ,high=mid-1,k-=1;<br>    说明:low=mid+1说明待查找的元素在[low,mid-1]范围内，k-=1 说明范围[low,mid-1]内的元素个数为F(k-1)-1 个，所以可以递归 的应用斐波那契查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">public static int fbnacciSearch(int[] array, int key) &#123;  </div><div class="line">       if (array == null || array.length == 0) &#123;  </div><div class="line">           return -1;  </div><div class="line">       &#125; else &#123;  </div><div class="line">           int length=array.length;  </div><div class="line">           int[] fb=makeFbnacciArray(20);  </div><div class="line">           int k=0;  </div><div class="line">           while (length&gt;fb[k]-1)&#123;//找出数组的长度在斐波那契数列中的位置 n&lt;=F[k]-1  </div><div class="line">               k++;  </div><div class="line">           &#125;  </div><div class="line">           //n不一定刚刚好等于F[k]-1 此时扩容原数组 新增的位置的值为原数组的最大值  </div><div class="line">           int[] temp= Arrays.copyOf(array,fb[k]-1);  </div><div class="line">           for (int i=length;i&lt;temp.length;i++)&#123;  </div><div class="line">               if(i&gt;=length)&#123;  </div><div class="line">                   temp[i]=array[length-1];  </div><div class="line">               &#125;  </div><div class="line">           &#125;  </div><div class="line">           int low=0;  </div><div class="line">           int high=array.length-1;  </div><div class="line">           while (low&lt;=high)&#123;  </div><div class="line">               int middle=low+fb[k-1]-1;  </div><div class="line">               if(temp[middle]&gt;key)&#123;  </div><div class="line">                   high=middle-1;  </div><div class="line">                   k=k-1;  </div><div class="line">               &#125;else if(temp[middle]&lt;key)&#123;  </div><div class="line">                   low=middle+1;  </div><div class="line">                   k=k-2;  </div><div class="line">               &#125;else&#123;  </div><div class="line">                   if(middle&lt;=high)&#123;  </div><div class="line">                       return  middle;//若相等则说明middle为查找的位置  </div><div class="line">                   &#125;else&#123;  </div><div class="line">                       return high;//middle的值已经大于high，进入扩展数组的填充部分，既最后一个数就是要查找的数  </div><div class="line">                   &#125;  </div><div class="line">               &#125;  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">  </div><div class="line">       return -1;  </div><div class="line">   &#125;  </div><div class="line">  </div><div class="line">   private static int[] makeFbnacciArray(int length) &#123;  </div><div class="line">       int array[] = null;  </div><div class="line">       if (length &gt; 2) &#123;  </div><div class="line">           array = new int[length];  </div><div class="line">           array[0] = 1;  </div><div class="line">           array[1] = 1;  </div><div class="line">           for (int i = 2; i &lt; length; i++) &#123;  </div><div class="line">               array[i] = array[i - 1] + array[i - 2];  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">       if (length == 2) &#123;  </div><div class="line">           array = new int[length];  </div><div class="line">           array[0] = 1;  </div><div class="line">       &#125;  </div><div class="line">       if (length == 1) &#123;  </div><div class="line">           array = new int[length];  </div><div class="line">           array[0] = 1;  </div><div class="line">           array[1] = 1;  </div><div class="line">       &#125;  </div><div class="line">       return array;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h1><p>三种有序表的查找本质是分割点的选择不同，各有优劣，实际开发时可根据数据的特点综合考虑再做选择。这里注意主要的运算，折半查找采用乘除（mid = (low + high) / 2）、插值采用的是四则运算（  mid = low + (high - low) * (key - array[low]) / (array[high] - array[low])），斐波那契采用的是加减（middle=low+fb[k-1]-1）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/数据结构与算法/" rel="tag"># 数据结构与算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/05/Android的Window底层原理/" rel="next" title="Android的Window底层原理">
+                <i class="fa fa-chevron-left"></i> Android的Window底层原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/10/查找算法-稠密索引、分块索引、倒排索引/" rel="prev" title="查找算法-稠密索引、分块索引、倒排索引">
+                查找算法-稠密索引、分块索引、倒排索引 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/06/查找算法-顺序查找、有序查找/"
+           data-title="查找算法-顺序查找、有序查找" data-url="https://junbin1011.github.io/2016/12/06/查找算法-顺序查找、有序查找/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-顺序表的查找"><span class="nav-number">1.</span> <span class="nav-text">1.顺序表的查找</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1）顺序查找"><span class="nav-number">1.1.</span> <span class="nav-text">1）顺序查找</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-有序表的查找"><span class="nav-number">2.</span> <span class="nav-text">2.有序表的查找</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1）折半查找"><span class="nav-number">2.1.</span> <span class="nav-text">1）折半查找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2）插值查找"><span class="nav-number">2.2.</span> <span class="nav-text">2）插值查找</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3）斐波那契查找"><span class="nav-number">3.</span> <span class="nav-text">3）斐波那契查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4.总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

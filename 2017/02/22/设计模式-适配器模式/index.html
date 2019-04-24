@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.适配器模式的定义及使用场景定义：适配器模式在我们的开发中使用率非常高，从代码中随处可见的Adapter就可以看出来，从最早的ListView、GridView，到现在最新的RecycleView都需要用到Adapter。说到底，适配器就是将两个不兼容的类融合在一起，它有点像粘合剂，将不同的东西通过一种转换使得他们能够协作起来。适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-适配器模式">
+<meta property="og:url" content="https://junbin1011.github.io/2017/02/22/设计模式-适配器模式/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="1.适配器模式的定义及使用场景定义：适配器模式在我们的开发中使用率非常高，从代码中随处可见的Adapter就可以看出来，从最早的ListView、GridView，到现在最新的RecycleView都需要用到Adapter。说到底，适配器就是将两个不兼容的类融合在一起，它有点像粘合剂，将不同的东西通过一种转换使得他们能够协作起来。适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因">
+<meta property="og:image" content="http://img.blog.csdn.net/20170222100849043?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.789Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-适配器模式">
+<meta name="twitter:description" content="1.适配器模式的定义及使用场景定义：适配器模式在我们的开发中使用率非常高，从代码中随处可见的Adapter就可以看出来，从最早的ListView、GridView，到现在最新的RecycleView都需要用到Adapter。说到底，适配器就是将两个不兼容的类融合在一起，它有点像粘合剂，将不同的东西通过一种转换使得他们能够协作起来。适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170222100849043?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/02/22/设计模式-适配器模式/"/>
+
+
+
+
+
+  <title> 设计模式-适配器模式 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/22/设计模式-适配器模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式-适配器模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-22T10:10:25+08:00">
+                2017-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/22/设计模式-适配器模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/22/设计模式-适配器模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-适配器模式的定义及使用场景"><a href="#1-适配器模式的定义及使用场景" class="headerlink" title="1.适配器模式的定义及使用场景"></a>1.适配器模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>适配器模式在我们的开发中使用率非常高，从代码中随处可见的Adapter就可以看出来，从最早的ListView、GridView，到现在最新的RecycleView都需要用到Adapter。说到底，适配器就是将两个不兼容的类融合在一起，它有点像粘合剂，将不同的东西通过一种转换使得他们能够协作起来。<br>适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法再一起工作的两个类能够在一起工作</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li>系统需要使用现有的类，而此类的接口不符合系统的需要，即接口不兼容</li>
+<li>想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
+<li>需要一个统一的输出接口，而输入端的类型不可预知</li>
+</ul>
+<p><img src="http://img.blog.csdn.net/20170222100849043?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h1 id="2-适配器模式的优缺点"><a href="#2-适配器模式的优缺点" class="headerlink" title="2. 适配器模式的优缺点"></a>2. 适配器模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
+<li>适配器模式可以让两个没有任何关系的类在一起运行</li>
+<li>增加了类的透明度，提高类的复用度</li>
+<li>增强灵活性<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>过多地使用适配器，会让系统增加复杂度，不易整体把握。例如，明明看到调用的是A接口，其实内部被适配成了B接口的实现。因此，如果不是很有必要，可以不使用适配器，而是直接对系统进行必要的重构<h1 id="3-注意实现"><a href="#3-注意实现" class="headerlink" title="3.注意实现"></a>3.注意实现</h1>适配器模式最好在详细设计阶段不要考虑，它不是为了解决还出在开发阶段的问题，而是解决正在服役的项目问题，系统扩展了，不符合原有设计的时候才考虑通过适配器模式减少代码修改带来的风险。<h1 id="4-适配器模式的实现方式"><a href="#4-适配器模式的实现方式" class="headerlink" title="4. 适配器模式的实现方式"></a>4. 适配器模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface Target &#123;</div><div class="line">    public void request();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class ConcreteTarget implements Target &#123;</div><div class="line">    @Override</div><div class="line">    public void request() &#123;</div><div class="line">        System.out.println(&quot;ConcreteTarget is doing request!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class Adaptee &#123;</div><div class="line">    public void doSomeThing() &#123;</div><div class="line">        System.out.println(&quot;Adaptee is doSomeThing now!！！！&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class Adapter extends Adaptee implements Target &#123;</div><div class="line">    @Override</div><div class="line">    public void request() &#123;</div><div class="line">        super.doSomeThing();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"></div><div class="line">    public static void main(String args[]) &#123;</div><div class="line">        Target target = new ConcreteTarget();</div><div class="line">        target.request();</div><div class="line">        Target adapterTarget = new Adapter();</div><div class="line">        adapterTarget.request();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="5-适配器模式在Android中的实际应用"><a href="#5-适配器模式在Android中的实际应用" class="headerlink" title="5. 适配器模式在Android中的实际应用"></a>5. 适配器模式在Android中的实际应用</h1><p>ListView作为重要的控件，它需要能够显示各种各样的视图（ItemView），每个人需要的显示效果各不同。显示的数据类型、数量等也千变万化，那么如何应对这种变化成为架构师需要考虑的重要特性之一。</p>
+<p>Android的做法是增加一个Adapter层来隔离变化，将ListView需要的关于Item View接口抽象到Adapter对象中，并且在ListView内部调用Adapter这些接口完成布局操作。这样只用用户实现了Adapter的接口，并且将该Adapter设置给ListView，ListView就可以按照用户设定的UI效果、数量、数据来显示每一项数据。</p>
+<p>ListView最重要的问题是要解决每一项Item视图的输出，ItemView千变万化，但终究它是View类型，Adapter将统一ItemView 输出为View，这样就很好的应对了ItemView的可变性。这虽然有些脱离Adapter模式将不兼容的接口转换为可用接口的使用场景，但也是Adapter模式的一种变种实现。这里的Target角色就是View，Adapter角色就是将ItemView输出为View抽象的角色，Adaptee就是需要被处理的ItemView。</p>
+<p>通过增加Adapter一层来将ItemView的操作抽象起来，ListView等集合视图通过Adapter对象获取Item的个数、数据、ItemView等，从而达到适配各种数据、各种Item视图的效果。因为ItemView和数据类型千变万化，Android的架构师将这种变化的部分交给用户来处理，通过getCount，getItem，getView等几个抽象出来，也就是将ItemView的构造过程交给用户来处理，灵活地运用了设配器的模式，达到了无限适配，拥抱变化的目的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/21/设计模式-策略模式/" rel="next" title="设计模式-策略模式">
+                <i class="fa fa-chevron-left"></i> 设计模式-策略模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/23/设计模式-迭代器模式/" rel="prev" title="设计模式-迭代器模式">
+                设计模式-迭代器模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/22/设计模式-适配器模式/"
+           data-title="设计模式-适配器模式" data-url="https://junbin1011.github.io/2017/02/22/设计模式-适配器模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-适配器模式的定义及使用场景"><span class="nav-number">1.</span> <span class="nav-text">1.适配器模式的定义及使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义："><span class="nav-number">1.1.</span> <span class="nav-text">定义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景："><span class="nav-number">1.2.</span> <span class="nav-text">使用场景：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-适配器模式的优缺点"><span class="nav-number">2.</span> <span class="nav-text">2. 适配器模式的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1优点"><span class="nav-number">2.1.</span> <span class="nav-text">2.1优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2缺点"><span class="nav-number">2.2.</span> <span class="nav-text">2.2缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-注意实现"><span class="nav-number">3.</span> <span class="nav-text">3.注意实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-适配器模式的实现方式"><span class="nav-number">4.</span> <span class="nav-text">4. 适配器模式的实现方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-适配器模式在Android中的实际应用"><span class="nav-number">5.</span> <span class="nav-text">5. 适配器模式在Android中的实际应用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

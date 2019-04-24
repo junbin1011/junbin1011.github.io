@@ -1,0 +1,959 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,源码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="rxjava是什么？ReactiveXReactiveX是Reactive Extensions的缩写，一般简写为Rx，最初是LINQ的一个扩展，由微软的架构师Erik Meijer领导的团队开发，在2012年11月开源，Rx是一个编程模型，目标是提供一致的编程接口，帮助开发者更方便的处理异步数据流，Rx库支持.NET、JavaScript和C++，Rx近几年越来越流行了，现在已经支持几乎全部的流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rxjava2.x源码学习随笔">
+<meta property="og:url" content="https://junbin1011.github.io/2018/09/05/rxjava2-x源码学习随笔/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="rxjava是什么？ReactiveXReactiveX是Reactive Extensions的缩写，一般简写为Rx，最初是LINQ的一个扩展，由微软的架构师Erik Meijer领导的团队开发，在2012年11月开源，Rx是一个编程模型，目标是提供一致的编程接口，帮助开发者更方便的处理异步数据流，Rx库支持.NET、JavaScript和C++，Rx近几年越来越流行了，现在已经支持几乎全部的流">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-a863e73ba5777198?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-844ed90793607aa1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rxjava2.x源码学习随笔">
+<meta name="twitter:description" content="rxjava是什么？ReactiveXReactiveX是Reactive Extensions的缩写，一般简写为Rx，最初是LINQ的一个扩展，由微软的架构师Erik Meijer领导的团队开发，在2012年11月开源，Rx是一个编程模型，目标是提供一致的编程接口，帮助开发者更方便的处理异步数据流，Rx库支持.NET、JavaScript和C++，Rx近几年越来越流行了，现在已经支持几乎全部的流">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-a863e73ba5777198?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2018/09/05/rxjava2-x源码学习随笔/"/>
+
+
+
+
+
+  <title> rxjava2.x源码学习随笔 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/09/05/rxjava2-x源码学习随笔/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                rxjava2.x源码学习随笔
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T16:27:49+08:00">
+                2018-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/05/rxjava2-x源码学习随笔/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/05/rxjava2-x源码学习随笔/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="rxjava是什么？"><a href="#rxjava是什么？" class="headerlink" title="rxjava是什么？"></a>rxjava是什么？</h1><h2 id="ReactiveX"><a href="#ReactiveX" class="headerlink" title="ReactiveX"></a>ReactiveX</h2><p>ReactiveX是Reactive Extensions的缩写，一般简写为Rx，最初是LINQ的一个扩展，由微软的架构师Erik Meijer领导的团队开发，在2012年11月开源，Rx是一个编程模型，目标是提供一致的编程接口，帮助开发者更方便的处理异步数据流，Rx库支持.NET、JavaScript和C++，Rx近几年越来越流行了，现在已经支持几乎全部的流行编程语言了，Rx的大部分语言库由ReactiveX这个组织负责维护，比较流行的有RxJava/RxJS/Rx.NET。</p>
+<h2 id="rxjava"><a href="#rxjava" class="headerlink" title="rxjava"></a>rxjava</h2><p>rxjava是ReactiveX在java平台的一个实现。是一个编程模型，以观察者模式提供链式的接口调用，动态控制线程的切换，使得可以简便的处理异步数据流。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Github:<a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="external">rxjava</a></p>
+<p>中文文档：<a href="https://mcxiaoke.gitbooks.io/rxdocs/content/" target="_blank" rel="external">ReactiveX/RxJava文档中文版</a></p>
+<p>官网：<a href="http://reactivex.io/" target="_blank" rel="external">reactivex</a></p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
+<li>链式调用，使用简单</li>
+<li>简化逻辑</li>
+<li>灵活的线程调度</li>
+<li>提供完善的数据操作符，功能强大</li>
+</ul>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p> 观察者模式定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所以依赖于它的对象都会得到通知并被自动更新。rxjava的核心设计就是采用观察者模式。Observable是被观察者，Observer是观察者，通过subscribe方法进行订阅。</p>
+<ul>
+<li>优点</li>
+</ul>
+<p>观察者和被观察者之间是抽象解耦，应对业务变化</p>
+<p>增强系统灵活性、可扩展性</p>
+<p>具体代码示例可参考<a href="https://junbin1011.github.io/2017/02/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">设计模式-观察者模式</a></p>
+<ul>
+<li>缺点</li>
+</ul>
+<p>在应用观察者模式时需要考虑一下开发效率和运行效率问题，程序中包括一个被观察者、多个观察者、开发和调试等内容会比较复杂，而且在Java中消息的通知默认是顺序执行，一个观察者卡顿，会影响整体的执行效率，在这种情况下，一般考虑采用异步的方式</p>
+<h1 id="rxjava怎么用？"><a href="#rxjava怎么用？" class="headerlink" title="rxjava怎么用？"></a>rxjava怎么用？</h1><p>gradle引入版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">implementation &apos;io.reactivex.rxjava2:rxjava:2.2.0&apos;</div><div class="line">implementation &apos;io.reactivex.rxjava2:rxandroid:2.1.0&apos;</div></pre></td></tr></table></figure></p>
+<p> 接着举一个常用的rxjava使用的例子，我们在项目经常需要请求服务端接口，然后获取数据，将数据进行缓存，然后处理ui上的显示。示例的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">Observable.create(new ObservableOnSubscribe&lt;Response&gt;() &#123;</div><div class="line">         @Override</div><div class="line">         public void subscribe(ObservableEmitter&lt;Response&gt; e) throws Exception &#123;</div><div class="line">             //获取服务端的接口数据</div><div class="line">             Request.Builder builder = new Request.Builder()</div><div class="line">                     .url(&quot;http://xxx.com&quot;)</div><div class="line">                     .get();</div><div class="line">             Request request = builder.build();</div><div class="line">             Call call = new OkHttpClient().newCall(request);</div><div class="line">             Response response = call.execute();</div><div class="line">             e.onNext(response);</div><div class="line">         &#125;</div><div class="line">     &#125;).map(new Function&lt;Response, Model&gt;() &#123;</div><div class="line">         @Override</div><div class="line">         public Model apply( Response response) throws Exception &#123;</div><div class="line">             //将json数据转化为对应的Model</div><div class="line">             if (response.isSuccessful()) &#123;</div><div class="line">                 ResponseBody body = response.body();</div><div class="line">                 if (body != null) &#123;</div><div class="line">                     Log.e(TAG, &quot;map:转换前:&quot; + response.body());</div><div class="line">                     return new Gson().fromJson(body.string(), Model.class);</div><div class="line">                 &#125;</div><div class="line">             &#125;</div><div class="line">             return null;</div><div class="line">         &#125;</div><div class="line">     &#125;).doOnNext(new Consumer&lt;Model&gt;() &#123;</div><div class="line">                 @Override</div><div class="line">                 public void accept( Model s) throws Exception &#123;</div><div class="line">                     //对数据进行其他缓存的处理</div><div class="line">                     Log.e(TAG, &quot;doOnNext: 保存网络加载的数据：&quot; + s.toString() + &quot;\n&quot;);</div><div class="line">                 &#125;</div><div class="line">             &#125;).subscribeOn(Schedulers.io())</div><div class="line">             .observeOn(AndroidSchedulers.mainThread())</div><div class="line">             .subscribe(new Consumer&lt;Model&gt;() &#123;</div><div class="line">                 @Override</div><div class="line">                 public void accept(Model model) throws Exception &#123;</div><div class="line">                     //刷新ui</div><div class="line">                     Log.e(TAG, &quot;成功刷新界面:&quot; + data.toString() + &quot;\n&quot;);</div><div class="line">                 &#125;</div><div class="line">             &#125;, new Consumer&lt;Throwable&gt;() &#123;</div><div class="line">                 @Override</div><div class="line">                 public void accept(Throwable throwable) throws Exception &#123;</div><div class="line">                     //进行失败的异常提示</div><div class="line">                     Log.e(TAG, &quot;失败处理异常：&quot; + throwable.getMessage() + &quot;\n&quot;);</div><div class="line">                 &#125;</div><div class="line">             &#125;);</div></pre></td></tr></table></figure>
+<p>本文主要对rxjava的源码进行梳理分析，关于rxjava操作符的使用，推荐参考中文的文档，以及下面的博文介绍。</p>
+<p><a href="https://www.jianshu.com/p/0cd258eecf60" target="_blank" rel="external">这可能是最好的RxJava 2.x 教程（完结版）</a></p>
+<h1 id="rxjava核心执行流程是怎样？"><a href="#rxjava核心执行流程是怎样？" class="headerlink" title="rxjava核心执行流程是怎样？"></a>rxjava核心执行流程是怎样？</h1><p>rxjava主要是采用观察者模式进行设计，当执行相关的操作符是会生成新的Observable及Observer。Observable会持有上游被观察者，Observer会持有下游的观察者。当执行subscribe订阅方法的时候，通过持有上游的被观察者对象，会往上游逐步执行订阅方法。当执行到起始的被观察者回调方法时，如果执行ObservableEmitter的onNext方法时，由于Observer会持有下游的Observer对象，会逐步调用下游的onNext方法，直到最终subscribe传入的观察者实例。这是rxjava链式调用的核心执行流程。</p>
+<p>当然rxjava还涉及到线程的调度及数据的背压处理，关于这些实现的原理会再后续进行梳理。但rxjava的链式调用的核心执行流程都是一致。下面我们将通过2个部分来梳理rxjava的核心执行流程，包含一些关键类的说明，及通过示例的代码相关的执行流程图进行梳理。</p>
+<h2 id="关键类功能说明"><a href="#关键类功能说明" class="headerlink" title="关键类功能说明"></a>关键类功能说明</h2><table>
+<thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> ObservableSource</td>
+<td>接口类，只有一个subscribe方法，参数是Observer对象</td>
+</tr>
+<tr>
+<td> Observer</td>
+<td>接口类，观察者。有onSubscribe、onNext、onError、onComplete方法</td>
+</tr>
+<tr>
+<td> Consumer</td>
+<td>接口有，观察者。只有一个accept方法，在被订阅时最终也会转换成Observer，设计这个类是为了简化调用</td>
+</tr>
+<tr>
+<td> Observable</td>
+<td>抽象类，继承了ObservableSource接口，操作符的实现都是继承与它。内部封装了大量的操作符调用方法，主要是有一个核心的抽象方法abstract void subscribeActual(Observer&lt;? super T&gt; observer)，用于实现相关的订阅分发逻辑。</td>
+</tr>
+<tr>
+<td> AbstractObservableWithUpstream</td>
+<td>继承于Observable，构造方法需要传入ObservableSource<t> source对象，source是父被观察者。</t></td>
+</tr>
+<tr>
+<td> ObservableCreate</td>
+<td>继承于AbstractObservableWithUpstream，source为ObservableOnSubscribe。subscribeActual方法会实例化一个CreateEmitter对象，执行ObservableOnSubscribe的subscribe方法</td>
+</tr>
+<tr>
+<td> ObservableMap</td>
+<td>继承于AbstractObservableWithUpstream，订阅会新生产一个观察者MapObserver</td>
+</tr>
+<tr>
+<td> MapObserver</td>
+<td>ObservableMap的内部类，onNext方法会触发mapper.apply(t)回调，然后执行下游观察者的onNext方法</td>
+</tr>
+<tr>
+<td> ObservableDoOnEach</td>
+<td>继承于AbstractObservableWithUpstream，订阅会新生产一个观察者DoOnEachObserver</td>
+</tr>
+<tr>
+<td> DoOnEachObserver</td>
+<td>ObservableDoOnEach的内部类，onNext会执行onNext.accept(t)方法，然后执行下游观察者的onNext方法</td>
+</tr>
+<tr>
+<td> ObservableSubscribeOn</td>
+<td>继承于AbstractObservableWithUpstream，被观察者线程调度控制。subscribeActual会执行scheduler.scheduleDirect(new SubscribeTask(parent))，SubscribeTask的run方法会执行source.subscribe(parent)。ObservableSubscribeOn根据线程调度器的策略去执行上游的订阅方法实现。</td>
+</tr>
+<tr>
+<td> ObservableObserveOn</td>
+<td>继承于AbstractObservableWithUpstream，观察者线程调度控制。subscribeActual方法会判断scheduler是否为TrampolineScheduler。若是则执行下游的观察者，否会创建新的ObserveOnObserver，并传入schedule的work。</td>
+</tr>
+<tr>
+<td> ObserveOnObserver</td>
+<td>ObservableObserveOn内部类，onNext会触发执行schedule（）方法，根据worker去控制下游观察者的回调线程</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码执行流程"><a href="#代码执行流程" class="headerlink" title="代码执行流程"></a>代码执行流程</h2><p>首先我们根据上面demo例子，梳理出rxjava的简单执行流程，如下图：<br><img src="http://upload-images.jianshu.io/upload_images/5125122-a863e73ba5777198?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>通过流程图可知，rxjava当执行相关的操作符是会生成新的Observable及Observer。Observable会持有上游被观察者，Observer会持有下游的观察者。当执行subscribe订阅方法的时候，通过持有上游的被观察者对象，会往上游逐步执行订阅方法。当执行到起始的被观察者回调方法时，如果执行ObservableEmitter的onNext方法时，由于Observer会持有下游的Observer对象，会逐步调用下游的onNext方法，直到最终subscribe传入的观察者实例。</p>
+<p> 了解了rxjava大致的执行流程，下面我们来详细的看看源码的执行流程。首先还是先上一下整体的流程图，由于图片较大，建议结合上述的demo及rxjava的源码进行查看。</p>
+<p> <img src="http://upload-images.jianshu.io/upload_images/5125122-844ed90793607aa1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>下面我们分配通过几个操作符来看看rxjava源码具体的实现。</p>
+<h3 id="create"><a href="#create" class="headerlink" title="create"></a>create</h3><p>create的操作符会返回一个ObservableCreate的被观察者。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static &lt;T&gt; Observable&lt;T&gt; create(ObservableOnSubscribe&lt;T&gt; source) &#123;</div><div class="line">      ObjectHelper.requireNonNull(source, &quot;source is null&quot;);</div><div class="line">      return RxJavaPlugins.onAssembly(new ObservableCreate&lt;T&gt;(source));</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>接下来看看ObservableCreate对象的关键实现代码，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">//构造方法会传入ObservableOnSubscribe接口的引用，指定为该被观察者的source。</div><div class="line"> public ObservableCreate(ObservableOnSubscribe&lt;T&gt; source) &#123;</div><div class="line">       this.source = source;</div><div class="line">   &#125;</div><div class="line"></div><div class="line"> //核心的subscribeActual </div><div class="line">   @Override</div><div class="line">   protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</div><div class="line">     //创建了CreateEmitter发射器</div><div class="line">       CreateEmitter&lt;T&gt; parent = new CreateEmitter&lt;T&gt;(observer);</div><div class="line">       observer.onSubscribe(parent);</div><div class="line"></div><div class="line">       try &#123;</div><div class="line">         //执行了ObservableOnSubscribe的subscribe回调方法，传入了CreateEmitter对象</div><div class="line">           source.subscribe(parent);</div><div class="line">       &#125; catch (Throwable ex) &#123;</div><div class="line">           Exceptions.throwIfFatal(ex);</div><div class="line">           parent.onError(ex);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>当我们在业务代码执行了ObservableEmitter的onNext方法，我们看一下CreateEmitter的onNext的实现代码，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> //持有下游的观察者引用</div><div class="line">CreateEmitter(Observer&lt;? super T&gt; observer) &#123;</div><div class="line">         this.observer = observer;</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     @Override</div><div class="line">     public void onNext(T t) &#123;</div><div class="line">         if (t == null) &#123;</div><div class="line">             onError(new NullPointerException(&quot;onNext called with null. Null values are generally not allowed in 2.x operators and sources.&quot;));</div><div class="line">             return;</div><div class="line">         &#125;</div><div class="line">         //如果没有取消订阅，则会执行下游的观察者的onNext方法，达到链式调用的效果</div><div class="line">         if (!isDisposed()) &#123;</div><div class="line">             observer.onNext(t);</div><div class="line">         &#125;</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map的操作符会返回一个ObservableMap的被观察者。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@CheckReturnValue</div><div class="line">  @SchedulerSupport(SchedulerSupport.NONE)</div><div class="line">  public final &lt;R&gt; Observable&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; mapper) &#123;</div><div class="line">      ObjectHelper.requireNonNull(mapper, &quot;mapper is null&quot;);</div><div class="line">      return RxJavaPlugins.onAssembly(new ObservableMap&lt;T, R&gt;(this, mapper));</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>接下来看看ObservableMap对象的关键实现代码，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void subscribeActual(Observer&lt;? super U&gt; t) &#123;</div><div class="line">    //将上游的被观察者订阅MapObserver观察者</div><div class="line">    source.subscribe(new MapObserver&lt;T, U&gt;(t, function));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来主要看看MapObserver的onNext方法，该方法会在ObservableEmitter的onNext方法触发后被调用，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">  //持有下游的观察者和回调函数mapper</div><div class="line">  MapObserver(Observer&lt;? super U&gt; actual, Function&lt;? super T, ? extends U&gt; mapper) &#123;</div><div class="line">           super(actual);</div><div class="line">           this.mapper = mapper;</div><div class="line">       &#125;</div><div class="line">       </div><div class="line">@Override</div><div class="line">       public void onNext(T t) &#123;</div><div class="line">           if (done) &#123;</div><div class="line">               return;</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           if (sourceMode != NONE) &#123;</div><div class="line">               actual.onNext(null);</div><div class="line">               return;</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           U v;</div><div class="line"></div><div class="line">           try &#123;</div><div class="line">             //map的核心执行代码，mapper.apply(t)会执行数据的转换，并将转换后的结果v继续交由下游的观察者执行</div><div class="line">               v = ObjectHelper.requireNonNull(mapper.apply(t), &quot;The mapper function returned a null value.&quot;);</div><div class="line">           &#125; catch (Throwable ex) &#123;</div><div class="line">               fail(ex);</div><div class="line">               return;</div><div class="line">           &#125;</div><div class="line">           //将转换后的结果v继续交由下游的观察者执行</div><div class="line">           actual.onNext(v);</div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="doOnNext"><a href="#doOnNext" class="headerlink" title="doOnNext"></a>doOnNext</h3><p>doOnNext的操作符会返回一个ObservableDoOnEach的被观察者。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">private Observable&lt;T&gt; doOnEach(Consumer&lt;? super T&gt; onNext, Consumer&lt;? super Throwable&gt; onError, Action onComplete, Action onAfterTerminate) &#123;</div><div class="line">    ObjectHelper.requireNonNull(onNext, &quot;onNext is null&quot;);</div><div class="line">    ObjectHelper.requireNonNull(onError, &quot;onError is null&quot;);</div><div class="line">    ObjectHelper.requireNonNull(onComplete, &quot;onComplete is null&quot;);</div><div class="line">    ObjectHelper.requireNonNull(onAfterTerminate, &quot;onAfterTerminate is null&quot;);</div><div class="line">    return RxJavaPlugins.onAssembly(new ObservableDoOnEach&lt;T&gt;(this, onNext, onError, onComplete, onAfterTerminate));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来看看ObservableDoOnEach对象的关键实现代码，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void subscribeActual(Observer&lt;? super T&gt; t) &#123;</div><div class="line">   //实例化一个DoOnEachObserver的观察者对象</div><div class="line">    source.subscribe(new DoOnEachObserver&lt;T&gt;(t, onNext, onError, onComplete, onAfterTerminate));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里核心我们还是要看DoOnEachObserver的onNext对于数据的处理，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">      public void onNext(T t) &#123;</div><div class="line">          if (done) &#123;</div><div class="line">              return;</div><div class="line">          &#125;</div><div class="line">          try &#123;</div><div class="line">              //回调accept方法</div><div class="line">              onNext.accept(t);</div><div class="line">          &#125; catch (Throwable e) &#123;</div><div class="line">              Exceptions.throwIfFatal(e);</div><div class="line">              s.dispose();</div><div class="line">              onError(e);</div><div class="line">              return;</div><div class="line">          &#125;</div><div class="line">          //继续往下游调用观察者的onNext</div><div class="line">          actual.onNext(t);</div><div class="line">      &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="subscribeOn"><a href="#subscribeOn" class="headerlink" title="subscribeOn"></a>subscribeOn</h3><p>subscribeOn的操作符会返回一个ObservableSubscribeOn的被观察者，并传入scheduler线程调度参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@CheckReturnValue</div><div class="line">@SchedulerSupport(SchedulerSupport.CUSTOM)</div><div class="line">public final Observable&lt;T&gt; subscribeOn(Scheduler scheduler) &#123;</div><div class="line">    ObjectHelper.requireNonNull(scheduler, &quot;scheduler is null&quot;);</div><div class="line">    return RxJavaPlugins.onAssembly(new ObservableSubscribeOn&lt;T&gt;(this, scheduler));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来看看ObservableSubscribeOn对象的关键实现代码，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> public ObservableSubscribeOn(ObservableSource&lt;T&gt; source, Scheduler scheduler) &#123;</div><div class="line">    super(source);</div><div class="line">    this.scheduler = scheduler;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void subscribeActual(final Observer&lt;? super T&gt; s) &#123;</div><div class="line">    //创建了SubscribeOnObserver的观察者</div><div class="line">    final SubscribeOnObserver&lt;T&gt; parent = new SubscribeOnObserver&lt;T&gt;(s);</div><div class="line"></div><div class="line">    s.onSubscribe(parent);</div><div class="line">    </div><div class="line">    //这个是核心方法，调用了线程调度去的scheduleDirect方法，并传入SubscribeTask任务</div><div class="line">    parent.setDisposable(scheduler.scheduleDirect(new SubscribeTask(parent)));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来我们看看SubscribeTask的实现，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">final class SubscribeTask implements Runnable &#123;</div><div class="line">      private final SubscribeOnObserver&lt;T&gt; parent;</div><div class="line"></div><div class="line">      SubscribeTask(SubscribeOnObserver&lt;T&gt; parent) &#123;</div><div class="line">          this.parent = parent;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      @Override</div><div class="line">      public void run() &#123;</div><div class="line">          //执行上游被观察的订阅方法，这里就是subscribeOn将上游的订阅方法控制在scheduler指定线程执行的核心</div><div class="line">          source.subscribe(parent);</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>最后看下SubscribeOnObserver的onNext方法，比较简单，直接执行下游观察者的onNext方法，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">     public void onNext(T t) &#123;</div><div class="line">         actual.onNext(t);</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
+<p>关于scheduler的具体实现，在后续的线程原理进行分析。这里我们只需要知道上游的被观察者的订阅在指定的scheduler线程策略中执行就可以了。</p>
+<h3 id="observerOn"><a href="#observerOn" class="headerlink" title="observerOn"></a>observerOn</h3><p>observerOn 的操作符会返回一个ObservableObserveOn的被观察者，并传入scheduler线程调度参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> @CheckReturnValue</div><div class="line">@SchedulerSupport(SchedulerSupport.CUSTOM)</div><div class="line">public final Observable&lt;T&gt; observeOn(Scheduler scheduler, boolean delayError, int bufferSize) &#123;</div><div class="line">    ObjectHelper.requireNonNull(scheduler, &quot;scheduler is null&quot;);</div><div class="line">    ObjectHelper.verifyPositive(bufferSize, &quot;bufferSize&quot;);</div><div class="line">    return RxJavaPlugins.onAssembly(new ObservableObserveOn&lt;T&gt;(this, scheduler, delayError, bufferSize));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来看看ObservableObserveOn对象的关键实现代码，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line"> protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</div><div class="line">    //TrampolineScheduler 如果是当前的线程 则直接将下游的观察者与上游的被观察订阅</div><div class="line">     if (scheduler instanceof TrampolineScheduler) &#123;</div><div class="line">         source.subscribe(observer);</div><div class="line">     &#125; else &#123;</div><div class="line">         //其他线程策略</div><div class="line">         Scheduler.Worker w = scheduler.createWorker();</div><div class="line">         //将线程策略的worker传入ObserveOnObserver观察者</div><div class="line">         source.subscribe(new ObserveOnObserver&lt;T&gt;(observer, w, delayError, bufferSize));</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>接下来关键还是看ObserveOnObserver的实现，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void onNext(T t) &#123;</div><div class="line">    // 上一级的模式如果不是异步的，加入队列</div><div class="line">    if (sourceMode != QueueDisposable.ASYNC) &#123;</div><div class="line">        queue.offer(t);</div><div class="line">    &#125;</div><div class="line">    //进行线程调度</div><div class="line">    schedule();</div><div class="line">&#125;</div><div class="line"></div><div class="line">void schedule() &#123;</div><div class="line">    // 判断当前正在执行的任务数目</div><div class="line">    if (getAndIncrement() == 0) &#123;</div><div class="line">        worker.schedule(this);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>ObserveOnObserver本身继承了Runnable接口，run方法实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void run() &#123;</div><div class="line">    //输出结果是否融合</div><div class="line">    if (outputFused) &#123;</div><div class="line">        drainFused();</div><div class="line">    &#125; else &#123;</div><div class="line">        drainNormal();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们先进入drainNormal方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">void drainNormal() &#123;</div><div class="line">    int missed = 1;</div><div class="line">    final SimpleQueue&lt;T&gt; q = queue;</div><div class="line">    final Observer&lt;? super T&gt; a = actual;</div><div class="line">    //第一层循环</div><div class="line">    for (;;) &#123;</div><div class="line">        // 检查异常处理</div><div class="line">        if (checkTerminated(done, q.isEmpty(), a)) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        //第二层循环</div><div class="line">        for (;;) &#123;</div><div class="line">            boolean d = done;</div><div class="line">            T v;</div><div class="line">            //从队列中获取数据</div><div class="line">            v = q.poll();</div><div class="line">            boolean empty = v == null;</div><div class="line">            // 检查异常</div><div class="line">            if (checkTerminated(d, empty, a)) &#123;</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line">            //如果没有数据了，跳出</div><div class="line">            if (empty) &#123;</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">            //执行下一次操作。</div><div class="line">            a.onNext(v);</div><div class="line">        &#125;</div><div class="line">        //减掉执行的次数，并获取剩于任务数量，然后再次循环</div><div class="line">        //直到获取剩余任务量为0，跳出循环</div><div class="line">        missed = addAndGet(-missed);</div><div class="line">        if (missed == 0) &#123;</div><div class="line">            break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于scheduler的具体实现，在后续的线程原理进行分析。这里我们只需要知道下游的观察者的onNext在指定的scheduler线程策略中执行就可以了。</p>
+<h3 id="subscribe"><a href="#subscribe" class="headerlink" title="subscribe"></a>subscribe</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@SchedulerSupport(SchedulerSupport.NONE)</div><div class="line">   @Override</div><div class="line">   public final void subscribe(Observer&lt;? super T&gt; observer) &#123;</div><div class="line">       ObjectHelper.requireNonNull(observer, &quot;observer is null&quot;);</div><div class="line">       try &#123;</div><div class="line">           observer = RxJavaPlugins.onSubscribe(this, observer);</div><div class="line"></div><div class="line">           ObjectHelper.requireNonNull(observer, &quot;Plugin returned null Observer&quot;);</div><div class="line"></div><div class="line">           subscribeActual(observer);</div><div class="line">       &#125; catch (NullPointerException e) &#123; // NOPMD</div><div class="line">           throw e;</div><div class="line">       &#125; catch (Throwable e) &#123;</div><div class="line">           Exceptions.throwIfFatal(e);</div><div class="line">           // can&apos;t call onError because no way to know if a Disposable has been set or not</div><div class="line">           // can&apos;t call onSubscribe because the call might have set a Subscription already</div><div class="line">           RxJavaPlugins.onError(e);</div><div class="line"></div><div class="line">           NullPointerException npe = new NullPointerException(&quot;Actually not, but can&apos;t throw other exceptions due to RS&quot;);</div><div class="line">           npe.initCause(e);</div><div class="line">           throw npe;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p> 最后的订阅方法在做了非空检查后，会调用subscribeActual方法，开始往上游逐层执行订阅。</p>
+<h1 id="被观察者Observable是如何发送数据？"><a href="#被观察者Observable是如何发送数据？" class="headerlink" title="被观察者Observable是如何发送数据？"></a>被观察者Observable是如何发送数据？</h1><p>通过上面的流程分析，我们可以知道。如果使用create创建了Observable，在ObservableOnSubscribe的subscribe方法中会通过ObservableEmitter的onNext去发送数据，onNext会触发开始往下游观察者传递数据。当然rxjava的创建型操作符还有很多，如just、from等，本质最后都是触发下游观察者的onNext进行数据的发送。</p>
+<h1 id="观察者Observer是如何接收到数据的？"><a href="#观察者Observer是如何接收到数据的？" class="headerlink" title="观察者Observer是如何接收到数据的？"></a>观察者Observer是如何接收到数据的？</h1><p>通过源码分析，每一个链层的Observer都会持有相邻下游的Observer对象，当开始发送数据时，会依次链式执行Observer的onNext方法，最后执行到subscribe方法中创建的Observer对象。</p>
+<h1 id="被观察者和观察者之间是如何实现订阅？"><a href="#被观察者和观察者之间是如何实现订阅？" class="headerlink" title="被观察者和观察者之间是如何实现订阅？"></a>被观察者和观察者之间是如何实现订阅？</h1><p>每一个链层的Observable 都会持有相邻上游的Observable对象，在subscribe方法开始调用后，最后会执行到subscribeActual方法，在subscribeActual方法中会将观察者与上游的被观察执行订阅。</p>
+<h1 id="rxjava是如何进行线程的调度？"><a href="#rxjava是如何进行线程的调度？" class="headerlink" title="rxjava是如何进行线程的调度？"></a>rxjava是如何进行线程的调度？</h1><p>rxjava的Scheduler有很多种实现，下面我们介绍Scheduler的相关说明，然后通过最常用的.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())来分析具体的线程调度流程。</p>
+<h2 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h2><p> 我们在调用subscribeOn与observeOn时，都会传入Scheduler对象，首先我们先看一下Scheduler的种类及其功能</p>
+<table>
+<thead>
+<tr>
+<th>Scheduler种类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schedulers.io( )</td>
+<td>用于IO密集型的操作，例如读写SD卡文件，查询数据库，访问网络等，具有线程缓存机制，在此调度器接收到任务后，先检查线程缓存池中，是否有空闲的线程，如果有，则复用，如果没有则创建新的线程，并加入到线程池中，如果每次都没有空闲线程使用，可以无上限的创建新线程</td>
+</tr>
+<tr>
+<td>Schedulers.newThread( )</td>
+<td>在每执行一个任务时创建一个新的线程，不具有线程缓存机制，因为创建一个新的线程比复用一个线程更耗时耗力，虽然使用Schedulers.io( )的地方，都可以使用Schedulers.newThread( )，但是，Schedulers.newThread( )的效率没有Schedulers.io( )高</td>
+</tr>
+<tr>
+<td>Schedulers.computation()</td>
+<td>用于CPU 密集型计算任务，即不会被 I/O 等操作限制性能的耗时操作，例如xml,json文件的解析，Bitmap图片的压缩取样等，具有固定的线程池，大小为CPU的核数。不可以用于I/O操作，因为I/O操作的等待时间会浪费CPU</td>
+</tr>
+<tr>
+<td>Schedulers.trampoline()</td>
+<td>在当前线程立即执行任务，如果当前线程有任务在执行，则会将其暂停，等插入进来的任务执行完之后，再将未完成的任务接着执行</td>
+</tr>
+<tr>
+<td>Schedulers.single()</td>
+<td>拥有一个线程单例，所有的任务都在这一个线程中执行，当此线程中有任务执行时，其他任务将会按照先进先出的顺序依次执行</td>
+</tr>
+<tr>
+<td>Scheduler.from(Executor executor)</td>
+<td>指定一个线程调度器，由此调度器来控制任务的执行策略</td>
+</tr>
+<tr>
+<td>AndroidSchedulers.mainThread()</td>
+<td>在Android UI线程中执行任务，为Android开发定制</td>
+</tr>
+</tbody>
+</table>
+<h2 id="subscribeOn-Schedulers-io"><a href="#subscribeOn-Schedulers-io" class="headerlink" title="subscribeOn(Schedulers.io())"></a>subscribeOn(Schedulers.io())</h2><p> 根据上面的分析，subscribeOn()方法最后会执行到subscribeActual方法，SubscribeTask上面分析了，继承了Runnable接口， run方法最后会执行source.subscribe(parent)方法。<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">   public void subscribeActual(final Observer&lt;? super T&gt; s) &#123;</div><div class="line">       final SubscribeOnObserver&lt;T&gt; parent = new SubscribeOnObserver&lt;T&gt;(s);</div><div class="line"></div><div class="line">       s.onSubscribe(parent);</div><div class="line">       </div><div class="line">       parent.setDisposable(scheduler.scheduleDirect(new SubscribeTask(parent)));</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>  这里我们主要要分析scheduler.scheduleDirect()方法。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">@NonNull</div><div class="line"> public Disposable scheduleDirect(@NonNull Runnable run) &#123;</div><div class="line">     return scheduleDirect(run, 0L, TimeUnit.NANOSECONDS);</div><div class="line"> &#125;</div><div class="line"> </div><div class="line">  @NonNull</div><div class="line"> public Disposable scheduleDirect(@NonNull Runnable run, long delay, @NonNull TimeUnit unit) &#123;</div><div class="line">   //创建一个Worker对象</div><div class="line">     final Worker w = createWorker();</div><div class="line"></div><div class="line"></div><div class="line">     final Runnable decoratedRun = RxJavaPlugins.onSchedule(run);</div><div class="line">     </div><div class="line">     //DisposeTasky也是一个包装类 继承了Runnable接口</div><div class="line">     DisposeTask task = new DisposeTask(decoratedRun, w);</div><div class="line"></div><div class="line">     //这里是关键的实现，执行了worker的schedule方法</div><div class="line">     w.schedule(task, delay, unit);</div><div class="line"></div><div class="line">     return task;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>  Worker的schedule是一个抽象的方法，Schedulers.io()对应的Worker实现为EventLoopWorker。我们看看EventLoopWorker的schedule实现如下：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">   static final class EventLoopWorker extends Scheduler.Worker &#123;</div><div class="line">    private final CompositeDisposable tasks;</div><div class="line">    private final CachedWorkerPool pool;</div><div class="line">    private final ThreadWorker threadWorker;</div><div class="line"></div><div class="line">    final AtomicBoolean once = new AtomicBoolean();</div><div class="line"></div><div class="line">    EventLoopWorker(CachedWorkerPool pool) &#123;</div><div class="line">        this.pool = pool;</div><div class="line">        this.tasks = new CompositeDisposable();</div><div class="line">        this.threadWorker = pool.get();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void dispose() &#123;</div><div class="line">        if (once.compareAndSet(false, true)) &#123;</div><div class="line">            tasks.dispose();</div><div class="line"></div><div class="line">            // releasing the pool should be the last action</div><div class="line">            pool.release(threadWorker);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean isDisposed() &#123;</div><div class="line">        return once.get();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @NonNull</div><div class="line">    @Override</div><div class="line">    public Disposable schedule(@NonNull Runnable action, long delayTime, @NonNull TimeUnit unit) &#123;</div><div class="line">        if (tasks.isDisposed()) &#123;</div><div class="line">            // don&apos;t schedule, we are unsubscribed</div><div class="line">            return EmptyDisposable.INSTANCE;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return threadWorker.scheduleActual(action, delayTime, unit, tasks);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  这里会执行到 threadWorker的scheduleActual方法，继续往下看<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public ScheduledRunnable scheduleActual(final Runnable run, long delayTime, @NonNull TimeUnit unit, @Nullable DisposableContainer parent) &#123;</div><div class="line">     Runnable decoratedRun = RxJavaPlugins.onSchedule(run);</div><div class="line"></div><div class="line">     ScheduledRunnable sr = new ScheduledRunnable(decoratedRun, parent);</div><div class="line"></div><div class="line">     if (parent != null) &#123;</div><div class="line">         if (!parent.add(sr)) &#123;</div><div class="line">             return sr;</div><div class="line">         &#125;</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     Future&lt;?&gt; f;</div><div class="line">     try &#123;</div><div class="line">         if (delayTime &lt;= 0) &#123;</div><div class="line">             f = executor.submit((Callable&lt;Object&gt;)sr);</div><div class="line">         &#125; else &#123;</div><div class="line">             f = executor.schedule((Callable&lt;Object&gt;)sr, delayTime, unit);</div><div class="line">         &#125;</div><div class="line">         sr.setFuture(f);</div><div class="line">     &#125; catch (RejectedExecutionException ex) &#123;</div><div class="line">         if (parent != null) &#123;</div><div class="line">             parent.remove(sr);</div><div class="line">         &#125;</div><div class="line">         RxJavaPlugins.onError(ex);</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     return sr;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>  在这里会使用executor最终去执行run方法。当然看到这里有一个疑问IoScheduler在这里是怎么实现线程的复用呢？我们看看threadWorker在IoScheduler中的线程的创建，如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">EventLoopWorker(CachedWorkerPool pool) &#123;</div><div class="line">        this.pool = pool;</div><div class="line">        this.tasks = new CompositeDisposable();</div><div class="line">        this.threadWorker = pool.get();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>  这里会通过维护一个Worker的线程池来达到线程复用的效果，具体我们看看CachedWorkerPool的get方法，如下：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">ThreadWorker get() &#123;</div><div class="line">      if (allWorkers.isDisposed()) &#123;</div><div class="line">          return SHUTDOWN_THREAD_WORKER;</div><div class="line">      &#125;</div><div class="line">      //从已经release的work线程队列中获取缓存</div><div class="line">      while (!expiringWorkerQueue.isEmpty()) &#123;</div><div class="line">          ThreadWorker threadWorker = expiringWorkerQueue.poll();</div><div class="line">          //如果找到，返回复用的线程</div><div class="line">          if (threadWorker != null) &#123;</div><div class="line">              return threadWorker;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      // 如果没有，则会创建一个新的ThreadWorker</div><div class="line">      ThreadWorker w = new ThreadWorker(threadFactory);</div><div class="line">      allWorkers.add(w);</div><div class="line">      return w;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h2 id="observeOn-AndroidSchedulers-mainThread"><a href="#observeOn-AndroidSchedulers-mainThread" class="headerlink" title="observeOn(AndroidSchedulers.mainThread())"></a>observeOn(AndroidSchedulers.mainThread())</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</div><div class="line">    //如果指定当前线程 则不进行调度</div><div class="line">    if (scheduler instanceof TrampolineScheduler) &#123;</div><div class="line">        source.subscribe(observer);</div><div class="line">    &#125; else &#123;</div><div class="line">        //创建Worker</div><div class="line">        Scheduler.Worker w = scheduler.createWorker();</div><div class="line">        //实例化ObserveOnObserver观察者并传入Worker</div><div class="line">        source.subscribe(new ObserveOnObserver&lt;T&gt;(observer, w, delayError, bufferSize));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 这里我们主要需要分析ObserveOnObserver对象，onNext实现如下：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">      public void onNext(T t) &#123;</div><div class="line">          if (done) &#123;</div><div class="line">              return;</div><div class="line">          &#125;</div><div class="line"></div><div class="line">          if (sourceMode != QueueDisposable.ASYNC) &#123;</div><div class="line">              queue.offer(t);</div><div class="line">          &#125;</div><div class="line">          schedule();</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">       void schedule() &#123;</div><div class="line">          if (getAndIncrement() == 0) &#123;</div><div class="line">              worker.schedule(this);</div><div class="line">          &#125;</div><div class="line">      &#125;</div></pre></td></tr></table></figure></p>
+<p> 关键还是执行了worker的schedule，AndroidSchedulers的实现主要为HandlerScheduler，HandlerScheduler中关于Worker的实现为HandlerWorker，我们看下schedule的实现如下：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public Disposable schedule(Runnable run, long delay, TimeUnit unit) &#123;</div><div class="line">           if (run == null) throw new NullPointerException(&quot;run == null&quot;);</div><div class="line">           if (unit == null) throw new NullPointerException(&quot;unit == null&quot;);</div><div class="line"></div><div class="line">           if (disposed) &#123;</div><div class="line">               return Disposables.disposed();</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           run = RxJavaPlugins.onSchedule(run);</div><div class="line"></div><div class="line">           ScheduledRunnable scheduled = new ScheduledRunnable(handler, run);</div><div class="line"></div><div class="line">           Message message = Message.obtain(handler, scheduled);</div><div class="line">           message.obj = this; // Used as token for batch disposal of this worker&apos;s runnables.</div><div class="line"></div><div class="line">           if (async) &#123;</div><div class="line">               message.setAsynchronous(true);</div><div class="line">           &#125;</div><div class="line">           //通过handler发送消息执行run接口</div><div class="line">           handler.sendMessageDelayed(message, unit.toMillis(delay));</div><div class="line"></div><div class="line">           // Re-check disposed state for removing in case we were racing a call to dispose().</div><div class="line">           if (disposed) &#123;</div><div class="line">               handler.removeCallbacks(scheduled);</div><div class="line">               return Disposables.disposed();</div><div class="line">           &#125;</div><div class="line"></div><div class="line">           return scheduled;</div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
+<p> 关于handler的实例，我们看AndroidSchedulers中的创建如下：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">private static final class MainHolder &#123;</div><div class="line">       static final Scheduler DEFAULT</div><div class="line">           = new HandlerScheduler(new Handler(Looper.getMainLooper()), false);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p> 综上可知AndroidSchedulers.mainThread()是通过消息将run方法的实现交由主线程Looper进行处理，达到将观察者的数据处理在主线程中执行的效果</p>
+<h1 id="rxjava背压策略实现原理是怎样的？"><a href="#rxjava背压策略实现原理是怎样的？" class="headerlink" title="rxjava背压策略实现原理是怎样的？"></a>rxjava背压策略实现原理是怎样的？</h1><h2 id="背压（backpressure）"><a href="#背压（backpressure）" class="headerlink" title="背压（backpressure）"></a>背压（backpressure）</h2><p>当上下游在不同的线程中，通过Observable发射，处理，响应数据流时，如果上游发射数据的速度快于下游接收处理数据的速度，这样对于那些没来及处理的数据就会造成积压，这些数据既不会丢失，也不会被垃圾回收机制回收，而是存放在一个异步缓存池中，如果缓存池中的数据一直得不到处理，越积越多，最后就会造成内存溢出，这便是响应式编程中的背压（backpressure）问题。</p>
+<h2 id="背压处理机制"><a href="#背压处理机制" class="headerlink" title="背压处理机制"></a>背压处理机制</h2><p>rxjava2.x使用Flowable来支持背压的机制，调用create方法时需要传入BackpressureStrategy策略。</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MISSING</td>
+<td>此策略表示，通过Create方法创建的Flowable没有指定背压策略，不会对通过OnNext发射的数据做缓存或丢弃处理，需要下游通过背压操作符（onBackpressureBuffer()/onBackpressureDrop()/onBackpressureLatest()）指定背压策略</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>在此策略下，如果放入Flowable的异步缓存池中的数据超限了，则会抛出MissingBackpressureException异常</td>
+</tr>
+<tr>
+<td>BUFFER</td>
+<td>此策略下，Flowable的异步缓存池同Observable的一样，没有固定大小，可以无限制向里添加数据，不会抛出MissingBackpressureException异常，但会导致OOM</td>
+</tr>
+<tr>
+<td>DROP</td>
+<td>在此策略下，如果Flowable的异步缓存池满了，会丢掉上游发送的数据</td>
+</tr>
+<tr>
+<td>LATEST</td>
+<td>与Drop策略一样，如果缓存池满了，会丢掉将要放入缓存池中的数据，不同的是，不管缓存池的状态如何，LATEST都会将最后一条数据强行放入缓存池中</td>
+</tr>
+</tbody>
+</table>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>首先看看Flowable的create实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public static &lt;T&gt; Flowable&lt;T&gt; create(FlowableOnSubscribe&lt;T&gt; source, BackpressureStrategy mode) &#123;</div><div class="line">       ObjectHelper.requireNonNull(source, &quot;source is null&quot;);</div><div class="line">       ObjectHelper.requireNonNull(mode, &quot;mode is null&quot;);</div><div class="line">       return RxJavaPlugins.onAssembly(new FlowableCreate&lt;T&gt;(source, mode));</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>这里会创建一个FlowableCreate对象，并传入指定的BackpressureStrategy策略。接着看看FlowableCreate的订阅方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">   public void subscribeActual(Subscriber&lt;? super T&gt; t) &#123;</div><div class="line">       BaseEmitter&lt;T&gt; emitter;</div><div class="line">       //根据不同的策略初始化不同的数据发射器</div><div class="line">       switch (backpressure) &#123;</div><div class="line">       case MISSING: &#123;</div><div class="line">           emitter = new MissingEmitter&lt;T&gt;(t);</div><div class="line">           break;</div><div class="line">       &#125;</div><div class="line">       case ERROR: &#123;</div><div class="line">           emitter = new ErrorAsyncEmitter&lt;T&gt;(t);</div><div class="line">           break;</div><div class="line">       &#125;</div><div class="line">       case DROP: &#123;</div><div class="line">           emitter = new DropAsyncEmitter&lt;T&gt;(t);</div><div class="line">           break;</div><div class="line">       &#125;</div><div class="line">       case LATEST: &#123;</div><div class="line">           emitter = new LatestAsyncEmitter&lt;T&gt;(t);</div><div class="line">           break;</div><div class="line">       &#125;</div><div class="line">       default: &#123;</div><div class="line">           emitter = new BufferAsyncEmitter&lt;T&gt;(t, bufferSize());</div><div class="line">           break;</div><div class="line">       &#125;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       t.onSubscribe(emitter);</div><div class="line">       try &#123;</div><div class="line">           source.subscribe(emitter);</div><div class="line">       &#125; catch (Throwable ex) &#123;</div><div class="line">           Exceptions.throwIfFatal(ex);</div><div class="line">           emitter.onError(ex);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h3 id="BaseEmitter"><a href="#BaseEmitter" class="headerlink" title="BaseEmitter"></a>BaseEmitter</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">abstract static class BaseEmitter&lt;T&gt;</div><div class="line">    extends AtomicLong</div><div class="line">    implements FlowableEmitter&lt;T&gt;, Subscription &#123;</div><div class="line">        private static final long serialVersionUID = 7326289992464377023L;</div><div class="line"></div><div class="line">        final Subscriber&lt;? super T&gt; actual;</div><div class="line"></div><div class="line">        final SequentialDisposable serial;</div><div class="line"></div><div class="line">        BaseEmitter(Subscriber&lt;? super T&gt; actual) &#123;</div><div class="line">            this.actual = actual;</div><div class="line">            this.serial = new SequentialDisposable();</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line">    </div><div class="line">    //这里需要注意的是，Request最终会把n负责给AtomicLong</div><div class="line">   @Override</div><div class="line">        public final void request(long n) &#123;</div><div class="line">            if (SubscriptionHelper.validate(n)) &#123;</div><div class="line">                BackpressureHelper.add(this, n);</div><div class="line">                onRequested();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">//省略其他若干方法</div></pre></td></tr></table></figure>
+<p>通过上面的结束我们知道Flowable有一个缓冲池，那个这个大小是多少，在哪里进行复制给发射器呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//长度是128</div><div class="line">  static final int BUFFER_SIZE;</div><div class="line">  static &#123;</div><div class="line">      BUFFER_SIZE = Math.max(1, Integer.getInteger(&quot;rx2.buffer-size&quot;, 128));</div><div class="line">  &#125;</div><div class="line">  </div><div class="line"> public static int bufferSize() &#123;</div><div class="line">      return BUFFER_SIZE;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  //在调用observeOn时，会将长度最后传给emitter发射器，具体可以打断的追踪查看调用链</div><div class="line">  public final Flowable&lt;T&gt; observeOn(Scheduler scheduler) &#123;</div><div class="line">      return observeOn(scheduler, false, bufferSize());</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="MissingEmitter"><a href="#MissingEmitter" class="headerlink" title="MissingEmitter"></a>MissingEmitter</h3><p>不会对通过OnNext发射的数据做缓存或丢弃处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">     public void onNext(T t) &#123;</div><div class="line">         if (isCancelled()) &#123;</div><div class="line">             return;</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         if (t != null) &#123;</div><div class="line">             actual.onNext(t);</div><div class="line">         &#125; else &#123;</div><div class="line">             onError(new NullPointerException(&quot;onNext called with null. Null values are generally not allowed in 2.x operators and sources.&quot;));</div><div class="line">             return;</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         for (;;) &#123;</div><div class="line">             long r = get();</div><div class="line">             if (r == 0L || compareAndSet(r, r - 1)) &#123;</div><div class="line">                 return;</div><div class="line">             &#125;</div><div class="line">         &#125;</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="NoOverflowBaseAsyncEmitter"><a href="#NoOverflowBaseAsyncEmitter" class="headerlink" title="NoOverflowBaseAsyncEmitter"></a>NoOverflowBaseAsyncEmitter</h3><p>DropAsyncEmitter和ErrorAsyncEmitter继承了NoOverflowBaseAsyncEmitter<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">      public final void onNext(T t) &#123;</div><div class="line">          if (isCancelled()) &#123;</div><div class="line">              return;</div><div class="line">          &#125;</div><div class="line"></div><div class="line">          if (t == null) &#123;</div><div class="line">              onError(new NullPointerException(&quot;onNext called with null. Null values are generally not allowed in 2.x operators and sources.&quot;));</div><div class="line">              return;</div><div class="line">          &#125;</div><div class="line">          //如果数量不为0则减1，通过上面的Request，可以知道get（）为Flowable的BUFFER_SIZE 128</div><div class="line">          if (get() != 0) &#123;</div><div class="line">              actual.onNext(t);</div><div class="line">              BackpressureHelper.produced(this, 1);</div><div class="line">          &#125; else &#123;</div><div class="line">              //超出阈值 执行onOverflow</div><div class="line">              onOverflow();</div><div class="line">          &#125;</div><div class="line">      &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="DropAsyncEmitter"><a href="#DropAsyncEmitter" class="headerlink" title="DropAsyncEmitter"></a>DropAsyncEmitter</h3><p>如果Flowable的异步缓存池满了，会丢掉上游发送的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">static final class DropAsyncEmitter&lt;T&gt; extends NoOverflowBaseAsyncEmitter&lt;T&gt; &#123;</div><div class="line"></div><div class="line"></div><div class="line">      private static final long serialVersionUID = 8360058422307496563L;</div><div class="line"></div><div class="line">      DropAsyncEmitter(Subscriber&lt;? super T&gt; actual) &#123;</div><div class="line">          super(actual);</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      @Override</div><div class="line">      void onOverflow() &#123;</div><div class="line">          // nothing to do</div><div class="line">      &#125;</div><div class="line"></div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="ErrorAsyncEmitter"><a href="#ErrorAsyncEmitter" class="headerlink" title="ErrorAsyncEmitter"></a>ErrorAsyncEmitter</h3><p>如果Flowable的异步缓存池满了，会抛出异常<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">static final class ErrorAsyncEmitter&lt;T&gt; extends NoOverflowBaseAsyncEmitter&lt;T&gt; &#123;</div><div class="line"></div><div class="line"></div><div class="line">    private static final long serialVersionUID = 338953216916120960L;</div><div class="line"></div><div class="line">    ErrorAsyncEmitter(Subscriber&lt;? super T&gt; actual) &#123;</div><div class="line">        super(actual);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    void onOverflow() &#123;</div><div class="line">        onError(new MissingBackpressureException(&quot;create: could not emit value due to lack of requests&quot;));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="BufferAsyncEmitter"><a href="#BufferAsyncEmitter" class="headerlink" title="BufferAsyncEmitter"></a>BufferAsyncEmitter</h3><p>Flowable的异步缓存池同Observable的一样，没有固定大小，可以无限制向里添加数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">  public void onNext(T t) &#123;</div><div class="line">      if (done || isCancelled()) &#123;</div><div class="line">          return;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      if (t == null) &#123;</div><div class="line">          onError(new NullPointerException(&quot;onNext called with null. Null values are generally not allowed in 2.x operators and sources.&quot;));</div><div class="line">          return;</div><div class="line">      &#125;</div><div class="line">      //加入队列 queue为SpscLinkedArrayQueue队列</div><div class="line">      queue.offer(t);</div><div class="line">      //通知消费</div><div class="line">      drain();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="LatestAsyncEmitter"><a href="#LatestAsyncEmitter" class="headerlink" title="LatestAsyncEmitter"></a>LatestAsyncEmitter</h3><p>Flowable的异步缓存池同Observable的一样，没有固定大小，可以无限制向里添加数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">  public void onNext(T t) &#123;</div><div class="line">     if (done || isCancelled()) &#123;</div><div class="line">          return;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      if (t == null) &#123;</div><div class="line">          onError(new NullPointerException(&quot;onNext called with null. Null values are generally not allowed in 2.x operators and sources.&quot;));</div><div class="line">          return;</div><div class="line">      &#125;</div><div class="line">      //进行覆盖 queue为AtomicReference</div><div class="line">      queue.set(t);</div><div class="line">       //通知消费</div><div class="line">      drain();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>本文主要对rxjava的链式执行流程、线程调度以及背压机制进行梳理分析。rxjava的库还有非常多的操作符及功能,希望后续有时间继续进行分析。rxjava的源码及一些概念命名还是相对比较复杂，前前后后大约花了2周的时间进行源码的学习，坚持下来了，还是收获满满。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p> <a href="https://www.jianshu.com/p/0cd258eecf60" target="_blank" rel="external">这可能是最好的RxJava 2.x 教程（完结版）</a></p>
+<p> <a href="https://mcxiaoke.gitbooks.io/rxdocs/content/Intro.html" target="_blank" rel="external">ReactiveX中文文档</a></p>
+<p> <a href="https://www.jianshu.com/p/ff8167c1d191/" target="_blank" rel="external">Rxjava2入门教程五：Flowable背压支持——对Flowable最全面而详细的讲解</a></p>
+<p> <a href="https://www.jianshu.com/p/fae1af7732ef" target="_blank" rel="external">RxJava2 源码解析——线程调度 Scheduler</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/23/blockcanary源码学习随笔/" rel="next" title="blockcanary源码学习随笔">
+                <i class="fa fa-chevron-left"></i> blockcanary源码学习随笔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/21/Android热修复技术，你会怎么选？/" rel="prev" title="Android热修复技术，你会怎么选？">
+                Android热修复技术，你会怎么选？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/09/05/rxjava2-x源码学习随笔/"
+           data-title="rxjava2.x源码学习随笔" data-url="https://junbin1011.github.io/2018/09/05/rxjava2-x源码学习随笔/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#rxjava是什么？"><span class="nav-number">1.</span> <span class="nav-text">rxjava是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactiveX"><span class="nav-number">1.1.</span> <span class="nav-text">ReactiveX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rxjava"><span class="nav-number">1.2.</span> <span class="nav-text">rxjava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.3.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">1.4.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-number">1.5.</span> <span class="nav-text">观察者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rxjava怎么用？"><span class="nav-number">2.</span> <span class="nav-text">rxjava怎么用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rxjava核心执行流程是怎样？"><span class="nav-number">3.</span> <span class="nav-text">rxjava核心执行流程是怎样？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关键类功能说明"><span class="nav-number">3.1.</span> <span class="nav-text">关键类功能说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码执行流程"><span class="nav-number">3.2.</span> <span class="nav-text">代码执行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create"><span class="nav-number">3.2.1.</span> <span class="nav-text">create</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">3.2.2.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doOnNext"><span class="nav-number">3.2.3.</span> <span class="nav-text">doOnNext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subscribeOn"><span class="nav-number">3.2.4.</span> <span class="nav-text">subscribeOn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#observerOn"><span class="nav-number">3.2.5.</span> <span class="nav-text">observerOn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subscribe"><span class="nav-number">3.2.6.</span> <span class="nav-text">subscribe</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#被观察者Observable是如何发送数据？"><span class="nav-number">4.</span> <span class="nav-text">被观察者Observable是如何发送数据？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#观察者Observer是如何接收到数据的？"><span class="nav-number">5.</span> <span class="nav-text">观察者Observer是如何接收到数据的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#被观察者和观察者之间是如何实现订阅？"><span class="nav-number">6.</span> <span class="nav-text">被观察者和观察者之间是如何实现订阅？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rxjava是如何进行线程的调度？"><span class="nav-number">7.</span> <span class="nav-text">rxjava是如何进行线程的调度？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Scheduler"><span class="nav-number">7.1.</span> <span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#subscribeOn-Schedulers-io"><span class="nav-number">7.2.</span> <span class="nav-text">subscribeOn(Schedulers.io())</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#observeOn-AndroidSchedulers-mainThread"><span class="nav-number">7.3.</span> <span class="nav-text">observeOn(AndroidSchedulers.mainThread())</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rxjava背压策略实现原理是怎样的？"><span class="nav-number">8.</span> <span class="nav-text">rxjava背压策略实现原理是怎样的？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背压（backpressure）"><span class="nav-number">8.1.</span> <span class="nav-text">背压（backpressure）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#背压处理机制"><span class="nav-number">8.2.</span> <span class="nav-text">背压处理机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">8.3.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BaseEmitter"><span class="nav-number">8.3.1.</span> <span class="nav-text">BaseEmitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MissingEmitter"><span class="nav-number">8.3.2.</span> <span class="nav-text">MissingEmitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NoOverflowBaseAsyncEmitter"><span class="nav-number">8.3.3.</span> <span class="nav-text">NoOverflowBaseAsyncEmitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DropAsyncEmitter"><span class="nav-number">8.3.4.</span> <span class="nav-text">DropAsyncEmitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ErrorAsyncEmitter"><span class="nav-number">8.3.5.</span> <span class="nav-text">ErrorAsyncEmitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BufferAsyncEmitter"><span class="nav-number">8.3.6.</span> <span class="nav-text">BufferAsyncEmitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LatestAsyncEmitter"><span class="nav-number">8.3.7.</span> <span class="nav-text">LatestAsyncEmitter</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">9.1.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">9.2.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

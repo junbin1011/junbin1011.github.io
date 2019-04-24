@@ -1,0 +1,969 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="简介为什么要学习Android的源码
+学习优秀的代码，可能是进步最快的方式之一，特别是看一群优秀的Google开发工程师的代码。
+知己知彼，了解系统的运行原理。在实际的项目开发中，解决一些疑难杂症，对于排障分析有很重要的意义。（开发中最怕就是特殊机型兼容，一些无日志的问题，这个时候只能靠经验来分析，熟悉系统的运行流程就显得很重要）
+不要做一个只会堆砌API的工程师，否则无论3年或者5年，你始终会感">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之Activity启动流程">
+<meta property="og:url" content="https://junbin1011.github.io/2017/04/10/Android之Activity启动流程/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="简介为什么要学习Android的源码
+学习优秀的代码，可能是进步最快的方式之一，特别是看一群优秀的Google开发工程师的代码。
+知己知彼，了解系统的运行原理。在实际的项目开发中，解决一些疑难杂症，对于排障分析有很重要的意义。（开发中最怕就是特殊机型兼容，一些无日志的问题，这个时候只能靠经验来分析，熟悉系统的运行流程就显得很重要）
+不要做一个只会堆砌API的工程师，否则无论3年或者5年，你始终会感">
+<meta property="og:image" content="https://developer.android.google.cn/images/activity_lifecycle.png">
+<meta property="og:image" content="https://developer.android.google.cn/images/fundamentals/restore_instance.png">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之Activity启动流程">
+<meta name="twitter:description" content="简介为什么要学习Android的源码
+学习优秀的代码，可能是进步最快的方式之一，特别是看一群优秀的Google开发工程师的代码。
+知己知彼，了解系统的运行原理。在实际的项目开发中，解决一些疑难杂症，对于排障分析有很重要的意义。（开发中最怕就是特殊机型兼容，一些无日志的问题，这个时候只能靠经验来分析，熟悉系统的运行流程就显得很重要）
+不要做一个只会堆砌API的工程师，否则无论3年或者5年，你始终会感">
+<meta name="twitter:image" content="https://developer.android.google.cn/images/activity_lifecycle.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/04/10/Android之Activity启动流程/"/>
+
+
+
+
+
+  <title> Android之Activity启动流程 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/04/10/Android之Activity启动流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android之Activity启动流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-10T18:25:25+08:00">
+                2017-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/10/Android之Activity启动流程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/10/Android之Activity启动流程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="为什么要学习Android的源码"><a href="#为什么要学习Android的源码" class="headerlink" title="为什么要学习Android的源码"></a>为什么要学习Android的源码</h2><ol>
+<li>学习优秀的代码，可能是进步最快的方式之一，特别是看一群优秀的Google开发工程师的代码。</li>
+<li>知己知彼，了解系统的运行原理。在实际的项目开发中，解决一些疑难杂症，对于排障分析有很重要的意义。（开发中最怕就是特殊机型兼容，一些无日志的问题，这个时候只能靠经验来分析，熟悉系统的运行流程就显得很重要）</li>
+<li>不要做一个只会堆砌API的工程师，否则无论3年或者5年，你始终会感觉到瓶颈的到来。其实换个角度学Android，例如源码分析、性能优化。你可能可以看到不一样的世界。</li>
+</ol>
+<h2 id="什么是Activity的启动流程"><a href="#什么是Activity的启动流程" class="headerlink" title="什么是Activity的启动流程"></a>什么是Activity的启动流程</h2><p>很多童鞋可能想，这还不简单，项目中用了千千万万遍了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startActivity(new Intent(this, Activity.class));</div></pre></td></tr></table></figure></p>
+<p>只能说Too young,Too simple。</p>
+<p>我一开始也以为只是简单调用个startActivity，然后屏幕就跳转到指定的Activity，这就是Activity的启动流程。</p>
+<p>我们都知道Activity有一个栈，当我们按了back键的时候，就会回到上一个Activity。那么系统是如何来管理这个栈的呢？</p>
+<p>我们从launcher点击一个应用图标，那么会启动一个新的进程，系统如何控制多进程之间的Activity切换呢？</p>
+<p>我们都知道Activity有它自己的生命周期，那么这个生命周期在运行的过程中，系统是怎么去做控制的呢？</p>
+<p>实际上问题远远不止这些，可见Activity的启动流程不是想象中的那么简单，所以为了找寻真相，我们需要从Android的源码来分析Activity的启动流程。</p>
+<h1 id="Activity基础"><a href="#Activity基础" class="headerlink" title="Activity基础"></a>Activity基础</h1><p>这里我们先简单来了解一些我们开发项目过程中，常用的一些Activity的基础知识，然后后续才来进行源码的分析。在源码的分析中，我们也可以结合日常的使用来结合分析。</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>这里使用Google官方的示例图来说明</p>
+<p><img src="https://developer.android.google.cn/images/activity_lifecycle.png" alt="Google官方示例图"></p>
+<ul>
+<li><p>Activity 的整个生命周期发生在 onCreate() 调用与 onDestroy() 调用之间。您的 Activity 应在 onCreate() 中执行“全局”状态设置（例如定义布局），并释放 onDestroy() 中的所有其余资源。例如，如果您的 Activity 有一个在后台运行的线程，用于从网络上下载数据，它可能会在 onCreate() 中创建该线程，然后在 onDestroy() 中停止该线程。</p>
+</li>
+<li><p>Activity 的可见生命周期发生在 onStart() 调用与 onStop() 调用之间。在这段时间，用户可以在屏幕上看到 Activity 并与其交互。 例如，当一个新 Activity 启动，并且此 Activity 不再可见时，系统会调用 onStop()。您可以在调用这两个方法之间保留向用户显示 Activity 所需的资源。 例如，您可以在 onStart() 中注册一个 BroadcastReceiver 以监控影响 UI 的变化，并在用户无法再看到您显示的内容时在 onStop() 中将其取消注册。在 Activity 的整个生命周期，当 Activity 在对用户可见和隐藏两种状态中交替变化时，系统可能会多次调用 onStart() 和 onStop()。</p>
+</li>
+<li><p>Activity 的前台生命周期发生在 onResume() 调用与 onPause() 调用之间。在这段时间，Activity 位于屏幕上的所有其他 Activity 之前，并具有用户输入焦点。 Activity 可频繁转入和转出前台 — 例如，当设备转入休眠状态或出现对话框时，系统会调用 onPause()。 由于此状态可能经常发生转变，因此这两个方法中应采用适度轻量级的代码，以避免因转变速度慢而让用户等待。</p>
+</li>
+</ul>
+<h2 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h2><ul>
+<li>standard（默认模式）</li>
+</ul>
+<p>默认。系统在启动 Activity 的任务中创建 Activity 的新实例并向其传送 Intent。Activity 可以多次实例化，而每个实例均可属于不同的任务，并且一个任务可以拥有多个实例。</p>
+<ul>
+<li>singleTop</li>
+</ul>
+<p>如果当前任务的顶部已存在 Activity 的一个实例，则系统会通过调用该实例的 onNewIntent() 方法向其传送 Intent，而不是创建 Activity 的新实例。 </p>
+<ul>
+<li>singleTask</li>
+</ul>
+<p>系统创建新任务并实例化位于新任务底部的 Activity。但是，如果该 Activity 的一个实例已存在于一个单独的任务中，则系统会通过调用现有实例的 onNewIntent() 方法向其传送 Intent，而不是创建新实例。 </p>
+<ul>
+<li>singleInstance</li>
+</ul>
+<p>与 “singleTask” 相同，只是系统不会将任何其他 Activity 启动到包含实例的任务中。该 Activity 始终是其任务唯一仅有的成员；由此 Activity 启动的任何 Activity 均在单独的任务中打开。</p>
+<h2 id="运行状态保存"><a href="#运行状态保存" class="headerlink" title="运行状态保存"></a>运行状态保存</h2><p>这里同样借助Google官方的示例图来说明<br><img src="https://developer.android.google.cn/images/fundamentals/restore_instance.png" alt="Google官方示例图"></p>
+<p>这个运行状态的保存，往往很容易在开发中被遗忘。如果不注意，却很容易引起一些程序的异常。首先，系统的运行的中，如果内存不足，会回收一些资源。再者，一些ROM会开启例如开发中选项中的不保留活动，当应用到后台时，则会被回收，或者屏幕旋转等一些配置变更。这些情况都需要我们处理好运行状态的保存。例如Viewpager保存好当前的tab位置，一些数据的保存和恢复，避免空指针等。</p>
+<p>在界面被回收时，系统会先调用 onSaveInstanceState()，然后再使 Activity 变得易于销毁。系统会向该方法传递一个 Bundle，您可以在其中使用 putString() 和 putInt() 等方法以名称-值对形式保存有关 Activity 状态的信息。然后，如果系统终止您的应用进程，并且用户返回您的 Activity，则系统会重建该 Activity，并将 Bundle 同时传递给 onCreate() 和 onRestoreInstanceState()。您可以使用上述任一方法从 Bundle 提取您保存的状态并恢复该 Activity 状态。如果没有状态信息需要恢复，则传递给您的 Bundle 是空值</p>
+<h1 id="源码相关类介绍"><a href="#源码相关类介绍" class="headerlink" title="源码相关类介绍"></a>源码相关类介绍</h1><p>过完了Activity的基础知识后，我们通过一个表格来分析一下Activity启动流程中核心的一些类的设计及作用，这样可以让我们更好的来了解启动的流程。</p>
+<table>
+<thead>
+<tr>
+<th>类名</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activity</td>
+<td>Activity 是一个应用组件，用户可与其提供的屏幕进行交互。</td>
+</tr>
+<tr>
+<td>Instrumentation</td>
+<td>每一个应用程序只有一个Instrumentation对象，每个Activity内都有一个对该对象的引用。当ActivityThread需要操作Activity的生命周期，都是通过Instrumentation来完成，实际Activity的实例化，也是在里面的newActivity完成。</td>
+</tr>
+<tr>
+<td>ActivityManagerService</td>
+<td>AMS(ActivityManagerService)是贯穿Android系统组件的核心服务，负责了系统中四大组件的启动、切换、调度以及应用进程管理和调度工作</td>
+</tr>
+<tr>
+<td>PackageManagerService</td>
+<td>Android系统下的apk程序都是通过名为PackageManagerService的包管理服务来管理的。PacketManagerService是安卓系统的一个重要服务，由SystemServer启动，主要实现apk程序包的解析，安装，更新，移动，卸载等服务。不管是系统apk(/system/app)，还是我们手工安装上去的，系统所有的apk都是由其管理</td>
+</tr>
+<tr>
+<td>ActivityStackSupervisor</td>
+<td>主要是对整个APP的Task进行管理，通常一个进程拥有一个或多个Task</td>
+</tr>
+<tr>
+<td>ActivityStack</td>
+<td>传说中的Activity栈，我们都知道Activity的管理就是通过栈管理，默认显示栈顶，当按back键后，就将栈顶的Activity移除，遵循后进先去原则</td>
+</tr>
+<tr>
+<td>ActivityRecord</td>
+<td>ActivityRecord 是Activity的标识，与每个Activity是一一对应的，存储这Activity的一些信息，便于后续操作Activity </td>
+</tr>
+<tr>
+<td>ActivityThread</td>
+<td>传说中的UI线程， 它管理应用进程的主线程的执行(相当于普通Java程序的main入口函数)，并根据AMS的要求（通过IApplicationThread接口）负责调度和执行activities、broadcasts和其它操作</td>
+</tr>
+</tbody>
+</table>
+<h1 id="源码启动流程分析"><a href="#源码启动流程分析" class="headerlink" title="源码启动流程分析"></a>源码启动流程分析</h1><p>Activity的源码启动流程，其实一开始想试试用流程图来说明，但最后发现实在太长，欲生欲死。下面我们同样通过表格，以序号的方式来一步步显示Activity启动流程。这个可以更清晰便捷的来理解。具体的关键实现源码会在说明中分析，可以自己在结合源码进行分析。</p>
+<table>
+<thead>
+<tr>
+<th>索引</th>
+<th>调用的类间关系</th>
+<th>说明 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Activity：startActivity-&gt;startActivityForResult</td>
+<td>startActivity其实最终也是调用了startActivityForResult</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Intrumentation：execStartActivity</td>
+<td>mInstrumentation类似与管家婆，ActivityThread与AMS交互后，最后都是交由Intrumentation来处理</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ActivityManagerNative.getDefault().startActivity(AIDL)-&gt;最后执行到AMS的startActivity</td>
+<td>这是一个IPC的过程</td>
+</tr>
+<tr>
+<td>4</td>
+<td>AMS：startActivityAsUser</td>
+<td>生成了userId</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ActivityStackSupervisor：startActivityMyWait()</td>
+<td>校验Intent的一些合法性,其中调用了PackageManagerService的resolveIntent</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ActivityStackSupervisor：startActivityLocked()</td>
+<td>验证intent、Class、Permission等保存将要启动的Activity的Record</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ActivityStackSupervisor：startActivityUncheckedLocked()</td>
+<td>检查将要启动的Activity的launchMode和启动Flag根据launcheMode和Flag配置task</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ActvityStack：startActivityLocked</td>
+<td>对栈进行初始化配置</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ActivityStack： resumeTopActivityInnerLocked()</td>
+<td>查找需要进入onPause的Activity</td>
+</tr>
+<tr>
+<td>10</td>
+<td>ActivityStack：startPausingLocked()</td>
+<td>IPC，控制将需要OnPause的Activity进行暂停</td>
+</tr>
+<tr>
+<td>11</td>
+<td>ActivityThread： handlePauseActivity()</td>
+<td>回调Activity的onPause，并通知AMS</td>
+</tr>
+<tr>
+<td>12</td>
+<td>ActivityManagerService:activityPaused()</td>
+<td>获取对应的栈，执行activityPausedLocked</td>
+</tr>
+<tr>
+<td>13</td>
+<td>ActivityStack：activityPausedLocked</td>
+<td>获取ActivityRecord，调用completePauseLocked</td>
+</tr>
+<tr>
+<td>14</td>
+<td>ActivityStackSuperVisor： resumeTopActivitiesLocked()</td>
+<td>找出当前自己管理的task的栈，执行resumeTopActivityLocked</td>
+</tr>
+<tr>
+<td>15</td>
+<td>ActivityStack：resumeTopActivityLocked()</td>
+<td>调用ActivityStackSuperVisor：resumeTopActivityInnerLocked验证是否该启动的Activity所在进程和app是否存在，若存在，直接启动。否则，准备创建该进程</td>
+</tr>
+<tr>
+<td>16</td>
+<td>ActivityStackSuperVisor：startSpecificActivityLocked()</td>
+<td>该进程不存在，创建进程</td>
+</tr>
+<tr>
+<td>17</td>
+<td>ActivityManagerService：startProcessLocked()</td>
+<td>通过Process.start()启动进程 entryPoint = “android.app.ActivityThread”</td>
+</tr>
+<tr>
+<td>18</td>
+<td>ActivityThread：main()</td>
+<td>主线程的Looper也在这里初始化，这里是我们应用层的主入口。</td>
+</tr>
+<tr>
+<td>19</td>
+<td>ActivityThread：attach</td>
+<td>调用attachApplication()</td>
+</tr>
+<tr>
+<td>20</td>
+<td>IActivityManager：attachApplication()</td>
+<td>调用attachApplicationLocked，我们的Application也会在这个地方来创建</td>
+</tr>
+<tr>
+<td>21</td>
+<td>ActivityStackSuperVisor：attachApplicationLocked()</td>
+<td>通过ActivityRecord找出具体的栈</td>
+</tr>
+<tr>
+<td>22</td>
+<td>ActivityStackSuperVisor：realStartActivityLocked()</td>
+<td>IPC通知ActivityThread </td>
+</tr>
+<tr>
+<td>23</td>
+<td>ActivityThread：scheduleLaunchActivity()</td>
+<td>通过handler调用handleLaunchActivity,接着performLaunchActivity</td>
+</tr>
+<tr>
+<td>24</td>
+<td>ActivityThread：接着performLaunchActivity</td>
+<td>进行了一些Avcitity的状态判断，执行了mInstrumentation.newActivity。Activity对象真正通过反射实例化出来</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Intrumentation：callActivityOnCreate</td>
+<td>调用了Activity的onCreate</td>
+</tr>
+</tbody>
+</table>
+<p>过完一遍，反正欲生欲死了。觉得不是当初想象的那么简单。过源码，我们尽量保持流程性上的理解吧，如果纠结于实现的细节，反倒会适得其反，不可自拔。通过流程上的梳理，来理解设计的精髓。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>Android源码中大量使用了Service的思想。提供统一的服务，这样使得系统可以统一来调用一些任务。为什么这里的Activity启动要设计得如此的复杂？因为系统需要统一管理窗口的显示，这里涉及多进程、多窗口的管理控制。</li>
+<li>单一责任原则。这个是设计模式里面的东西。不同的功能让不同的类来实现，减低耦合性。例如这里的ActivityStackSupervisor用来管理Task,ActivityStack用来管理栈。而不会将所有的东西都塞在Activity中</li>
+<li>模块化思想。系统的各种Service其实很好的体现了这一点。AMS管理Activity，WMS管理窗口，PMS管理安装包，还有例如网络、电量等的管理都一致。这样使得系统逻辑更加清晰，便于维护管理及使用</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/01/“Android性能优化-渲染优化/" rel="next" title="Android性能优化-渲染优化">
+                <i class="fa fa-chevron-left"></i> Android性能优化-渲染优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/19/Android之Binder底层原理/" rel="prev" title="Android之Binder底层原理">
+                Android之Binder底层原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/10/Android之Activity启动流程/"
+           data-title="Android之Activity启动流程" data-url="https://junbin1011.github.io/2017/04/10/Android之Activity启动流程/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要学习Android的源码"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要学习Android的源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Activity的启动流程"><span class="nav-number">1.2.</span> <span class="nav-text">什么是Activity的启动流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Activity基础"><span class="nav-number">2.</span> <span class="nav-text">Activity基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">2.1.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动模式"><span class="nav-number">2.2.</span> <span class="nav-text">启动模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行状态保存"><span class="nav-number">2.3.</span> <span class="nav-text">运行状态保存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码相关类介绍"><span class="nav-number">3.</span> <span class="nav-text">源码相关类介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码启动流程分析"><span class="nav-number">4.</span> <span class="nav-text">源码启动流程分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

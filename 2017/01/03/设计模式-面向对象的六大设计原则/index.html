@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。拥抱变化也就是意味着在满足需求且不破坏系统稳定性的前提下保持高可扩展性、高内聚、低耦合，在经历了各版本的变更之后依旧保持清晰、灵活、稳定的系统架构。
+虽然在实际的应该开发中，要饱受产品的折磨和摧残、需要在极其有限的研发时间里完成功能、上线。但是我们仍需尽量保持遵循面向对象的六大设计原则，这才能让我们不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-面向对象的六大设计原则">
+<meta property="og:url" content="https://junbin1011.github.io/2017/01/03/设计模式-面向对象的六大设计原则/index.html">
+<meta property="og:site_name" content="黄俊彬个人博客">
+<meta property="og:description" content="在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。拥抱变化也就是意味着在满足需求且不破坏系统稳定性的前提下保持高可扩展性、高内聚、低耦合，在经历了各版本的变更之后依旧保持清晰、灵活、稳定的系统架构。
+虽然在实际的应该开发中，要饱受产品的折磨和摧残、需要在极其有限的研发时间里完成功能、上线。但是我们仍需尽量保持遵循面向对象的六大设计原则，这才能让我们不">
+<meta property="og:updated_time" content="2019-04-24T08:12:18.789Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-面向对象的六大设计原则">
+<meta name="twitter:description" content="在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。拥抱变化也就是意味着在满足需求且不破坏系统稳定性的前提下保持高可扩展性、高内聚、低耦合，在经历了各版本的变更之后依旧保持清晰、灵活、稳定的系统架构。
+虽然在实际的应该开发中，要饱受产品的折磨和摧残、需要在极其有限的研发时间里完成功能、上线。但是我们仍需尽量保持遵循面向对象的六大设计原则，这才能让我们不">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2017/01/03/设计模式-面向对象的六大设计原则/"/>
+
+
+
+
+
+  <title> 设计模式-面向对象的六大设计原则 | 黄俊彬个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄俊彬个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀是一种习惯，坚持是一种品质。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/01/03/设计模式-面向对象的六大设计原则/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式-面向对象的六大设计原则
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-03T09:39:58+08:00">
+                2017-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/03/设计模式-面向对象的六大设计原则/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/03/设计模式-面向对象的六大设计原则/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在应用的开发过程中，最难的不是完成应用的开发工作，而是在后续的升级、维护中让应用系统能够拥抱变化。拥抱变化也就是意味着在满足需求且不破坏系统稳定性的前提下保持高可扩展性、高内聚、低耦合，在经历了各版本的变更之后依旧保持清晰、灵活、稳定的系统架构。</p>
+<p>虽然在实际的应该开发中，要饱受产品的折磨和摧残、需要在极其有限的研发时间里完成功能、上线。但是我们仍需尽量保持遵循面向对象的六大设计原则，这才能让我们不必在各种需求的苦海中挣扎。</p>
+<h2 id="1-单一责任原则"><a href="#1-单一责任原则" class="headerlink" title="1.单一责任原则"></a>1.单一责任原则</h2><ul>
+<li>定义：就一个类而言，应该只有一个引起变化的原因。</li>
+<li>优点：低耦合</li>
+<li>缺点：责任界限比较难划分</li>
+<li>总结：在研发当中，设计的规范应尽量满足单一责任原则。接口一定要做到单一责任原则，类的设计尽量做到只有一个引起变化的原因。<h2 id="2-里氏替换原则"><a href="#2-里氏替换原则" class="headerlink" title="2.里氏替换原则"></a>2.里氏替换原则</h2></li>
+<li>定义： 所有引用父类的地方，必要能透明的使用其子类</li>
+<li>优点：低耦合，高内聚，增强程序的健壮性。版本升级时，只需新增对应的实现子类，不必影响旧的业务逻辑</li>
+<li>缺点： 继承是侵入性的，子类必须拥有分类的所有属性和方法，同时可能造成子类代码冗余、灵活性降低</li>
+<li>总结： 在项目中，采用里氏替换原则，应尽量避免子类的个性（拥有自己的业务实现方法），把子类当父类使用，个性无法使用，单独作为一个业务，耦合关系复杂<h2 id="3-依赖倒置原则"><a href="#3-依赖倒置原则" class="headerlink" title="3.依赖倒置原则"></a>3.依赖倒置原则</h2></li>
+<li>定义： 模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，其依赖关系是通过接口或抽象类产生的。</li>
+<li>优点： 减少类间的耦合性，提高系统的稳定性，降低并行开发引起的风险，提高代码的可读性和维护性</li>
+<li>缺点： 前期需要耗时进行结构设计及抽象提取</li>
+<li>总结： 依赖倒置原则的本质就是通过抽象（接口或抽象类）使各个类或模块的实现彼此独立，不相互影响，实现模块间的松耦合。在实践中可以根据以下几个规则来衡量：</li>
+</ul>
+<ol>
+<li>每个类尽量都有接口或抽象类，或者抽象类和两者都具备</li>
+<li>任何类尽量都不应该从具体的类派生</li>
+<li>结合里氏替换原则</li>
+<li>接口隔离原则</li>
+</ol>
+<ul>
+<li>定义： 客户端不应该依赖它不需要的接口，类间的依赖关系应该建立在最小的接口上</li>
+<li>优点： 接口隔离的原则将非常庞大、臃肿的接口拆分成更小的和更具体的接口，这样客户将会只需要知道他们感兴趣的方法。接口隔离原则的目的是系统解开耦合，从而容易重构、更改和重新部署<br>缺点： 需要耗时统筹接口隔离颗粒度，接口拆分的标准、颗粒度比较难划分，太大降低灵活性，太小，导致接口数据增大，开发成本更高<br>总结： 接口隔离原则是对接口的定义，同时也是对类的定义，接口和类尽量使用原子接口和原子类来组织。在实践中可以根据以下几个规则来衡量：</li>
+</ul>
+<ol>
+<li>一个接口只服务于一个子模块或业务逻辑</li>
+<li>通过业务逻辑压缩接口中的public方法，尽量让接口精简，而不是暴露一大堆方法</li>
+<li>已被污染的接口，尽量去修改，若变更风险较大，则采用设配器模式进行转换处理</li>
+<li>根据业务，每个项目或产品都有特定的环境因素，拆分的标准可能不同，不要硬套标准<h2 id="5-迪米特原则"><a href="#5-迪米特原则" class="headerlink" title="5.迪米特原则"></a>5.迪米特原则</h2></li>
+</ol>
+<ul>
+<li>定义： 一个对象应该对自己需要耦合或调用的类知道最少，尽量不要对外公布太多的public方法和非静态的public变量</li>
+<li>优点： 迪米特法则的核心观念就是类间解耦，提高类的复用率</li>
+<li>缺点： 可能产生大量的中转或者跳转类，导致系统的复杂性提高</li>
+<li>总结： 迪米特法则是要求类间解耦，但解耦是有限度。在实际的项目中，要适度的参考运用，严格执行就是“过犹不及”<h2 id="6-开放封闭原则"><a href="#6-开放封闭原则" class="headerlink" title="6.开放封闭原则"></a>6.开放封闭原则</h2></li>
+<li>定义：软件中的对象（类、模块、函数等）应该对于扩展是开放的，但是，对于修改是封闭的。</li>
+<li>优点：</li>
+</ul>
+<ol>
+<li>避免修改代码，影响已经通过单元测试等原业务逻辑</li>
+<li>可以提高复用性、可维护性</li>
+</ol>
+<ul>
+<li>缺点： 需要预知变化，全局统筹。</li>
+<li>总结： 在将开闭原则运行到实际的项目中需注意:</li>
+</ul>
+<ol>
+<li>抽象约束，通过接口或者抽象类约束扩展，对扩展进行边界开放。</li>
+<li>元数据控制模块行为，通过配置参数（文件，数据库），减少重复开发</li>
+<li>制定项目章程</li>
+<li>封装变化，第一将相同的变化封装到同一个接口或者抽象类中；第二将不同的变化封装到不同的接口或抽象类中，不应该有两个不同的变化出现在同一个接口或抽象类中。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/24/排序算法总结/" rel="next" title="排序算法总结">
+                <i class="fa fa-chevron-left"></i> 排序算法总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/06/设计模式-单例模式/" rel="prev" title="设计模式-单例模式">
+                设计模式-单例模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/03/设计模式-面向对象的六大设计原则/"
+           data-title="设计模式-面向对象的六大设计原则" data-url="https://junbin1011.github.io/2017/01/03/设计模式-面向对象的六大设计原则/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">优秀是一种习惯，坚持是一种品质。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-jun-bin-48/" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-单一责任原则"><span class="nav-number">1.</span> <span class="nav-text">1.单一责任原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-里氏替换原则"><span class="nav-number">2.</span> <span class="nav-text">2.里氏替换原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-依赖倒置原则"><span class="nav-number">3.</span> <span class="nav-text">3.依赖倒置原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-迪米特原则"><span class="nav-number">4.</span> <span class="nav-text">5.迪米特原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-开放封闭原则"><span class="nav-number">5.</span> <span class="nav-text">6.开放封闭原则</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
