@@ -270,12 +270,161 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/28/设计模式-外观模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄俊彬个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/28/设计模式-外观模式/" itemprop="url">
+                  设计模式-外观模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-28T09:29:08+08:00">
+                2017-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/28/设计模式-外观模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/28/设计模式-外观模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-外观模式的定义及使用场景"><a href="#1-外观模式的定义及使用场景" class="headerlink" title="1.外观模式的定义及使用场景"></a>1.外观模式的定义及使用场景</h1><p>外观模式（Facade）在开发过程中的运用频率非常高，尤其是在现阶段各个第三方SDK充斥在我们的周边，而这些SDK很大概率会使用外观模式，通过一个外观类使得整个系统的接口只有一个统一的高层接口，这样能够降低用户的使用成本，也对用户屏蔽了很多实现细节。</p>
+<p><img src="http://img.blog.csdn.net/20170228092218459?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>要求一个子系统的外部与其内部的通讯必须通过一个统一的对象进行。外观模式提供一个高层次的接口，使得子系统更易于使用</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li>为一个复杂的模块或子系统提供一个供外界访问的接口</li>
+<li>子系统相对独立–外界对子系统的访问只要黑箱操作即可</li>
+<li>预防低水平人员带来的风险扩散<h1 id="2-外观模式的优缺点"><a href="#2-外观模式的优缺点" class="headerlink" title="2. 外观模式的优缺点"></a>2. 外观模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2></li>
+<li>减少系统的相互依赖</li>
+<li>提高了灵活性</li>
+<li>提高安全性<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>门面模式的最大缺点就是不符合开闭原则，对修改关闭，对扩展开放，需求变化时，需要修改Facade的代码，这样相对风险比较大<h1 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h1></li>
+<li>对于庞大到不能容忍的程度，一个子系统可以有多个门面</li>
+<li>门面不要参与子系统内的业务逻辑<h1 id="4-外观模式的实现方式"><a href="#4-外观模式的实现方式" class="headerlink" title="4. 外观模式的实现方式"></a>4. 外观模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class ClassA &#123;</div><div class="line">    public void doSomeThing() &#123;</div><div class="line">        System.out.println(&quot;ClassA is doSomeThing!!!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class ClassB &#123;</div><div class="line">    public void doSomeThing() &#123;</div><div class="line">        System.out.println(&quot;ClassB is doSomeThing!!!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class ClassC &#123;</div><div class="line">    public void doSomeThing() &#123;</div><div class="line">        System.out.println(&quot;ClassC is doSomeThing!!!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class Facade &#123;</div><div class="line">    ClassA classA = new ClassA();</div><div class="line">    ClassB classB = new ClassB();</div><div class="line">    ClassC classC = new ClassC();</div><div class="line"></div><div class="line">    public void doMethodA() &#123;</div><div class="line">        classA.doSomeThing();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void doMethodB() &#123;</div><div class="line">        classB.doSomeThing();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void doMethodC() &#123;</div><div class="line">        classC.doSomeThing();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"></div><div class="line">    public  static void main(String args[]) &#123;</div><div class="line">        Facade facade = new Facade();</div><div class="line">        facade.doMethodA();</div><div class="line">        facade.doMethodB();</div><div class="line">        facade.doMethodC();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="5-外观模式在Android中的实际应用"><a href="#5-外观模式在Android中的实际应用" class="headerlink" title="5. 外观模式在Android中的实际应用"></a>5. 外观模式在Android中的实际应用</h1><p>在Android开发过程中，Context是最重要的一个类型，Context意为上下文，也就是程序的运行环境。它封装了很多重要的操作。如startActivity（）、sendBoradcast（）、bindService等，因此，Context对开发者来说就是重要的高层接口。</p>
+<p>我们都知道Context的实现类是ContextImpl。ContextImpl内部封装了很多不同子系统的操作，例如Activity的跳转、广播、启动服务、设置壁纸等，这些工作并不是在ContextImpl中实现，而是转交给了具体的子系统进行处理。</p>
+<p>用户可以通过Context这个接口统一进行与Android系统的交互，这样用户通过情况下就不需要对每个子系统进行了解，例如启动Activity时用户不需要手动调用mMainThread.getInstrumentation().execStartActivity函数进行执行，发送广播时也不需要直接操作ActivityManagerNative类。用户于系统服务的交互都通过Context的高层接口，这样对用户屏蔽了具体的实现细节，降低了使用成本</p>
+<p>关于Context的具体介绍可以参考博文：<br><a href="http://blog.csdn.net/junbin1011/article/details/54612858（" target="_blank" rel="external">http://blog.csdn.net/junbin1011/article/details/54612858（</a>  Android之Context底层原理）</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/27/设计模式-观察者模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -427,7 +576,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -574,7 +723,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -713,7 +862,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -861,7 +1010,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1018,7 +1167,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1167,7 +1316,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1339,7 +1488,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1483,7 +1632,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1619,150 +1768,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/07/设计模式-中介者模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="黄俊彬个人博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/07/设计模式-中介者模式/" itemprop="url">
-                  设计模式-中介者模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T09:04:26+08:00">
-                2017-02-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/07/设计模式-中介者模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/07/设计模式-中介者模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-中介者模式的定义及使用场景"><a href="#1-中介者模式的定义及使用场景" class="headerlink" title="1.中介者模式的定义及使用场景"></a>1.中介者模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而使他们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象之间的作用。保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
-<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><p>当对象之间的交互操作很多且每个对象的行为操作都彼此依赖时，为防止在修改一个对象的行为时，同时涉及修改很多其他对象的行为，可采用中介者模式，来解决紧耦合问题。该模式将对象之间的多对多关系变成一对多关系，中介者对象将系统从网状结构变成以调停者为中心的星形结构，达到降低系统的复杂性，提高可扩展的作用。</p>
-<p><img src="http://img.blog.csdn.net/20170207090120031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
-<h1 id="2-中介者模式的优缺点"><a href="#2-中介者模式的优缺点" class="headerlink" title="2.中介者模式的优缺点"></a>2.中介者模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><p>中介者的模式的优点就是减少类间的依赖，把原有的一对多的依赖变成一对一的依赖，同事类只依赖中介者，减少依赖，当然同时也降低了类间的耦合</p>
-<p>##2.2缺点<br>中介者模式的缺点就是中介者会膨胀得很大，而且逻辑复杂，原本N个对象直接的相互依赖关系转换为中介者和同事类的依赖关系，同事类约多，中介者的逻辑就越复杂</p>
-<h1 id="3-注意实现"><a href="#3-注意实现" class="headerlink" title="3.注意实现"></a>3.注意实现</h1><p>中介者模式是一个非常好的封装模式，也是一个很容易被滥用的模式，一个对象依赖几个对象是再正常不过的事情，但是纯理论家就会要求使用中介者模式来封装这种依赖关系，这是非常危险的！使用中介者模式就必然会带来中介者的膨胀问题，这在一个项目中是很不恰当的。可以在如下的情况尝试使用中介者模式：</p>
-<ul>
-<li>N个对象直接产生了相互的依赖关系（N&gt;2）</li>
-<li>对个对象有依赖关系，但是依赖的行为尚不确定或者有发送改变的可能，在这种情况下一般建议采用中介者模式，降低变更引起的风险扩散</li>
-<li>产品开发。一个明显的例子就是MVC框架，把中介者模式应用到产品中，可以提升产品的性能扩展性，但是对于项目开发就未必，因为项目是以交付投产为目标，而产品是以稳定、高效、扩展为宗旨。<h1 id="4-中介者模式的实现方式"><a href="#4-中介者模式的实现方式" class="headerlink" title="4.中介者模式的实现方式"></a>4.中介者模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public abstract class Colleague &#123;  </div><div class="line">    Mediator mediator;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public Colleague(Mediator mediator) &#123;  </div><div class="line">        this.mediator = mediator;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public abstract void action();  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class ConcreteColleagueA extends Colleague &#123;  </div><div class="line">    public ConcreteColleagueA(Mediator mediator) &#123;  </div><div class="line">        super(mediator);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public void action() &#123;  </div><div class="line">        System.out.println(&quot;ColleagueA do action!&quot;);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void doPrivateA() &#123;  </div><div class="line">        System.out.println(&quot;ColleagueA do private!&quot;);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class ConcreteColleagueB extends Colleague &#123;  </div><div class="line">    public ConcreteColleagueB(Mediator mediator) &#123;  </div><div class="line">        super(mediator);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public void action() &#123;  </div><div class="line">        System.out.println(&quot;ColleagueB do action!&quot;);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void doPrivateB() &#123;  </div><div class="line">        System.out.println(&quot;ColleagueB do private!&quot;);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> public abstract class Mediator &#123;  </div><div class="line">    protected ConcreteColleagueA concreteColleagueA;  </div><div class="line">    protected  ConcreteColleagueB concreteColleagueB;  </div><div class="line">    public abstract void method();  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setConcreteColleagueA(ConcreteColleagueA concreteColleagueA) &#123;  </div><div class="line">        this.concreteColleagueA = concreteColleagueA;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setConcreteColleagueB(ConcreteColleagueB concreteColleagueB) &#123;  </div><div class="line">        this.concreteColleagueB = concreteColleagueB;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class ConcreteMediator extends Mediator &#123;  </div><div class="line">    @Override  </div><div class="line">    public void method() &#123;  </div><div class="line">        concreteColleagueA.action();  </div><div class="line">        concreteColleagueB.action();  </div><div class="line">        concreteColleagueA.doPrivateA();  </div><div class="line">        concreteColleagueB.doPrivateB();  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="5-中介者模式在Android中的实际应用"><a href="#5-中介者模式在Android中的实际应用" class="headerlink" title="5.中介者模式在Android中的实际应用"></a>5.中介者模式在Android中的实际应用</h1><p>Android的Activity实际就是一个中介者模式，形形式式的View交互都在Activity中统一执行，View之间彼此不交互。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1800,7 +1805,7 @@
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://avatar.csdn.net/0/6/2/1_junbin1011.jpg"
+               src="https://note.youdao.com/yws/api/personal/file/WEBc90ae3b4054ea1c24355c6f72b3a4ba6?method=download&shareKey=5c0d26947cc7ff6ae5dd2eb1e6065b72"
                alt="黄俊彬" />
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
@@ -1812,7 +1817,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">76</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
