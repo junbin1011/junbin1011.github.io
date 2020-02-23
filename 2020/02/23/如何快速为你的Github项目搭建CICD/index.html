@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="持续集成," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
+本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
+集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何快速为你的Github项目搭建CICD">
+<meta property="og:url" content="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/index.html">
+<meta property="og:site_name" content="JunBin">
+<meta property="og:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
+本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
+集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&shareKey=eda0b79e189d7559fd80c3eec37d21ed">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&shareKey=09bc64e9133e43f61c1651a59c9c92d7">
+<meta property="og:updated_time" content="2020-02-23T03:57:49.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何快速为你的Github项目搭建CICD">
+<meta name="twitter:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
+本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
+集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&shareKey=eda0b79e189d7559fd80c3eec37d21ed">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/"/>
+
+
+
+
+
+  <title> 如何快速为你的Github项目搭建CICD | JunBin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JunBin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一花一世界，一码一浮生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                如何快速为你的Github项目搭建CICD
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-23T11:55:56+08:00">
+                2020-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/23/如何快速为你的Github项目搭建CICD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/23/如何快速为你的Github项目搭建CICD/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。</p>
+<p>本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。</p>
+<h1 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h1><h2 id="账号"><a href="#账号" class="headerlink" title="账号"></a>账号</h2><h3 id="Travis-CI"><a href="#Travis-CI" class="headerlink" title="Travis CI"></a>Travis CI</h3><p><a href="https://travis-ci.org/" target="_blank" rel="external">Travis CI</a> 是目前比较流行的持续集成工具之一，用来构建及测试在 Github 托管的代码，使用它可以极大的简化工作流程。</p>
+<h3 id="蒲公英"><a href="#蒲公英" class="headerlink" title="蒲公英"></a>蒲公英</h3><p><a href="https://www.pgyer.com/" target="_blank" rel="external">蒲公英</a>提供专业的手机应用内测服务，您只需将需要内测的应用上传至蒲公英，生成二维码，内测用户通过在手机上扫描二维码，即可将内测应用安装至手机等设备中进行测试</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ol>
+<li>授权及开启权限</li>
+</ol>
+<p>通过Github账号授权Travis进行登录。在Travis的<a href="https://travis-ci.org/account/repositories" target="_blank" rel="external">Settings</a>中开启repositories的授权开关</p>
+<ol>
+<li>在工程根目录下添加 .travis.yml文件</li>
+</ol>
+<p>Travis-CI 本身提供基本的构建和支持语言，同时开发者可以通过.travis.yml文件设置自己的构建操作，同时需要遵从 Travis-CI 自己规定的构建生命周期。具体可参<a href="https://docs.travis-ci.com/user/customizing-the-build/" target="_blank" rel="external">Travis官网介绍</a>。</p>
+<p>3.获取蒲公英的token用于发布项目</p>
+<p>蒲公英的 API_KEY 可以通过这里查看:<a href="https://www.pgyer.com/account/api" target="_blank" rel="external">https://www.pgyer.com/account/api</a></p>
+<p>4.配置基础的模板<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">language: android        #语言说明</div><div class="line">dist: trusty</div><div class="line">jdk: oraclejdk8          #jdk版本</div><div class="line">sudo: required           #权限要求</div><div class="line">env:                 #环境变量</div><div class="line">global:</div><div class="line">  - ANDROID_BUILD_TOOLS=29.0.1</div><div class="line">  - ADB_INSTALL_TIMEOUT=5 # minutes</div><div class="line">android:             #Android 环境要求</div><div class="line">components:</div><div class="line">  - tools</div><div class="line">  - platform-tools</div><div class="line">  - build-tools-$ANDROID_BUILD_TOOLS</div><div class="line">  - android-29</div><div class="line">  - android-21</div><div class="line">  - extra-google-m2repository</div><div class="line">  - extra-android-m2repository        # 配置design 库</div><div class="line">  - extra-android-support</div><div class="line">  - extra-google-google_play_services</div><div class="line">  - addon-google_apis-google-19       # 配置google play services</div><div class="line">  - sys-img-armeabi-v7a-android-29</div><div class="line">  - sys-img-armeabi-v7a-android-21</div><div class="line">licenses:               #内容许可添加</div><div class="line">  - android-sdk-preview-license-.+</div><div class="line">  - android-sdk-license-.+</div><div class="line">  - google-gdk-license-.+</div></pre></td></tr></table></figure></p>
+<p>5.执行对应的代码检查、单元测试、真机测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">before_script:</div><div class="line">  ##执行代码规范扫描</div><div class="line">  - ./gradlew apm:lint</div><div class="line">    ##执行Demo测试脚本</div><div class="line">  - ./gradlew apm:test</div><div class="line">  #执行测试demo的测试</div><div class="line">  ##执行代码规范扫描</div><div class="line">  - ./gradlew lint</div><div class="line">  ##执行Demo测试脚本</div><div class="line">  - ./gradlew test</div><div class="line">  - ./gradlew connectedAndroidTest</div></pre></td></tr></table></figure></p>
+<p>6.构建发布</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">script:</div><div class="line">  #构建版本</div><div class="line">  - ./gradlew assembleRelease</div><div class="line">after_script:</div><div class="line">  #发布蒲公英</div><div class="line">  - set -e</div><div class="line">  - $TRAVIS_BUILD_DIR/pgyer_upload.sh &quot;$&#123;TRAVIS_BUILD_DIR&#125;/app/build/outputs/apk/release/app-release-unsigned.apk&quot; 1ffafb3680dc6131e41428163082c76a</div></pre></td></tr></table></figure>
+<h2 id="填坑"><a href="#填坑" class="headerlink" title="填坑"></a>填坑</h2><p>1.模拟器启动失败（Error:Target id is not vaild.Use ‘android list targets’ to get the target ids）</p>
+<p>规定的模拟器 android 版本需要在 .travis.yml android 部分声明到相关的版本,并且需要添加对应的配置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">before_install:</div><div class="line">  - yes | sdkmanager &quot;platforms;android-29&quot;</div><div class="line">  - yes | sdkmanager &quot;platforms;android-21&quot;</div><div class="line">  - echo yes | android update sdk --all --filter sys-img-armeabi-v7a-android-21 --no-ui --force &gt; /dev/null</div></pre></td></tr></table></figure></p>
+<p>2.NDK支持</p>
+<p>如果项目中使用cmake，需要添加对应的参数配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">before_install:</div><div class="line">  - echo y | sdkmanager &quot;ndk-bundle&quot;</div><div class="line">  - echo y | sdkmanager &quot;ndk;20.1.5948944&quot;</div><div class="line">  - echo y | sdkmanager &quot;cmake;3.10.2.4988404&quot;</div><div class="line">before_script:</div><div class="line">  - export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle</div><div class="line">  - export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT</div></pre></td></tr></table></figure>
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>1.项目</p>
+<p>项目地址：<a href="https://github.com/junbin1011/SmartAPM" target="_blank" rel="external">https://github.com/junbin1011/SmartAPM</a></p>
+<p>Travis构建：<img src="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&amp;shareKey=eda0b79e189d7559fd80c3eec37d21ed" alt=""></p>
+<p>发布地址：<a href="https://www.pgyer.com/3Dkk" target="_blank" rel="external">https://www.pgyer.com/3Dkk</a></p>
+<p>2.配置文件.travis.yaml</p>
+<p>请参考 <a href="https://github.com/junbin1011/SmartAPM/blob/master/.travis.yml" target="_blank" rel="external">SmartAPM/.travis.yml 
+</a></p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
+<p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&amp;shareKey=09bc64e9133e43f61c1651a59c9c92d7" alt=""></p>
+<ul>
+<li>作者：黄俊彬 </li>
+<li><a href="https://junbin.tech/" target="_blank" rel="external">博客：junbin.tech</a></li>
+<li><a href="https://github.com/junbin1011" target="_blank" rel="external">GitHub: junbin1011 </a></li>
+<li><a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" rel="external">知乎: @JunBin</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/持续集成/" rel="tag"># 持续集成</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/24/如何高效完成项目交付/" rel="next" title="如何高效完成项目交付">
+                <i class="fa fa-chevron-left"></i> 如何高效完成项目交付
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/02/23/如何快速为你的Github项目搭建CICD/"
+           data-title="如何快速为你的Github项目搭建CICD" data-url="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
+               alt="黄俊彬" />
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成"><span class="nav-number">2.</span> <span class="nav-text">集成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#账号"><span class="nav-number">2.1.</span> <span class="nav-text">账号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Travis-CI"><span class="nav-number">2.1.1.</span> <span class="nav-text">Travis CI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蒲公英"><span class="nav-number">2.1.2.</span> <span class="nav-text">蒲公英</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#填坑"><span class="nav-number">2.3.</span> <span class="nav-text">填坑</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例"><span class="nav-number">3.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">3.1.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

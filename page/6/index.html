@@ -270,6 +270,156 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/08/设计模式-命令模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/08/设计模式-命令模式/" itemprop="url">
+                  设计模式-命令模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-08T19:24:00+08:00">
+                2017-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/08/设计模式-命令模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/08/设计模式-命令模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-命令模式的定义及使用场景"><a href="#1-命令模式的定义及使用场景" class="headerlink" title="1.命令模式的定义及使用场景"></a>1.命令模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>命令模式是行为型设计模式之一。将一个请求封装成一个对象，从而让用户使用不同的请求把客户端参数化；对请求排队或者记录请求日志，以支持可撤销的操作</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li><p>需要抽象出待执行的动作，然后以参数的形式提供出来，类似于过程设计中的回调机制，而命令模式正是回调机制的一个面向对象的替代品。<br>在不同的时刻指定、排列和执行请求。一个命令对象可以有与初始请求无关的生存期。</p>
+</li>
+<li><p>需要支持取消操作。</p>
+</li>
+<li>支持修改日志功能，这样当系统奔溃时，这些修改可以被重做一遍。</li>
+<li>需要支持事务操作。</li>
+</ul>
+<p><img src="http://img.blog.csdn.net/20170208192136610?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<h1 id="2-命令模式的优缺点"><a href="#2-命令模式的优缺点" class="headerlink" title="2. 命令模式的优缺点"></a>2. 命令模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
+<li>类间解耦<br>调用者角色与接受者角色之间没有任何依赖关系，调用者实现功能时只需要调用Command抽象类的execute方法就可以，不需要了解到底是那个接受者执行</li>
+<li>可扩展性<br>Command的子类可以非常容易地扩展，而调用者Invoker和高层次的模块Client不产生严重的代码耦合</li>
+<li>命令模式结合其他模式会更优秀<br>命令模式可以结合责任链模式，实现命令族解析任务；结合模板方法模式，则可以减少Command子类的膨胀问题<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>命令模式也是有缺点的，请看Command的子类；如果有N个命令，问题就出来了，Command的子类就可不是几个，而是N个，这个类膨胀得非常大，这个就需要读者在项目中慎重考虑<h1 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h1>对于命令模式，大家可能 心存疑虑，明明是一个很简单的调用逻辑，为什么要做如此的复杂，为什么不直接reciver的excute方法就可以实现功能？<br>调用逻辑复杂，是为了如果后续命令的增加， 能够应对后续需求的变化。简单的只是开发起来方便，但对后续的维护则是困难。<br>除此之外，使用命令模式的另一个好处是可以实现命令记录的功能，可以在调用者里面使用一个数据结构来存储执行过的命令对象，以此可以方便地知道刚刚执行过哪些命令，并可以在需要是恢复。并且可以在调用者中执行日志的记录。<h1 id="4-命令模式的实现方式"><a href="#4-命令模式的实现方式" class="headerlink" title="4. 命令模式的实现方式"></a>4. 命令模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public abstract class Command &#123;  </div><div class="line">    //执行具体操作命令  </div><div class="line">    public  abstract void execute();  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class ConcreteCommand1 extends Command &#123;  </div><div class="line">    private  Receiver receiver;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public ConcreteCommand1() &#123;  </div><div class="line">        this.receiver = new ConcreteReceiver1();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setReceiver(Receiver receiver) &#123;  </div><div class="line">        this.receiver = receiver;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public void execute() &#123;  </div><div class="line">        if(receiver!=null)&#123;  </div><div class="line">            receiver.doSomething();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class ConcreteCommand2 extends Command &#123;  </div><div class="line">    private  Receiver receiver;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public ConcreteCommand2() &#123;  </div><div class="line">        this.receiver = new ConcreteReceiver2();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setReceiver(Receiver receiver) &#123;  </div><div class="line">        this.receiver = receiver;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public void execute() &#123;  </div><div class="line">        if(receiver!=null)&#123;  </div><div class="line">            receiver.doSomething();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract  class Receiver &#123;  </div><div class="line">    public abstract void doSomething();  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public class ConcreteReceiver1 extends Receiver &#123;  </div><div class="line">    @Override  </div><div class="line">    public void doSomething() &#123;  </div><div class="line">        System.out.println(&quot;ConcreteReceiver1 do...&quot;);  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class ConcreteReceiver2 extends Receiver &#123;  </div><div class="line">    @Override  </div><div class="line">    public void doSomething() &#123;  </div><div class="line">        System.out.println(&quot;ConcreteReceiver2 do...&quot;);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class Invoker &#123;  </div><div class="line">    private Command command;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void setCommand(Command command) &#123;  </div><div class="line">        this.command = command;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public void action() &#123;  </div><div class="line">        this.command.execute();  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;  </div><div class="line">  </div><div class="line">  </div><div class="line">    public static void main(String args[]) &#123;  </div><div class="line">        Invoker invoker = new Invoker();  </div><div class="line">        Receiver receiver = new ConcreteReceiver1();  </div><div class="line">        Command command = new ConcreteCommand1();  </div><div class="line">        invoker.setCommand(command);  </div><div class="line">        invoker.action();  </div><div class="line">        Receiver receiver2 = new ConcreteReceiver2();  </div><div class="line">        Command command2 = new ConcreteCommand2();  </div><div class="line">        invoker.setCommand(command2);  </div><div class="line">        invoker.action();  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/07/设计模式-中介者模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1600,172 +1750,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/01/06/设计模式-单例模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JunBin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/06/设计模式-单例模式/" itemprop="url">
-                  设计模式-单例模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-06T09:33:13+08:00">
-                2017-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/06/设计模式-单例模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/06/设计模式-单例模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-单利模式的定义及使用场景"><a href="#1-单利模式的定义及使用场景" class="headerlink" title="1.单利模式的定义及使用场景"></a>1.单利模式的定义及使用场景</h1><p>确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源，或者某种类型的对象应该有且只有一个。例如创建一个对象需要消耗的资源过多，如要访问IO和数据库等资源，这时就要考虑使用单例模式。<br><img src="http://img.blog.csdn.net/20170106093535299?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
-<h1 id="2-单例模式的优缺点"><a href="#2-单例模式的优缺点" class="headerlink" title="2.单例模式的优缺点"></a>2.单例模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ol>
-<li>减少内存，特别是一个对象需要频繁地创建、销毁，而且创建或销毁时性能又无法优化</li>
-<li>单例模式可以避免对资源的多重占用，例如一个写文件动作，由于只有一个实例存在内存中，避免同时对一个资源文件的同时写操作</li>
-<li>单例模式可以在系统设置全局的访问点，优化和共享资源访问<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2></li>
-<li>单例模式一般没有接口，扩展比较困难</li>
-<li>单例模式与单一责任原则有冲突。一个类应该只实现一个逻辑，而不关心它是否是单例的，是不是要单例取决于环境，单例模式把“要单例”和业务逻辑融合在一个类中<h1 id="3-单例模式的实现方式"><a href="#3-单例模式的实现方式" class="headerlink" title="3.单例模式的实现方式"></a>3.单例模式的实现方式</h1><h2 id="3-1懒汉模式"><a href="#3-1懒汉模式" class="headerlink" title="3.1懒汉模式"></a>3.1懒汉模式</h2></li>
-<li><p>最原始的懒汉模式</p>
-<p> 优点：懒加载</p>
-<p> 缺点：未考虑线程安全</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">    private static Singleton instance;  </div><div class="line">    private Singleton ()&#123;&#125;  </div><div class="line">  </div><div class="line">    public static Singleton getInstance() &#123;  </div><div class="line">    if (instance == null) &#123;  </div><div class="line">        instance = new Singleton();  </div><div class="line">    &#125;  </div><div class="line">    return instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ol>
-<li>加锁的懒汉模式</li>
-</ol>
-<p>优点：懒加载 、线程安全</p>
-<p>缺点：效率低</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">    private static Singleton instance;  </div><div class="line">    private Singleton ()&#123;&#125;  </div><div class="line">    public static synchronized Singleton getInstance() &#123;  </div><div class="line">    if (instance == null) &#123;  </div><div class="line">        instance = new Singleton();  </div><div class="line">    &#125;  </div><div class="line">    return instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ol>
-<li>双重锁懒汉模式</li>
-</ol>
-<p>优点：懒加载、线程安全</p>
-<p>缺点：效率高于2）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">     private volatile static Singleton singleton;  </div><div class="line">     private Singleton ()&#123;&#125;  </div><div class="line">     public static Singleton getSingleton() &#123;  </div><div class="line">     if (singleton == null) &#123;  </div><div class="line">         synchronized (Singleton.class) &#123;  </div><div class="line">         if (singleton == null) &#123;  </div><div class="line">             singleton = new Singleton();  </div><div class="line">         &#125;  </div><div class="line">         &#125;  </div><div class="line">     &#125;  </div><div class="line">     return singleton;  </div><div class="line">     &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<ol>
-<li>静态内部类</li>
-</ol>
-<p>优点：懒加载、线程安全</p>
-<p>缺点：实现方式比较复杂</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">     private static class SingletonHolder &#123;  </div><div class="line">     private static final Singleton INSTANCE = new Singleton();  </div><div class="line">     &#125;  </div><div class="line">     private Singleton ()&#123;&#125;  </div><div class="line">     public static final Singleton getInstance() &#123;  </div><div class="line">     return SingletonHolder.INSTANCE;  </div><div class="line">     &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h2 id="3-2饿汉模式"><a href="#3-2饿汉模式" class="headerlink" title="3.2饿汉模式"></a>3.2饿汉模式</h2><p>优点：非懒加载</p>
-<p>缺点：线程安全</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">     private Singleton instance = null;  </div><div class="line">     static &#123;  </div><div class="line">     instance = new Singleton();  </div><div class="line">     &#125;  </div><div class="line">     private Singleton ()&#123;&#125;  </div><div class="line">     public static Singleton getInstance() &#123;  </div><div class="line">     return this.instance;  </div><div class="line">     &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h1 id="4-单例模式在Android中的实际应用"><a href="#4-单例模式在Android中的实际应用" class="headerlink" title="4.单例模式在Android中的实际应用"></a>4.单例模式在Android中的实际应用</h1><p>相信大家对LayoutInflate都不陌生，特别在ListView的Adapter的getView方法中基本都会出现，使用inflate方法去加载一个布局，用于ListView的每个Item的布局。最简单的使用方法是LayoutInflater layoutInflater = LayoutInflater.from(context);  那么Android的源码中是怎么保持LayoutInflater的单例模式呢？分析源码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line"> * Obtains the LayoutInflater from the given context. </div><div class="line"> */  </div><div class="line"> public static LayoutInflater from(Context context) &#123;  </div><div class="line"> LayoutInflater LayoutInflater =  </div><div class="line"> (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);  </div><div class="line"> if (LayoutInflater == null) &#123;  </div><div class="line"> throw new AssertionError(&quot;LayoutInflater not found.&quot;);  </div><div class="line"> &#125;  </div><div class="line"> return LayoutInflater;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p> Context：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@SuppressWarnings(&quot;unchecked&quot;)  </div><div class="line">public final &lt;T&gt; T getSystemService(Class&lt;T&gt; serviceClass) &#123;  </div><div class="line">// Because subclasses may override getSystemService(String) we cannot  </div><div class="line">// perform a lookup by class alone. We must first map the class to its  </div><div class="line">// service name then invoke the stringbased method.  </div><div class="line">String serviceName = getSystemServiceName(serviceClass);  </div><div class="line">return serviceName != null ? (T)getSystemService(serviceName) : null;  </div><div class="line">&#125;  </div><div class="line">public abstract String getSystemServiceName(Class&lt;?&gt; serviceClass);</div></pre></td></tr></table></figure></p>
-<p> ContextImpl：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override  </div><div class="line"> public String getSystemServiceName(Class&lt;?&gt; serviceClass) &#123;  </div><div class="line"> return SystemServiceRegistry.getSystemServiceName(serviceClass);  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p> SystemServiceRegistry :<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"> /** </div><div class="line">  * Gets the name of the systemlevel service that is represented by the specified class. </div><div class="line">  */  </div><div class="line">  public static String getSystemServiceName(Class&lt;?&gt; serviceClass) &#123;  </div><div class="line">  return SYSTEM_SERVICE_NAMES.get(serviceClass);  </div><div class="line">  &#125;  </div><div class="line">registerService(Context.LAYOUT_INFLATER_SERVICE, LayoutInflater.class,  </div><div class="line">  new CachedServiceFetcher&lt;LayoutInflater&gt;() &#123;  </div><div class="line">  @Override  </div><div class="line">  public LayoutInflater createService(ContextImpl ctx) &#123;  </div><div class="line">  return new PhoneLayoutInflater(ctx.getOuterContext());  </div><div class="line">  &#125;&#125;);  </div><div class="line">  </div><div class="line">  /** </div><div class="line">  * Statically registers a system service with the context. </div><div class="line">  * This method must be called during static initialization only. </div><div class="line">  */  </div><div class="line">  private static &lt;T&gt; void registerService(String serviceName, Class&lt;T&gt; serviceClass,  </div><div class="line">  ServiceFetcher&lt;T&gt; serviceFetcher) &#123;  </div><div class="line">  SYSTEM_SERVICE_NAMES.put(serviceClass, serviceName);  </div><div class="line">  SYSTEM_SERVICE_FETCHERS.put(serviceName, serviceFetcher);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  static abstract class CachedServiceFetcher&lt;T&gt; implements ServiceFetcher&lt;T&gt; &#123;  </div><div class="line">  private final int mCacheIndex;  </div><div class="line">  </div><div class="line">  public CachedServiceFetcher() &#123;  </div><div class="line">  mCacheIndex = sServiceCacheSize++;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  @Override  </div><div class="line">  @SuppressWarnings(&quot;unchecked&quot;)  </div><div class="line">  public final T getService(ContextImpl ctx) &#123;  </div><div class="line">  final Object[] cache = ctx.mServiceCache;  </div><div class="line">  synchronized (cache) &#123;  </div><div class="line">  // Fetch or create the service.  </div><div class="line">  Object service = cache[mCacheIndex];  </div><div class="line">  if (service == null) &#123;  </div><div class="line">  service = createService(ctx);  </div><div class="line">  cache[mCacheIndex] = service;  </div><div class="line">  &#125;  </div><div class="line">  return (T)service;  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  public abstract T createService(ContextImpl ctx);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p>通过源码分析可知，LayoutInflater最终是保存在cache的一个Object数组中，以这种方式进行单例的提供。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1815,7 +1799,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">76</span>
+                <span class="site-state-item-count">77</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1828,7 +1812,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

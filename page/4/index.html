@@ -270,6 +270,361 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/04/10/Android之Activity启动流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/10/Android之Activity启动流程/" itemprop="url">
+                  Android之Activity启动流程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-10T18:25:25+08:00">
+                2017-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/10/Android之Activity启动流程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/10/Android之Activity启动流程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="为什么要学习Android的源码"><a href="#为什么要学习Android的源码" class="headerlink" title="为什么要学习Android的源码"></a>为什么要学习Android的源码</h2><ol>
+<li>学习优秀的代码，可能是进步最快的方式之一，特别是看一群优秀的Google开发工程师的代码。</li>
+<li>知己知彼，了解系统的运行原理。在实际的项目开发中，解决一些疑难杂症，对于排障分析有很重要的意义。（开发中最怕就是特殊机型兼容，一些无日志的问题，这个时候只能靠经验来分析，熟悉系统的运行流程就显得很重要）</li>
+<li>不要做一个只会堆砌API的工程师，否则无论3年或者5年，你始终会感觉到瓶颈的到来。其实换个角度学Android，例如源码分析、性能优化。你可能可以看到不一样的世界。</li>
+</ol>
+<h2 id="什么是Activity的启动流程"><a href="#什么是Activity的启动流程" class="headerlink" title="什么是Activity的启动流程"></a>什么是Activity的启动流程</h2><p>很多童鞋可能想，这还不简单，项目中用了千千万万遍了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startActivity(new Intent(this, Activity.class));</div></pre></td></tr></table></figure></p>
+<p>只能说Too young,Too simple。</p>
+<p>我一开始也以为只是简单调用个startActivity，然后屏幕就跳转到指定的Activity，这就是Activity的启动流程。</p>
+<p>我们都知道Activity有一个栈，当我们按了back键的时候，就会回到上一个Activity。那么系统是如何来管理这个栈的呢？</p>
+<p>我们从launcher点击一个应用图标，那么会启动一个新的进程，系统如何控制多进程之间的Activity切换呢？</p>
+<p>我们都知道Activity有它自己的生命周期，那么这个生命周期在运行的过程中，系统是怎么去做控制的呢？</p>
+<p>实际上问题远远不止这些，可见Activity的启动流程不是想象中的那么简单，所以为了找寻真相，我们需要从Android的源码来分析Activity的启动流程。</p>
+<h1 id="Activity基础"><a href="#Activity基础" class="headerlink" title="Activity基础"></a>Activity基础</h1><p>这里我们先简单来了解一些我们开发项目过程中，常用的一些Activity的基础知识，然后后续才来进行源码的分析。在源码的分析中，我们也可以结合日常的使用来结合分析。</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>这里使用Google官方的示例图来说明</p>
+<p><img src="https://developer.android.google.cn/images/activity_lifecycle.png" alt="Google官方示例图"></p>
+<ul>
+<li><p>Activity 的整个生命周期发生在 onCreate() 调用与 onDestroy() 调用之间。您的 Activity 应在 onCreate() 中执行“全局”状态设置（例如定义布局），并释放 onDestroy() 中的所有其余资源。例如，如果您的 Activity 有一个在后台运行的线程，用于从网络上下载数据，它可能会在 onCreate() 中创建该线程，然后在 onDestroy() 中停止该线程。</p>
+</li>
+<li><p>Activity 的可见生命周期发生在 onStart() 调用与 onStop() 调用之间。在这段时间，用户可以在屏幕上看到 Activity 并与其交互。 例如，当一个新 Activity 启动，并且此 Activity 不再可见时，系统会调用 onStop()。您可以在调用这两个方法之间保留向用户显示 Activity 所需的资源。 例如，您可以在 onStart() 中注册一个 BroadcastReceiver 以监控影响 UI 的变化，并在用户无法再看到您显示的内容时在 onStop() 中将其取消注册。在 Activity 的整个生命周期，当 Activity 在对用户可见和隐藏两种状态中交替变化时，系统可能会多次调用 onStart() 和 onStop()。</p>
+</li>
+<li><p>Activity 的前台生命周期发生在 onResume() 调用与 onPause() 调用之间。在这段时间，Activity 位于屏幕上的所有其他 Activity 之前，并具有用户输入焦点。 Activity 可频繁转入和转出前台 — 例如，当设备转入休眠状态或出现对话框时，系统会调用 onPause()。 由于此状态可能经常发生转变，因此这两个方法中应采用适度轻量级的代码，以避免因转变速度慢而让用户等待。</p>
+</li>
+</ul>
+<h2 id="启动模式"><a href="#启动模式" class="headerlink" title="启动模式"></a>启动模式</h2><ul>
+<li>standard（默认模式）</li>
+</ul>
+<p>默认。系统在启动 Activity 的任务中创建 Activity 的新实例并向其传送 Intent。Activity 可以多次实例化，而每个实例均可属于不同的任务，并且一个任务可以拥有多个实例。</p>
+<ul>
+<li>singleTop</li>
+</ul>
+<p>如果当前任务的顶部已存在 Activity 的一个实例，则系统会通过调用该实例的 onNewIntent() 方法向其传送 Intent，而不是创建 Activity 的新实例。 </p>
+<ul>
+<li>singleTask</li>
+</ul>
+<p>系统创建新任务并实例化位于新任务底部的 Activity。但是，如果该 Activity 的一个实例已存在于一个单独的任务中，则系统会通过调用现有实例的 onNewIntent() 方法向其传送 Intent，而不是创建新实例。 </p>
+<ul>
+<li>singleInstance</li>
+</ul>
+<p>与 “singleTask” 相同，只是系统不会将任何其他 Activity 启动到包含实例的任务中。该 Activity 始终是其任务唯一仅有的成员；由此 Activity 启动的任何 Activity 均在单独的任务中打开。</p>
+<h2 id="运行状态保存"><a href="#运行状态保存" class="headerlink" title="运行状态保存"></a>运行状态保存</h2><p>这里同样借助Google官方的示例图来说明<br><img src="https://developer.android.google.cn/images/fundamentals/restore_instance.png" alt="Google官方示例图"></p>
+<p>这个运行状态的保存，往往很容易在开发中被遗忘。如果不注意，却很容易引起一些程序的异常。首先，系统的运行的中，如果内存不足，会回收一些资源。再者，一些ROM会开启例如开发中选项中的不保留活动，当应用到后台时，则会被回收，或者屏幕旋转等一些配置变更。这些情况都需要我们处理好运行状态的保存。例如Viewpager保存好当前的tab位置，一些数据的保存和恢复，避免空指针等。</p>
+<p>在界面被回收时，系统会先调用 onSaveInstanceState()，然后再使 Activity 变得易于销毁。系统会向该方法传递一个 Bundle，您可以在其中使用 putString() 和 putInt() 等方法以名称-值对形式保存有关 Activity 状态的信息。然后，如果系统终止您的应用进程，并且用户返回您的 Activity，则系统会重建该 Activity，并将 Bundle 同时传递给 onCreate() 和 onRestoreInstanceState()。您可以使用上述任一方法从 Bundle 提取您保存的状态并恢复该 Activity 状态。如果没有状态信息需要恢复，则传递给您的 Bundle 是空值</p>
+<h1 id="源码相关类介绍"><a href="#源码相关类介绍" class="headerlink" title="源码相关类介绍"></a>源码相关类介绍</h1><p>过完了Activity的基础知识后，我们通过一个表格来分析一下Activity启动流程中核心的一些类的设计及作用，这样可以让我们更好的来了解启动的流程。</p>
+<table>
+<thead>
+<tr>
+<th>类名</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activity</td>
+<td>Activity 是一个应用组件，用户可与其提供的屏幕进行交互。</td>
+</tr>
+<tr>
+<td>Instrumentation</td>
+<td>每一个应用程序只有一个Instrumentation对象，每个Activity内都有一个对该对象的引用。当ActivityThread需要操作Activity的生命周期，都是通过Instrumentation来完成，实际Activity的实例化，也是在里面的newActivity完成。</td>
+</tr>
+<tr>
+<td>ActivityManagerService</td>
+<td>AMS(ActivityManagerService)是贯穿Android系统组件的核心服务，负责了系统中四大组件的启动、切换、调度以及应用进程管理和调度工作</td>
+</tr>
+<tr>
+<td>PackageManagerService</td>
+<td>Android系统下的apk程序都是通过名为PackageManagerService的包管理服务来管理的。PacketManagerService是安卓系统的一个重要服务，由SystemServer启动，主要实现apk程序包的解析，安装，更新，移动，卸载等服务。不管是系统apk(/system/app)，还是我们手工安装上去的，系统所有的apk都是由其管理</td>
+</tr>
+<tr>
+<td>ActivityStackSupervisor</td>
+<td>主要是对整个APP的Task进行管理，通常一个进程拥有一个或多个Task</td>
+</tr>
+<tr>
+<td>ActivityStack</td>
+<td>传说中的Activity栈，我们都知道Activity的管理就是通过栈管理，默认显示栈顶，当按back键后，就将栈顶的Activity移除，遵循后进先去原则</td>
+</tr>
+<tr>
+<td>ActivityRecord</td>
+<td>ActivityRecord 是Activity的标识，与每个Activity是一一对应的，存储这Activity的一些信息，便于后续操作Activity </td>
+</tr>
+<tr>
+<td>ActivityThread</td>
+<td>传说中的UI线程， 它管理应用进程的主线程的执行(相当于普通Java程序的main入口函数)，并根据AMS的要求（通过IApplicationThread接口）负责调度和执行activities、broadcasts和其它操作</td>
+</tr>
+</tbody>
+</table>
+<h1 id="源码启动流程分析"><a href="#源码启动流程分析" class="headerlink" title="源码启动流程分析"></a>源码启动流程分析</h1><p>Activity的源码启动流程，其实一开始想试试用流程图来说明，但最后发现实在太长，欲生欲死。下面我们同样通过表格，以序号的方式来一步步显示Activity启动流程。这个可以更清晰便捷的来理解。具体的关键实现源码会在说明中分析，可以自己在结合源码进行分析。</p>
+<table>
+<thead>
+<tr>
+<th>索引</th>
+<th>调用的类间关系</th>
+<th>说明 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Activity：startActivity-&gt;startActivityForResult</td>
+<td>startActivity其实最终也是调用了startActivityForResult</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Intrumentation：execStartActivity</td>
+<td>mInstrumentation类似与管家婆，ActivityThread与AMS交互后，最后都是交由Intrumentation来处理</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ActivityManagerNative.getDefault().startActivity(AIDL)-&gt;最后执行到AMS的startActivity</td>
+<td>这是一个IPC的过程</td>
+</tr>
+<tr>
+<td>4</td>
+<td>AMS：startActivityAsUser</td>
+<td>生成了userId</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ActivityStackSupervisor：startActivityMyWait()</td>
+<td>校验Intent的一些合法性,其中调用了PackageManagerService的resolveIntent</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ActivityStackSupervisor：startActivityLocked()</td>
+<td>验证intent、Class、Permission等保存将要启动的Activity的Record</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ActivityStackSupervisor：startActivityUncheckedLocked()</td>
+<td>检查将要启动的Activity的launchMode和启动Flag根据launcheMode和Flag配置task</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ActvityStack：startActivityLocked</td>
+<td>对栈进行初始化配置</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ActivityStack： resumeTopActivityInnerLocked()</td>
+<td>查找需要进入onPause的Activity</td>
+</tr>
+<tr>
+<td>10</td>
+<td>ActivityStack：startPausingLocked()</td>
+<td>IPC，控制将需要OnPause的Activity进行暂停</td>
+</tr>
+<tr>
+<td>11</td>
+<td>ActivityThread： handlePauseActivity()</td>
+<td>回调Activity的onPause，并通知AMS</td>
+</tr>
+<tr>
+<td>12</td>
+<td>ActivityManagerService:activityPaused()</td>
+<td>获取对应的栈，执行activityPausedLocked</td>
+</tr>
+<tr>
+<td>13</td>
+<td>ActivityStack：activityPausedLocked</td>
+<td>获取ActivityRecord，调用completePauseLocked</td>
+</tr>
+<tr>
+<td>14</td>
+<td>ActivityStackSuperVisor： resumeTopActivitiesLocked()</td>
+<td>找出当前自己管理的task的栈，执行resumeTopActivityLocked</td>
+</tr>
+<tr>
+<td>15</td>
+<td>ActivityStack：resumeTopActivityLocked()</td>
+<td>调用ActivityStackSuperVisor：resumeTopActivityInnerLocked验证是否该启动的Activity所在进程和app是否存在，若存在，直接启动。否则，准备创建该进程</td>
+</tr>
+<tr>
+<td>16</td>
+<td>ActivityStackSuperVisor：startSpecificActivityLocked()</td>
+<td>该进程不存在，创建进程</td>
+</tr>
+<tr>
+<td>17</td>
+<td>ActivityManagerService：startProcessLocked()</td>
+<td>通过Process.start()启动进程 entryPoint = “android.app.ActivityThread”</td>
+</tr>
+<tr>
+<td>18</td>
+<td>ActivityThread：main()</td>
+<td>主线程的Looper也在这里初始化，这里是我们应用层的主入口。</td>
+</tr>
+<tr>
+<td>19</td>
+<td>ActivityThread：attach</td>
+<td>调用attachApplication()</td>
+</tr>
+<tr>
+<td>20</td>
+<td>IActivityManager：attachApplication()</td>
+<td>调用attachApplicationLocked，我们的Application也会在这个地方来创建</td>
+</tr>
+<tr>
+<td>21</td>
+<td>ActivityStackSuperVisor：attachApplicationLocked()</td>
+<td>通过ActivityRecord找出具体的栈</td>
+</tr>
+<tr>
+<td>22</td>
+<td>ActivityStackSuperVisor：realStartActivityLocked()</td>
+<td>IPC通知ActivityThread </td>
+</tr>
+<tr>
+<td>23</td>
+<td>ActivityThread：scheduleLaunchActivity()</td>
+<td>通过handler调用handleLaunchActivity,接着performLaunchActivity</td>
+</tr>
+<tr>
+<td>24</td>
+<td>ActivityThread：接着performLaunchActivity</td>
+<td>进行了一些Avcitity的状态判断，执行了mInstrumentation.newActivity。Activity对象真正通过反射实例化出来</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Intrumentation：callActivityOnCreate</td>
+<td>调用了Activity的onCreate</td>
+</tr>
+</tbody>
+</table>
+<p>过完一遍，反正欲生欲死了。觉得不是当初想象的那么简单。过源码，我们尽量保持流程性上的理解吧，如果纠结于实现的细节，反倒会适得其反，不可自拔。通过流程上的梳理，来理解设计的精髓。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>Android源码中大量使用了Service的思想。提供统一的服务，这样使得系统可以统一来调用一些任务。为什么这里的Activity启动要设计得如此的复杂？因为系统需要统一管理窗口的显示，这里涉及多进程、多窗口的管理控制。</li>
+<li>单一责任原则。这个是设计模式里面的东西。不同的功能让不同的类来实现，减低耦合性。例如这里的ActivityStackSupervisor用来管理Task,ActivityStack用来管理栈。而不会将所有的东西都塞在Activity中</li>
+<li>模块化思想。系统的各种Service其实很好的体现了这一点。AMS管理Activity，WMS管理窗口，PMS管理安装包，还有例如网络、电量等的管理都一致。这样使得系统逻辑更加清晰，便于维护管理及使用</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/04/01/“Android性能优化-渲染优化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1892,162 +2247,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/03/01/设计模式-备忘录模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JunBin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/01/设计模式-备忘录模式/" itemprop="url">
-                  设计模式-备忘录模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-01T10:02:18+08:00">
-                2017-03-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/01/设计模式-备忘录模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/01/设计模式-备忘录模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-备忘录模式的定义及使用场景"><a href="#1-备忘录模式的定义及使用场景" class="headerlink" title="1.备忘录模式的定义及使用场景"></a>1.备忘录模式的定义及使用场景</h1><p>备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露。</p>
-<h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>在不破坏封闭的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样，以后就可将该对象回复到原先保存的状态</p>
-<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
-<li>需要保存一个对象在某一个时刻的状态或部分状态</li>
-<li>需要用一个接口来让其他对象得到这些状态，将会暴露对象的实现细节并破坏对象的封装性，一个对象不希望外界直接访问其内部状态，通过中间对象可以间接访问其内部状态</li>
-</ul>
-<p><img src="http://img.blog.csdn.net/20170301095411447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h1 id="2-备忘录模式的优缺点"><a href="#2-备忘录模式的优缺点" class="headerlink" title="2. 备忘录模式的优缺点"></a>2. 备忘录模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
-<li>给用户提供了一种可以恢复状态的机制，可以使用户能够比较方便地回到某个历史的状态</li>
-<li>实现了信息的封装，使得用户不需要关心状态的保持细节<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>消耗资源，如果类的成员变量过多，势必会占用比较大的资源，而且每一次保存都会消耗一定的内存<h1 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h1></li>
-<li>备忘录的生命期<br>备忘录创建出来就要在“最近”的代码中使用，要主动管理它的生命周期，建立就要使用，不使用就要立刻删除其引用，等待垃圾回收器对它的回收处理</li>
-<li>备忘录的性能<br>不要在频繁建立备份的场景中使用备忘录模式（比如一个for循环中），主要原因是一是控制不了备忘录建立的对象数量；而是大对象的建立是要消耗资源的，系统的性能需要考虑。<h1 id="4-备忘录模式的实现方式"><a href="#4-备忘录模式的实现方式" class="headerlink" title="4. 备忘录模式的实现方式"></a>4. 备忘录模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class Memento &#123;</div><div class="line">    //发起人的内部状态</div><div class="line">    private String state=&quot;&quot;;</div><div class="line"></div><div class="line">    public Memento(String state) &#123;</div><div class="line">        this.state = state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getState() &#123;</div><div class="line">        return state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setState(String state) &#123;</div><div class="line">        this.state = state;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class Caretaker &#123;</div><div class="line">    //备忘录对象</div><div class="line">    private  Memento memento;</div><div class="line"></div><div class="line">    public Memento getMemento() &#123;</div><div class="line">        return memento;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setMemento(Memento memento) &#123;</div><div class="line">        this.memento = memento;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class Originator &#123;</div><div class="line">    //内部状态</div><div class="line">    private String state = &quot;&quot;;</div><div class="line"></div><div class="line">    public String getState() &#123;</div><div class="line">        return state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setState(String state) &#123;</div><div class="line">        this.state = state;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //创建一个备忘录</div><div class="line">    public Memento createMemento() &#123;</div><div class="line">        return new Memento(state);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //恢复一个备忘录</div><div class="line">    public void restoreMemento(Memento memento) &#123;</div><div class="line">        this.setState(memento.getState());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"></div><div class="line">    public static void main(String args[]) &#123;</div><div class="line">        //定义出发起人</div><div class="line">        Originator originator = new Originator();</div><div class="line">        originator.setState(&quot;初始：1111111111111&quot;);</div><div class="line">        //定义出备忘录管理员</div><div class="line">        Caretaker caretaker = new Caretaker();</div><div class="line">        System.out.println(originator.getState());</div><div class="line">        //创建一个备忘录</div><div class="line">        caretaker.setMemento(originator.createMemento());</div><div class="line">        originator.setState(&quot;改变：22222222222222&quot;);</div><div class="line">        System.out.println(originator.getState());</div><div class="line">        originator.setState(&quot;恢复：restoreMemento&quot;);</div><div class="line">        originator.restoreMemento(caretaker.getMemento());</div><div class="line">        System.out.println(originator.getState());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="5-备忘录模式在Android中的实际应用"><a href="#5-备忘录模式在Android中的实际应用" class="headerlink" title="5. 备忘录模式在Android中的实际应用"></a>5. 备忘录模式在Android中的实际应用</h1><p>在Android开发中，状态模式应用是Android中的状态保持，也就是里面的onSaveInstanceState和onRestoreInstanceState。当Activity不是正常方式退出，且Activity在随后的时间内被系统杀死之前会调用这两个方法让开发人员可以有机会存储Activity的相关信息，并且在下次放好Activity的时候恢复这些数据。<br>Activity：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">protected void onSaveInstanceState(Bundle outState) &#123;</div><div class="line"> outState.putBundle(WINDOW_HIERARCHY_TAG, mWindow.saveHierarchyState()); //保存当前窗口的视图树的状态</div><div class="line"> Parcelable p = mFragments.saveAllState(); //存储Fragment的状态</div><div class="line"> if (p != null) &#123;</div><div class="line"> outState.putParcelable(FRAGMENTS_TAG, p);</div><div class="line"> &#125;</div><div class="line"> getApplication().dispatchActivitySaveInstanceState(this, outState);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p>Window的实现为PhoneWindow：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"> /** &#123;@inheritDoc&#125; */</div><div class="line">  @Override</div><div class="line">  public Bundle saveHierarchyState() &#123;</div><div class="line">  Bundle outState = new Bundle();</div><div class="line">  if (mContentParent == null) &#123;</div><div class="line">  return outState;</div><div class="line">  &#125;</div><div class="line">//通过SparseArray类来存储，这相当于一个key为整型的map</div><div class="line">  SparseArray&lt;Parcelable&gt; states = new SparseArray&lt;Parcelable&gt;();</div><div class="line">//mContentParent就是调用Activity的setContentView函数设置的内容视图，它是内容视图的根节点，在这里存储整棵树的结构</div><div class="line">  mContentParent.saveHierarchyState(states);</div><div class="line">//将视图树结构放到outState中</div><div class="line">  outState.putSparseParcelableArray(VIEWS_TAG, states);</div><div class="line"></div><div class="line">  // 保存当前界面中获取了焦点的View</div><div class="line">  View focusedView = mContentParent.findFocus();</div><div class="line">  if (focusedView != null) &#123;</div><div class="line">  if (focusedView.getId() != View.NO_ID) &#123;</div><div class="line">  outState.putInt(FOCUSED_ID_TAG, focusedView.getId());</div><div class="line">  &#125; else &#123;</div><div class="line">  if (false) &#123;</div><div class="line">  Log.d(TAG, &quot;couldn&apos;t save which view has focus because the focused view &quot;</div><div class="line">  + focusedView + &quot; has no id.&quot;);</div><div class="line">  &#125;</div><div class="line">  &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 存储整个面板的状态</div><div class="line">  SparseArray&lt;Parcelable&gt; panelStates = new SparseArray&lt;Parcelable&gt;();</div><div class="line">  savePanelState(panelStates);</div><div class="line">  if (panelStates.size() &gt; 0) &#123;</div><div class="line">  outState.putSparseParcelableArray(PANELS_TAG, panelStates);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">//存储actionBar的状态</div><div class="line">  if (mDecorContentParent != null) &#123;</div><div class="line">  SparseArray&lt;Parcelable&gt; actionBarStates = new SparseArray&lt;Parcelable&gt;();</div><div class="line">  mDecorContentParent.saveToolbarHierarchyState(actionBarStates);</div><div class="line">  outState.putSparseParcelableArray(ACTION_BAR_TAG, actionBarStates);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return outState;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p>在saveHierarchyState函数中，主要是存储了与当前UI、ActionBar相关的View状态。mContentParent就是我们通过Activity的setContentView函数设置的内容视图，他是这个内容视图的根节点。mContentParent是一个ViewGroup对象，但是saveHierachyState是在父类View中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void saveHierarchyState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line"> dispatchSaveInstanceState(container);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">protected void dispatchSaveInstanceState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line">if (mID != NO_ID &amp;&amp; (mViewFlags &amp; SAVE_DISABLED_MASK) == 0) &#123;</div><div class="line">mPrivateFlags &amp;= ~PFLAG_SAVE_STATE_CALLED;</div><div class="line">Parcelable state = onSaveInstanceState();</div><div class="line">if ((mPrivateFlags &amp; PFLAG_SAVE_STATE_CALLED) == 0) &#123;</div><div class="line">throw new IllegalStateException(</div><div class="line">&quot;Derived class did not call super.onSaveInstanceState()&quot;);</div><div class="line">&#125;</div><div class="line">if (state != null) &#123;</div><div class="line">// Log.i(&quot;View&quot;, &quot;Freezing #&quot; + Integer.toHexString(mID)</div><div class="line">// + &quot;: &quot; + state);</div><div class="line">container.put(mID, state); //将自身状态放到container中 key 为id value为自身状态</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//View类默认的存储的状态为空</div><div class="line"> protected Parcelable onSaveInstanceState() &#123;</div><div class="line">  mPrivateFlags |= PFLAG_SAVE_STATE_CALLED;</div><div class="line">  if (mStartActivityRequestWho != null) &#123;</div><div class="line">  BaseSavedState state = new BaseSavedState(AbsSavedState.EMPTY_STATE);</div><div class="line">  state.mStartActivityRequestWhoSaved = mStartActivityRequestWho;</div><div class="line">  return state;</div><div class="line">  &#125;</div><div class="line">  return BaseSavedState.EMPTY_STATE;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>恢复数据的调用过程如下，基本流程与保存类似<br>Activity:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">protected void onRestoreInstanceState(Bundle savedInstanceState) &#123;</div><div class="line">if (mWindow != null) &#123;</div><div class="line">Bundle windowState = savedInstanceState.getBundle(WINDOW_HIERARCHY_TAG);</div><div class="line">if (windowState != null) &#123;</div><div class="line">mWindow.restoreHierarchyState(windowState);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>PhoneWindow:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">/** &#123;@inheritDoc&#125; */</div><div class="line"> @Override</div><div class="line"> public void restoreHierarchyState(Bundle savedInstanceState) &#123;</div><div class="line"> if (mContentParent == null) &#123;</div><div class="line"> return;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> SparseArray&lt;Parcelable&gt; savedStates</div><div class="line"> = savedInstanceState.getSparseParcelableArray(VIEWS_TAG);</div><div class="line"> if (savedStates != null) &#123;</div><div class="line"> mContentParent.restoreHierarchyState(savedStates);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> // restore the focused view</div><div class="line"> int focusedViewId = savedInstanceState.getInt(FOCUSED_ID_TAG, View.NO_ID);</div><div class="line"> if (focusedViewId != View.NO_ID) &#123;</div><div class="line"> View needsFocus = mContentParent.findViewById(focusedViewId);</div><div class="line"> if (needsFocus != null) &#123;</div><div class="line"> needsFocus.requestFocus();</div><div class="line"> &#125; else &#123;</div><div class="line"> Log.w(TAG,</div><div class="line"> &quot;Previously focused view reported id &quot; + focusedViewId</div><div class="line"> + &quot; during save, but can&apos;t be found during restore.&quot;);</div><div class="line"> &#125;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> // restore the panels</div><div class="line"> SparseArray&lt;Parcelable&gt; panelStates = savedInstanceState.getSparseParcelableArray(PANELS_TAG);</div><div class="line"> if (panelStates != null) &#123;</div><div class="line"> restorePanelState(panelStates);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> if (mDecorContentParent != null) &#123;</div><div class="line"> SparseArray&lt;Parcelable&gt; actionBarStates =</div><div class="line"> savedInstanceState.getSparseParcelableArray(ACTION_BAR_TAG);</div><div class="line"> if (actionBarStates != null) &#123;</div><div class="line"> doPendingInvalidatePanelMenu();</div><div class="line"> mDecorContentParent.restoreToolbarHierarchyState(actionBarStates);</div><div class="line"> &#125; else &#123;</div><div class="line"> Log.w(TAG, &quot;Missing saved instance states for action bar views! &quot; +</div><div class="line"> &quot;State will not be restored.&quot;);</div><div class="line"> &#125;</div><div class="line"> &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p>View:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void restoreHierarchyState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line">  dispatchRestoreInstanceState(container);</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* Called by &#123;@link #restoreHierarchyState(android.util.SparseArray)&#125; to retrieve the</div><div class="line">* state for this view and its children. May be overridden to modify how restoring</div><div class="line">* happens to a view&apos;s children; for example, some views may want to not store state</div><div class="line">* for their children.</div><div class="line">*</div><div class="line">* @param container The SparseArray which holds previously saved state.</div><div class="line">*</div><div class="line">* @see #dispatchSaveInstanceState(android.util.SparseArray)</div><div class="line">* @see #restoreHierarchyState(android.util.SparseArray)</div><div class="line">* @see #onRestoreInstanceState(android.os.Parcelable)</div><div class="line">*/</div><div class="line">protected void dispatchRestoreInstanceState(SparseArray&lt;Parcelable&gt; container) &#123;</div><div class="line">if (mID != NO_ID) &#123;</div><div class="line">Parcelable state = container.get(mID);</div><div class="line">if (state != null) &#123;</div><div class="line">// Log.i(&quot;View&quot;, &quot;Restoreing #&quot; + Integer.toHexString(mID)</div><div class="line">// + &quot;: &quot; + state);</div><div class="line">mPrivateFlags &amp;= ~PFLAG_SAVE_STATE_CALLED;</div><div class="line">onRestoreInstanceState(state);</div><div class="line">if ((mPrivateFlags &amp; PFLAG_SAVE_STATE_CALLED) == 0) &#123;</div><div class="line">throw new IllegalStateException(</div><div class="line">&quot;Derived class did not call super.onRestoreInstanceState()&quot;);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">protected void onRestoreInstanceState(Parcelable state) &#123;</div><div class="line">mPrivateFlags |= PFLAG_SAVE_STATE_CALLED;</div><div class="line">if (state != null &amp;&amp; !(state instanceof AbsSavedState)) &#123;</div><div class="line">throw new IllegalArgumentException(&quot;Wrong state class, expecting View State but &quot;</div><div class="line">+ &quot;received &quot; + state.getClass().toString() + &quot; instead. This usually happens &quot;</div><div class="line">+ &quot;when two views of different type have the same id in the same hierarchy. &quot;</div><div class="line">+ &quot;This view&apos;s id is &quot; + ViewDebug.resolveId(mContext, getId()) + &quot;. Make sure &quot;</div><div class="line">+ &quot;other views do not use the same id.&quot;);</div><div class="line">&#125;</div><div class="line">if (state != null &amp;&amp; state instanceof BaseSavedState) &#123;</div><div class="line">mStartActivityRequestWho = ((BaseSavedState) state).mStartActivityRequestWhoSaved;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在这个过程中，Activity扮演了Caretaker角色，负责存储、恢复UI的状态信息；Activity、Fragement、View、ViewGroup等对象为Originator角色，也就是需要存储状态的对象；Memento则是由Bundle类扮演。</p>
-<p>Activity在停止之前会根据Activity的退出情景来选择是否需要存储状态，在重新启动该Activity时会判断ActivityClientRecord对象中是否存储了Activity的状态，如果含有状态则调用Activity的onRestoreInstanceState函数，从而使得Activity的UI效果与上次保持一致，这样一来，就保证了在非正常退出Activity时不会丢失数据的情况，很好地提升了用户体验。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2097,7 +2296,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">76</span>
+                <span class="site-state-item-count">77</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2110,7 +2309,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

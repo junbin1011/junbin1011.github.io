@@ -270,6 +270,148 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2016/12/10/查找算法-稠密索引、分块索引、倒排索引/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/12/10/查找算法-稠密索引、分块索引、倒排索引/" itemprop="url">
+                  查找算法-稠密索引、分块索引、倒排索引
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-10T10:28:16+08:00">
+                2016-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/10/查找算法-稠密索引、分块索引、倒排索引/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/10/查找算法-稠密索引、分块索引、倒排索引/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-稠密索引"><a href="#1-稠密索引" class="headerlink" title="1.稠密索引"></a>1.稠密索引</h1><p>稠密索引时指在线性索引中，将数据集中的每个记录都对应一个索引项 。对于索引项一定是按照关键码有序的排列 索引项有序意味着可以使用顺序查找算法，这是稠密索引的有点， 但是如果数据集非常大，意味着索引也得有同样的数据集长度规模。</p>
+<p><img src="http://img.blog.csdn.net/20161210103900031?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<figure class="highlight plain"><figcaption><span>&#123;  </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    public int key;  </div><div class="line">    public Object value;  </div><div class="line">    public int size;//分块存储数量  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public String toString() &#123;  </div><div class="line">        return &quot;Index&#123;&quot; +  </div><div class="line">                &quot;key=&quot; + key +  </div><div class="line">                &quot;, value=&quot; + value +  </div><div class="line">                &quot;, size=&quot; + size +  </div><div class="line">                &apos;&#125;&apos;;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class Student implements Comparable &#123;  </div><div class="line">  </div><div class="line">    public Student(int no, String name) &#123;  </div><div class="line">        this.no = no;  </div><div class="line">        this.name = name;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    public int no;  </div><div class="line">    public String name;  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public String toString() &#123;  </div><div class="line">        return &quot;Student&#123;&quot; +  </div><div class="line">                &quot;no=&quot; + no +  </div><div class="line">                &quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +  </div><div class="line">                &apos;&#125;&apos;;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    @Override  </div><div class="line">    public int compareTo(Object o) &#123;  </div><div class="line">        Student other = (Student) o;  </div><div class="line">        if (no &lt; other.no) //这里比较的是什么 sort方法实现的就是按照此比较的东西从小到大排列  </div><div class="line">            return -1;  </div><div class="line">        if (no &gt; other.no)  </div><div class="line">            return 1;  </div><div class="line">        return 0;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public static int binarySearch(Index[] array, int key) &#123;  </div><div class="line">        if (array.length &gt; 0) &#123;  </div><div class="line">            int low, high, mid;  </div><div class="line">            low = 0;  </div><div class="line">            high = array.length - 1;  </div><div class="line">            while (low &lt;= high) &#123;  </div><div class="line">                mid = (low + high) / 2;//折半  </div><div class="line">                if (key &lt; array[mid].key)  </div><div class="line">                    high = mid - 1;  </div><div class="line">                else if (key &gt; array[mid].key)  </div><div class="line">                    low = mid + 1;  </div><div class="line">                else  </div><div class="line">                    return mid;  </div><div class="line">  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">  </div><div class="line">        return -1;  </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public static Student denseIndex(Student[] array, int key) &#123;  </div><div class="line">  </div><div class="line">    if (array != null &amp;&amp; array.length &gt; 0) &#123;  </div><div class="line">        Arrays.sort(array);  </div><div class="line">  </div><div class="line">        Index[] list = new Index[array.length];  </div><div class="line">        //建立索引  </div><div class="line">        for (int i = 0; i &lt; array.length; i++) &#123;  </div><div class="line">            Index index = new Index();  </div><div class="line">            index.key = array[i].no;  </div><div class="line">            index.value = array[i];  </div><div class="line">            list[i] = index;  </div><div class="line">        &#125;  </div><div class="line">  </div><div class="line">        //根据索引关键码搜索  </div><div class="line">        int code = binarySearch(list, key);  </div><div class="line">        if (code != -1) &#123;  </div><div class="line">            return (Student) list[code].value;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">    return null;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="2-分块索引"><a href="#2-分块索引" class="headerlink" title="2.分块索引"></a>2.分块索引</h1><p>分块有序-是吧数据集合的记录分成了若干份，并且这些块需要满足2个条件</p>
+<p> 1）块内无序，即每一块内的记录不要求有序。（有序更好，但需要付出大量时间和空间代价）</p>
+<p>2）块间有序-例如要求第二块所有记录的关键字均要大于第一块所有记录的关键字，第三块的所有记录要大于第二块的所有记录关键字，因为只有块间有序，才能提高查找效率<br> 分块索引的平均查找长度ASL=根号n+1  高于o(n)小于折半查找o(logn)</p>
+<p><img src="http://img.blog.csdn.net/20161210103917531?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public static int blockSearch(Index[] array, int key) &#123;  </div><div class="line">       if (array.length &gt; 0) &#123;  </div><div class="line">           int result, low, high, mid;  </div><div class="line">           result = 0;  </div><div class="line">           low = 0;  </div><div class="line">           high = array.length - 1;  </div><div class="line">           while (low &lt;= high) &#123;  </div><div class="line">               mid = (low + high) / 2;//折半  </div><div class="line">               if (key &lt; array[mid].key) &#123;  </div><div class="line">                   high = mid - 1;  </div><div class="line">                   result = high;  </div><div class="line">               &#125; else if (key &gt; array[mid].key) &#123;  </div><div class="line">                   low = mid + 1;  </div><div class="line">                   result = mid;  </div><div class="line">               &#125; else  </div><div class="line">                   return mid;  </div><div class="line"> </div><div class="line">           &#125;  </div><div class="line">           return result;  </div><div class="line">       &#125;  </div><div class="line"> </div><div class="line">       return -1;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public static Student blockIndex(Student[] array, int block, int key) &#123;  </div><div class="line">  </div><div class="line">  </div><div class="line">        if (array != null &amp;&amp; array.length &gt; 0) &#123;  </div><div class="line">            if (block &lt; 1 || block &gt; array.length) &#123;  </div><div class="line">                return null;  </div><div class="line">            &#125;  </div><div class="line">            Arrays.sort(array);//为了方便构造 块内有序 其实可以无序  </div><div class="line">            Index[] list = new Index[block];  </div><div class="line">            int blocksize = array.length / block;  </div><div class="line">            //建立索引及数据分块  </div><div class="line">            for (int i = 0; i &lt; array.length; i++) &#123;  </div><div class="line">  </div><div class="line">                if (i % blocksize == 0 || block == 1) &#123;//分块建立索引  </div><div class="line">                    Index index = new Index();  </div><div class="line">                    index.key = array[i].no;  </div><div class="line">                    index.value = array[i];  </div><div class="line">                    if (block == 1) &#123;//只分一块 首个是索引  </div><div class="line">                        index.size = array.length;  </div><div class="line">                        list[0] = index;  </div><div class="line">                        break;  </div><div class="line">                    &#125; else if (i / blocksize == block - 1) &#123;//长度和分块个数不均匀，剩下最后的数据放在最后一块  </div><div class="line">                        index.size = array.length - i;  </div><div class="line">                        list[block - 1] = index;  </div><div class="line">                        break;  </div><div class="line">                    &#125; else if (i / blocksize &lt; block - 1) &#123;  </div><div class="line">                        index.size = blocksize;  </div><div class="line">                        list[i / blocksize] = index;  </div><div class="line">                    &#125;  </div><div class="line">  </div><div class="line">                &#125;  </div><div class="line">  </div><div class="line">            &#125;  </div><div class="line">  </div><div class="line">            //根据索引关键码搜索对应的块  </div><div class="line">            int mid = blockSearch(list, key);  </div><div class="line">            System.out.println(&quot;mid:&quot; + mid);  </div><div class="line">            if (mid != -1) &#123;  </div><div class="line">                Index index = list[mid];//找出索引  </div><div class="line">                System.out.println(&quot;index:&quot; + index);  </div><div class="line">                for (int i = 0; i &lt; index.size; i++) &#123;//块内无序 顺序查找  </div><div class="line">                    System.out.println(&quot;array[i]:&quot; + array[(mid * blocksize) + i]);  </div><div class="line">                    if (key == array[(mid * blocksize) + i].no) &#123;  </div><div class="line">                        return array[(mid * blocksize) + i];  </div><div class="line">                    &#125;  </div><div class="line">                &#125;  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        return null;  </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="3-倒排索引"><a href="#3-倒排索引" class="headerlink" title="3.倒排索引"></a>3.倒排索引</h1><p>倒排索引的概念很简单：就是将文件中的单词作为关键字，然后建立单词与文件的映射关系。 当然，你还可以添加文件中单词出现的频数等信息。 倒排索引是搜索引擎中一个很基本的概念，几乎所有的搜索引擎都会使用到倒排索引。<br>索引项的通用结构是：</p>
+<p>1）次关键码，例如上面的英文单词</p>
+<p>2） 记录号表，例如上面的文章编号<br> 其中记录号表存储具有相同次关键字的所有记录的记录号(可以是指向记录的指针或者是该记录的主关键字)</p>
+<p><img src="http://img.blog.csdn.net/20161210103931110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public static List&lt;String&gt; invertedIndex(String[] array, String word) &#123;  </div><div class="line">    HashMap&lt;String, List&lt;String&gt;&gt; lists = new HashMap&lt;&gt;();  </div><div class="line"> if (array != null &amp;&amp; array.length &gt; 0) &#123;  </div><div class="line">  //建立索引  </div><div class="line">         for (int i = 0; i &lt; array.length; i++) &#123;  </div><div class="line">String page = array[i];  </div><div class="line">              String[] words = page.split(&quot; &quot;);  </div><div class="line">              for (String str : words) &#123;  </div><div class="line">                  if (lists.containsKey(str)) &#123;  </div><div class="line">                      List&lt;String&gt; pages = lists.get(str);  </div><div class="line">                      pages.add(array[i]);  </div><div class="line">                  &#125; else &#123;  </div><div class="line">                      List&lt;String&gt; pages = new ArrayList&lt;&gt;();  </div><div class="line">                      pages.add(array[i]);  </div><div class="line">                      lists.put(str, pages);  </div><div class="line">                  &#125;  </div><div class="line">              &#125;  </div><div class="line">          &#125;  </div><div class="line">          return lists.get(word);  </div><div class="line"></div><div class="line">      &#125;  </div><div class="line">      return null;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2016/12/06/查找算法-顺序查找、有序查找/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1205,7 +1347,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">76</span>
+                <span class="site-state-item-count">77</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1218,7 +1360,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
