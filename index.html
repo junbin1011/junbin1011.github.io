@@ -747,13 +747,6 @@
 <p>2.NDK支持</p>
 <p>如果项目中使用cmake，需要添加对应的参数配置。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">before_install:</div><div class="line">  - echo y | sdkmanager &quot;ndk-bundle&quot;</div><div class="line">  - echo y | sdkmanager &quot;ndk;20.1.5948944&quot;</div><div class="line">  - echo y | sdkmanager &quot;cmake;3.10.2.4988404&quot;</div><div class="line">before_script:</div><div class="line">  - export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle</div><div class="line">  - export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT</div></pre></td></tr></table></figure>
-<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>1.项目</p>
-<p>项目地址：<a href="https://github.com/junbin1011/SmartAPM" target="_blank" rel="external">https://github.com/junbin1011/SmartAPM</a></p>
-<p>Travis构建：<img src="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&amp;shareKey=eda0b79e189d7559fd80c3eec37d21ed" alt=""></p>
-<p>发布地址：<a href="https://www.pgyer.com/3Dkk" target="_blank" rel="external">https://www.pgyer.com/3Dkk</a></p>
-<p>2.配置文件.travis.yaml</p>
-<p>请参考 <a href="https://github.com/junbin1011/SmartAPM/blob/master/.travis.yml" target="_blank" rel="external">SmartAPM/.travis.yml 
-</a></p>
 <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
 <p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&amp;shareKey=09bc64e9133e43f61c1651a59c9c92d7" alt=""></p>

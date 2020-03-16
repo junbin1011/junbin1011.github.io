@@ -97,15 +97,14 @@
 <meta property="og:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
 本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
 集成账号Travis CITravis CI 是目前比较流行的持续集成工">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&shareKey=eda0b79e189d7559fd80c3eec37d21ed">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&shareKey=09bc64e9133e43f61c1651a59c9c92d7">
-<meta property="og:updated_time" content="2020-02-23T03:57:49.123Z">
+<meta property="og:updated_time" content="2020-03-16T06:15:26.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何快速为你的Github项目搭建CICD">
 <meta name="twitter:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
 本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
 集成账号Travis CITravis CI 是目前比较流行的持续集成工">
-<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&shareKey=eda0b79e189d7559fd80c3eec37d21ed">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&shareKey=09bc64e9133e43f61c1651a59c9c92d7">
 
 
 
@@ -383,13 +382,6 @@
 <p>2.NDK支持</p>
 <p>如果项目中使用cmake，需要添加对应的参数配置。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">before_install:</div><div class="line">  - echo y | sdkmanager &quot;ndk-bundle&quot;</div><div class="line">  - echo y | sdkmanager &quot;ndk;20.1.5948944&quot;</div><div class="line">  - echo y | sdkmanager &quot;cmake;3.10.2.4988404&quot;</div><div class="line">before_script:</div><div class="line">  - export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle</div><div class="line">  - export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT</div></pre></td></tr></table></figure>
-<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>1.项目</p>
-<p>项目地址：<a href="https://github.com/junbin1011/SmartAPM" target="_blank" rel="external">https://github.com/junbin1011/SmartAPM</a></p>
-<p>Travis构建：<img src="https://note.youdao.com/yws/api/personal/file/WEBec9c70d5fc53f233e5638764a17ebab6?method=download&amp;shareKey=eda0b79e189d7559fd80c3eec37d21ed" alt=""></p>
-<p>发布地址：<a href="https://www.pgyer.com/3Dkk" target="_blank" rel="external">https://www.pgyer.com/3Dkk</a></p>
-<p>2.配置文件.travis.yaml</p>
-<p>请参考 <a href="https://github.com/junbin1011/SmartAPM/blob/master/.travis.yml" target="_blank" rel="external">SmartAPM/.travis.yml 
-</a></p>
 <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
 <p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&amp;shareKey=09bc64e9133e43f61c1651a59c9c92d7" alt=""></p>
@@ -591,7 +583,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成"><span class="nav-number">2.</span> <span class="nav-text">集成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#账号"><span class="nav-number">2.1.</span> <span class="nav-text">账号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Travis-CI"><span class="nav-number">2.1.1.</span> <span class="nav-text">Travis CI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蒲公英"><span class="nav-number">2.1.2.</span> <span class="nav-text">蒲公英</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#填坑"><span class="nav-number">2.3.</span> <span class="nav-text">填坑</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例"><span class="nav-number">3.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">3.1.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成"><span class="nav-number">2.</span> <span class="nav-text">集成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#账号"><span class="nav-number">2.1.</span> <span class="nav-text">账号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Travis-CI"><span class="nav-number">2.1.1.</span> <span class="nav-text">Travis CI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蒲公英"><span class="nav-number">2.1.2.</span> <span class="nav-text">蒲公英</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#填坑"><span class="nav-number">2.3.</span> <span class="nav-text">填坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">2.4.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
             
 
           </div>
