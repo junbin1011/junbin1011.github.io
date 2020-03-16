@@ -270,6 +270,150 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/14/设计模式-责任链模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/14/设计模式-责任链模式/" itemprop="url">
+                  设计模式-责任链模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-14T09:35:49+08:00">
+                2017-02-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/14/设计模式-责任链模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/14/设计模式-责任链模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-责任链模式的定义及使用场景"><a href="#1-责任链模式的定义及使用场景" class="headerlink" title="1.责任链模式的定义及使用场景"></a>1.责任链模式的定义及使用场景</h2><h3 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h3><p>责任链模式是行为型设计模式之一。使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止</p>
+<p>###使用场景：<br>使多个对象都有机会处理请求，从而避免了请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，只到有对象处理它为止<br><img src="http://img.blog.csdn.net/20170214090047528?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="责任链模式"></p>
+<h2 id="2-责任链模式的优缺点"><a href="#2-责任链模式的优缺点" class="headerlink" title="2 . 责任链模式的优缺点"></a>2 . 责任链模式的优缺点</h2><h3 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h3><p>责任链模式非常显著的优点是将请求和处理分开。请求者可以不用知道是谁处理，处理者可以不用知道请求的全貌，两者解耦，提高系统的灵活性</p>
+<h3 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h3><p>责任链有两个非常显著的缺点：一是性能问题，每个请求都是从链头遍历到链尾，特别是在链比较长的时候，性能是一个比较大的问题；<br>二是调试不很方便，特别是链条比较长，环节比较多的时候，由于采用了类似递归的方式，调试的时候逻辑可能比较复杂</p>
+<h2 id="3-注意实现"><a href="#3-注意实现" class="headerlink" title="3.注意实现"></a>3.注意实现</h2><p>链中节点数量需要控制，避免出现超长链的情况，一般的做法是在handler<br>中设置一个最大节点数量，在setNext方法中判断是否已经是超过其阈值，超过则不允许该链建立，避免无意识地破坏系统性能</p>
+<h2 id="4-责任链模式的实现方式"><a href="#4-责任链模式的实现方式" class="headerlink" title="4. 责任链模式的实现方式"></a>4. 责任链模式的实现方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public abstract class AbstractRequest &#123;</div><div class="line">    private Object obj;//处理对象</div><div class="line"></div><div class="line">    public AbstractRequest(Object object) &#123;</div><div class="line">        this.obj = object;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Object getContent() &#123;</div><div class="line">        return obj;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取请求的级别</div><div class="line">    public abstract int getRequestLevel();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public abstract class AbstractHandler &#123;</div><div class="line">    protected AbstractHandler nexthandler;//下一节点处理对象</div><div class="line"></div><div class="line">    public final void handleRequest(AbstractRequest request) &#123;</div><div class="line">        if(getHandleLevel()==request.getRequestLevel())&#123;</div><div class="line">            handle(request);</div><div class="line">        &#125;else&#123;</div><div class="line">            if(nexthandler!=null)&#123;</div><div class="line">                nexthandler.handleRequest(request);</div><div class="line">            &#125;else&#123;</div><div class="line">                System.out.println(&quot;All of handler can not handle the request&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取处理者对象的处理级别</div><div class="line">    protected abstract int getHandleLevel();</div><div class="line"></div><div class="line">    //每个处理者对象的具体处理方式</div><div class="line">    protected abstract void handle(AbstractRequest request);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Handler1 extends AbstractHandler &#123;</div><div class="line">    @Override</div><div class="line">    protected int getHandleLevel() &#123;</div><div class="line">        return 1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void handle(AbstractRequest request) &#123;</div><div class="line">        System.out.println(&quot;Handler1 handle request:&quot;+request.getRequestLevel());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Handler2 extends AbstractHandler &#123;</div><div class="line">    @Override</div><div class="line">    protected int getHandleLevel() &#123;</div><div class="line">        return 2;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void handle(AbstractRequest request) &#123;</div><div class="line">        System.out.println(&quot;Handler2 handle request:&quot;+request.getRequestLevel());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Handler3 extends AbstractHandler &#123;</div><div class="line">    @Override</div><div class="line">    protected int getHandleLevel() &#123;</div><div class="line">        return 3;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void handle(AbstractRequest request) &#123;</div><div class="line">        System.out.println(&quot;Handler3 handle request:&quot;+request.getRequestLevel());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request1 extends  AbstractRequest &#123;</div><div class="line">    public Request1(Object object) &#123;</div><div class="line">        super(object);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 1;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request2 extends  AbstractRequest &#123;</div><div class="line">    public Request2(Object object) &#123;</div><div class="line">        super(object);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 2;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request3 extends  AbstractRequest &#123;</div><div class="line">    public Request3(Object object) &#123;</div><div class="line">        super(object);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 3;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request4 extends  AbstractRequest &#123;</div><div class="line">    public Request4(Object object) &#123;</div><div class="line">        super(object);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 4;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"></div><div class="line">    public static void main(String args[]) &#123;</div><div class="line">        AbstractHandler h1=new Handler1();</div><div class="line">        AbstractHandler h2=new Handler2();</div><div class="line">        AbstractHandler h3=new Handler3();</div><div class="line">        h1.nexthandler=h2;</div><div class="line">        h2.nexthandler=h3;</div><div class="line"></div><div class="line">        AbstractRequest r1=new Request1(h1);</div><div class="line">        AbstractRequest r2=new Request2(h2);</div><div class="line">        AbstractRequest r3=new Request3(h3);</div><div class="line">        AbstractRequest r4=new Request4(h3);</div><div class="line">        //总是从链式的首端发起请求</div><div class="line">        h1.handleRequest(r1);</div><div class="line">        h1.handleRequest(r2);</div><div class="line">        h1.handleRequest(r3);</div><div class="line">        h1.handleRequest(r4);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="5-责任链模式在Android中的实际应用"><a href="#5-责任链模式在Android中的实际应用" class="headerlink" title="5. 责任链模式在Android中的实际应用"></a>5. 责任链模式在Android中的实际应用</h2><p>责任链模式在Android源码中比较类似的实现就是对于触摸事件的分发处理。每当用户接触屏幕时，Android都会将对应的事件包装成一个事件对象从ViewTree的顶部至上而下地分发传递。ViewGroup事件投递的递归调用就类似于一条责任链，一旦寻找到责任者，那么将由责任者持有并消费掉该次事件，具体地体现在View的onTouchEvent方法中返回值的设置，如果onTouchEvent返回false，那么意味着当前View不会是该次事件的复制人，将不会对其持有；如果为true则相反，此时View会持有该事件并不再向外传递。<br>View的事件分发机制（MontionEvent的分发过程）：<br>public boolean dispatchTouchEvent（MotionEvent ev）<br>如果事件能够传递到当前的View，那么此方法一定会被调用。<br>public boolean onInterceptTouchEvent（MotionEvent ev）<br>用来判断是否拦截某个事件<br>public boolean onTouchEvent(MotionEvent ev)<br>用来处理点击事件<br>流转关系（伪代码）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public boolean dispatchTouchEvent(MotionEvent ev)&#123;</div><div class="line">     boolean consume=false;</div><div class="line">     if(onInterceptTouchEvent(ev))&#123;</div><div class="line">          consume=onTouchEvent(ev);</div><div class="line">     &#125;else&#123;</div><div class="line">          consume=child.dispatchTouchEvent(ev);</div><div class="line">     &#125;</div><div class="line">     return consume;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/08/设计模式-命令模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1606,150 +1750,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/01/10/设计模式-工厂模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JunBin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/10/设计模式-工厂模式/" itemprop="url">
-                  设计模式-工厂模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-10T09:36:23+08:00">
-                2017-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/10/设计模式-工厂模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/10/设计模式-工厂模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-工厂模式的定义及使用场景"><a href="#1-工厂模式的定义及使用场景" class="headerlink" title="1.工厂模式的定义及使用场景"></a>1.工厂模式的定义及使用场景</h1><p>工厂模式是创建型设计模式之一。定义一个用户创建对象的接口，让子类决定实例化那个类。工厂模式是new一个对象的替代品，所以在所有需要生成对象的地方都可以使用</p>
-<p><img src="http://img.blog.csdn.net/20170110092505708?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
-<h1 id="2-工厂模式的优缺点"><a href="#2-工厂模式的优缺点" class="headerlink" title="2.工厂模式的优缺点"></a>2.工厂模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
-<li>良好的封装性，代码结构清晰</li>
-<li>具有良好的扩展性，在增加产品类的情况下，只要适当地修改具体的工厂类或扩展一个工厂类，就可以完成需求变化</li>
-<li>典型解耦框架，遵循迪米特法则、里氏替换原则、依赖倒置原则<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>需要谨慎考虑是否要增加一个工厂类进行管理，会增加代码的复杂度</li>
-</ul>
-<h1 id="3-工厂模式的实现方式"><a href="#3-工厂模式的实现方式" class="headerlink" title="3.工厂模式的实现方式"></a>3.工厂模式的实现方式</h1><p>Product:抽象产品类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Product &#123;  </div><div class="line">  public abstract void excute();  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Facory：抽象工厂类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Factory &#123;  </div><div class="line">  public abstract &lt;T extends Product&gt; T excute(Class&lt;T&gt; tClass);  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>ConcreteFactory：工厂实现类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class ConcreteFactory extends Factory &#123;  </div><div class="line">    @Override  </div><div class="line">  public  &lt;T extends Product&gt; T excute(Class&lt;T&gt; tClass) &#123;  </div><div class="line">        Product product = null;  </div><div class="line">        try &#123;  </div><div class="line">            product = (Product) Class.forName(tClass.getName()).newInstance();  </div><div class="line">        &#125; catch (Exception e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">        return (T)product;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>ProductOne：产品实现One<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class ProductOne extends Product &#123;  </div><div class="line">    @Override  </div><div class="line">  public void excute() &#123;  </div><div class="line">        System.out.println(&quot;ProductOne excute!&quot;);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>ProductTwo：产品实现Two<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class ProductTwo extends Product &#123;  </div><div class="line">    @Override  </div><div class="line">    public  void excute() &#123;  </div><div class="line">        System.out.println(&quot;ProductTwo excute!&quot;);  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Test：客户端使用类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;  </div><div class="line">  </div><div class="line">    public static void main(String args[]) &#123;  </div><div class="line">        Factory factory = new ConcreteFactory();  </div><div class="line">        Product r1 = factory.excute(ProductOne.class);  </div><div class="line">        r1.excute();  </div><div class="line">        Product r2 = factory.excute(ProductTwo.class);  </div><div class="line">        r2.excute();  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="4-工厂模式在Android中的实际应用"><a href="#4-工厂模式在Android中的实际应用" class="headerlink" title="4.工厂模式在Android中的实际应用"></a>4.工厂模式在Android中的实际应用</h1><p>关于Activity的创建工程，是一个复杂的调度过程。这里我们主要研究Activity的创建是如何采用实现。Activity的创建最终由ActivityThread的performLaunchActivity中实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;  </div><div class="line">  // System.out.println(&quot;##### [&quot; + System.currentTimeMillis() + &quot;] ActivityThread.performLaunchActivity(&quot; + r + &quot;)&quot;);  </div><div class="line">  </div><div class="line">  ActivityInfo aInfo = r.activityInfo;  </div><div class="line">  if (r.packageInfo == null) &#123;  </div><div class="line">  r.packageInfo = getPackageInfo(aInfo.applicationInfo, r.compatInfo,  </div><div class="line">  Context.CONTEXT_INCLUDE_CODE);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  ComponentName component = r.intent.getComponent();  </div><div class="line">  if (component == null) &#123;  </div><div class="line">  component = r.intent.resolveActivity(  </div><div class="line">  mInitialApplication.getPackageManager());  </div><div class="line">  r.intent.setComponent(component);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  if (r.activityInfo.targetActivity != null) &#123;  </div><div class="line">  component = new ComponentName(r.activityInfo.packageName,  </div><div class="line">  r.activityInfo.targetActivity);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  Activity activity = null;  </div><div class="line">  try &#123;  </div><div class="line">  java.lang.ClassLoader cl = r.packageInfo.getClassLoader();  </div><div class="line">  activity = mInstrumentation.newActivity(  </div><div class="line">  cl, component.getClassName(), r.intent);  </div><div class="line">  StrictMode.incrementExpectedActivityCount(activity.getClass());  </div><div class="line">  r.intent.setExtrasClassLoader(cl);  </div><div class="line">  r.intent.prepareToEnterProcess();  </div><div class="line">  if (r.state != null) &#123;  </div><div class="line">  r.state.setClassLoader(cl);  </div><div class="line">  &#125;  </div><div class="line">  &#125; catch (Exception e) &#123;  </div><div class="line">  if (!mInstrumentation.onException(activity, e)) &#123;  </div><div class="line">  throw new RuntimeException(  </div><div class="line">  &quot;Unable to instantiate activity &quot; + component  </div><div class="line">  + &quot;: &quot; + e.toString(), e);  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  try &#123;  </div><div class="line">  Application app = r.packageInfo.makeApplication(false, mInstrumentation);  </div><div class="line">  </div><div class="line">  if (localLOGV) Slog.v(TAG, &quot;Performing launch of &quot; + r);  </div><div class="line">  if (localLOGV) Slog.v(  </div><div class="line">  TAG, r + &quot;: app=&quot; + app  </div><div class="line">  + &quot;, appName=&quot; + app.getPackageName()  </div><div class="line">  + &quot;, pkg=&quot; + r.packageInfo.getPackageName()  </div><div class="line">  + &quot;, comp=&quot; + r.intent.getComponent().toShortString()  </div><div class="line">  + &quot;, dir=&quot; + r.packageInfo.getAppDir());  </div><div class="line">  </div><div class="line">  if (activity != null) &#123;  </div><div class="line">  Context appContext = createBaseContextForActivity(r, activity);  </div><div class="line">  CharSequence title = r.activityInfo.loadLabel(appContext.getPackageManager());  </div><div class="line">  Configuration config = new Configuration(mCompatConfiguration);  </div><div class="line">  if (DEBUG_CONFIGURATION) Slog.v(TAG, &quot;Launching activity &quot;  </div><div class="line">  + r.activityInfo.name + &quot; with config &quot; + config);  </div><div class="line">  activity.attach(appContext, this, getInstrumentation(), r.token,  </div><div class="line">  r.ident, app, r.intent, r.activityInfo, title, r.parent,  </div><div class="line">  r.embeddedID, r.lastNonConfigurationInstances, config,  </div><div class="line">  r.referrer, r.voiceInteractor);  </div><div class="line">  </div><div class="line">  if (customIntent != null) &#123;  </div><div class="line">  activity.mIntent = customIntent;  </div><div class="line">  &#125;  </div><div class="line">  r.lastNonConfigurationInstances = null;  </div><div class="line">  activity.mStartedActivity = false;  </div><div class="line">  int theme = r.activityInfo.getThemeResource();  </div><div class="line">  if (theme != 0) &#123;  </div><div class="line">  activity.setTheme(theme);  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  activity.mCalled = false;  </div><div class="line">  if (r.isPersistable()) &#123;  </div><div class="line">  mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);  </div><div class="line">  &#125; else &#123;  </div><div class="line">  mInstrumentation.callActivityOnCreate(activity, r.state);  </div><div class="line">  &#125;  </div><div class="line">  if (!activity.mCalled) &#123;  </div><div class="line">  throw new SuperNotCalledException(  </div><div class="line">  &quot;Activity &quot; + r.intent.getComponent().toShortString() +  </div><div class="line">  &quot; did not call through to super.onCreate()&quot;);  </div><div class="line">  &#125;  </div><div class="line">  r.activity = activity;  </div><div class="line">  r.stopped = true;  </div><div class="line">  if (!r.activity.mFinished) &#123;  </div><div class="line">  activity.performStart();  </div><div class="line">  r.stopped = false;  </div><div class="line">  &#125;  </div><div class="line">  if (!r.activity.mFinished) &#123;  </div><div class="line">  if (r.isPersistable()) &#123;  </div><div class="line">  if (r.state != null || r.persistentState != null) &#123;  </div><div class="line">  mInstrumentation.callActivityOnRestoreInstanceState(activity, r.state,  </div><div class="line">  r.persistentState);  </div><div class="line">  &#125;  </div><div class="line">  &#125; else if (r.state != null) &#123;  </div><div class="line">  mInstrumentation.callActivityOnRestoreInstanceState(activity, r.state);  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  if (!r.activity.mFinished) &#123;  </div><div class="line">  activity.mCalled = false;  </div><div class="line">  if (r.isPersistable()) &#123;  </div><div class="line">  mInstrumentation.callActivityOnPostCreate(activity, r.state,  </div><div class="line">  r.persistentState);  </div><div class="line">  &#125; else &#123;  </div><div class="line">  mInstrumentation.callActivityOnPostCreate(activity, r.state);  </div><div class="line">  &#125;  </div><div class="line">  if (!activity.mCalled) &#123;  </div><div class="line">  throw new SuperNotCalledException(  </div><div class="line">  &quot;Activity &quot; + r.intent.getComponent().toShortString() +  </div><div class="line">  &quot; did not call through to super.onPostCreate()&quot;);  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  r.paused = true;  </div><div class="line">  </div><div class="line">  mActivities.put(r.token, r);  </div><div class="line">  </div><div class="line">  &#125; catch (SuperNotCalledException e) &#123;  </div><div class="line">  throw e;  </div><div class="line">  </div><div class="line">  &#125; catch (Exception e) &#123;  </div><div class="line">  if (!mInstrumentation.onException(activity, e)) &#123;  </div><div class="line">  throw new RuntimeException(  </div><div class="line">  &quot;Unable to start activity &quot; + component  </div><div class="line">  + &quot;: &quot; + e.toString(), e);  </div><div class="line">  &#125;  </div><div class="line">  &#125;  </div><div class="line">  </div><div class="line">  return activity;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p>其中 activity = mInstrumentation.newActivity(cl, component.getClassName(), r.intent);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public Activity newActivity(Class&lt;?&gt; clazz, Context context,  </div><div class="line">  </div><div class="line"> IBinder token, Application application, Intent intent, ActivityInfo info,  </div><div class="line">  </div><div class="line"> CharSequence title, Activity parent, String id,  </div><div class="line"> Object lastNonConfigurationInstance) throws InstantiationException,  </div><div class="line">  </div><div class="line"> IllegalAccessException &#123;  </div><div class="line"> Activity activity = (Activity)clazz.newInstance();  </div><div class="line"> ActivityThread aThread = null;  </div><div class="line"> activity.attach(context, aThread, this, token, 0, application, intent,  </div><div class="line"> info, title, parent, id,  </div><div class="line"> (Activity.NonConfigurationInstances)lastNonConfigurationInstance,  </div><div class="line"> new Configuration(), null, null);  </div><div class="line"> return activity;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p>在Instrumentation中的newActivity最终执行了Activity的实例化创建。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1799,7 +1799,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1812,7 +1812,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
