@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,47 +66,40 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,源码," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,源码,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="Retrofit是什么？简介Retrofit，中文的翻译为“式样翻新”的意思，是一个基于OKHttp的RESTful网络请求框架。通俗一点来说，Retrofit就是一个网络请求框架的封装。同样是由Square公司开源的Android热门网络框架之一，其具有功能强大、简洁易用及高可拓展性特点。
-官网网址：Retrofit官网
-Github地址:Github
-特点1、基于OkHttp并遵循Restfu">
+<meta name="description" content="Retrofit是什么？简介Retrofit，中文的翻译为“式样翻新”的意思，是一个基于OKHttp的RESTful网络请求框架。通俗一点来说，Retrofit就是一个网络请求框架的封装。同样是由Square公司开源的Android热门网络框架之一，其具有功能强大、简洁易用及高可拓展性特点。 官网网址：Retrofit官网 Github地址:Github 特点1、基于OkHttp并遵循Restfu">
+<meta name="keywords" content="Android,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Retrofit源码学习随笔">
 <meta property="og:url" content="https://junbin1011.github.io/2018/08/07/Retrofit源码学习随笔/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="Retrofit是什么？简介Retrofit，中文的翻译为“式样翻新”的意思，是一个基于OKHttp的RESTful网络请求框架。通俗一点来说，Retrofit就是一个网络请求框架的封装。同样是由Square公司开源的Android热门网络框架之一，其具有功能强大、简洁易用及高可拓展性特点。
-官网网址：Retrofit官网
-Github地址:Github
-特点1、基于OkHttp并遵循Restfu">
+<meta property="og:description" content="Retrofit是什么？简介Retrofit，中文的翻译为“式样翻新”的意思，是一个基于OKHttp的RESTful网络请求框架。通俗一点来说，Retrofit就是一个网络请求框架的封装。同样是由Square公司开源的Android热门网络框架之一，其具有功能强大、简洁易用及高可拓展性特点。 官网网址：Retrofit官网 Github地址:Github 特点1、基于OkHttp并遵循Restfu">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-e251df442d1596cf?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.778Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Retrofit源码学习随笔">
-<meta name="twitter:description" content="Retrofit是什么？简介Retrofit，中文的翻译为“式样翻新”的意思，是一个基于OKHttp的RESTful网络请求框架。通俗一点来说，Retrofit就是一个网络请求框架的封装。同样是由Square公司开源的Android热门网络框架之一，其具有功能强大、简洁易用及高可拓展性特点。
-官网网址：Retrofit官网
-Github地址:Github
-特点1、基于OkHttp并遵循Restfu">
+<meta name="twitter:description" content="Retrofit是什么？简介Retrofit，中文的翻译为“式样翻新”的意思，是一个基于OKHttp的RESTful网络请求框架。通俗一点来说，Retrofit就是一个网络请求框架的封装。同样是由Square公司开源的Android热门网络框架之一，其具有功能强大、简洁易用及高可拓展性特点。 官网网址：Retrofit官网 Github地址:Github 特点1、基于OkHttp并遵循Restfu">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-e251df442d1596cf?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -135,7 +128,7 @@ Github地址:Github
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2018/08/07/Retrofit源码学习随笔/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2018/08/07/Retrofit源码学习随笔/">
 
 
 
@@ -185,7 +178,7 @@ Github地址:Github
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -215,7 +208,7 @@ Github地址:Github
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -225,7 +218,7 @@ Github地址:Github
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -235,7 +228,7 @@ Github地址:Github
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -245,7 +238,7 @@ Github地址:Github
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -284,7 +277,7 @@ Github地址:Github
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -465,7 +458,7 @@ Github地址:Github
 <h1 id="Retrofit-如何将定义的interface转换成网络请求？"><a href="#Retrofit-如何将定义的interface转换成网络请求？" class="headerlink" title="Retrofit 如何将定义的interface转换成网络请求？"></a>Retrofit 如何将定义的interface转换成网络请求？</h1><p>我们都知道，Retrofit通过自定义interface及相关的标注来描述一个http的请求，使用非常简便，且易于维护。</p>
 <p>这是Retrofit设计的精髓之一，，当调用Retrofit的create()方法时，会进行动态代理监听。当执行具体的接口方法时，会回调InvocationHandler。通过反射解析method的标注及参数，生成ServiceMethod对象，ServiceMethod中封装了OKHttp网络请求所需的相关参数。</p>
 <p>源码实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public &lt;T&gt; T create(final Class&lt;T&gt; service) &#123;</div><div class="line">   Utils.validateServiceInterface(service);</div><div class="line">   if (validateEagerly) &#123;</div><div class="line">     eagerlyValidateMethods(service);</div><div class="line">   &#125;</div><div class="line">   return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] &#123; service &#125;,</div><div class="line">       new InvocationHandler() &#123;</div><div class="line">         private final Platform platform = Platform.get();</div><div class="line"></div><div class="line">         @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)</div><div class="line">             throws Throwable &#123;</div><div class="line">           // If the method is a method from Object then defer to normal invocation.</div><div class="line">           if (method.getDeclaringClass() == Object.class) &#123;</div><div class="line">             return method.invoke(this, args);</div><div class="line">           &#125;</div><div class="line">           if (platform.isDefaultMethod(method)) &#123;</div><div class="line">             return platform.invokeDefaultMethod(method, service, proxy, args);</div><div class="line">           &#125;</div><div class="line">           //生成ServiceMethod</div><div class="line">           ServiceMethod&lt;Object, Object&gt; serviceMethod =o</div><div class="line">               (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);</div><div class="line">           OkHttpCall&lt;Object&gt; okHttpCall = new OkHttpCall&lt;&gt;(serviceMethod, args);</div><div class="line">           return serviceMethod.adapt(okHttpCall);</div><div class="line">         &#125;</div><div class="line">       &#125;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p>通过源码我们知道，具体的转换方法为 (ServiceMethod<object, object="">) loadServiceMethod(method)，具体的实现如下：</object,></p>
+<p>通过源码我们知道，具体的转换方法为 (ServiceMethod<object, object>) loadServiceMethod(method)，具体的实现如下：</object,></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">ServiceMethod&lt;?, ?&gt; loadServiceMethod(Method method) &#123;</div><div class="line">    ServiceMethod&lt;?, ?&gt; result = serviceMethodCache.get(method);</div><div class="line">    if (result != null) return result;</div><div class="line"></div><div class="line">    synchronized (serviceMethodCache) &#123;</div><div class="line">      result = serviceMethodCache.get(method);</div><div class="line">      if (result == null) &#123;</div><div class="line">        result = new ServiceMethod.Builder&lt;&gt;(this, method).build();</div><div class="line">        serviceMethodCache.put(method, result);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    return result;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <p>通过Builder构建模式，创建一个ServiceMethod对象，并加入缓存，具体的构造实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">Builder(Retrofit retrofit, Method method) &#123;</div><div class="line">     this.retrofit = retrofit;</div><div class="line">     this.method = method;</div><div class="line">     this.methodAnnotations = method.getAnnotations();</div><div class="line">     this.parameterTypes = method.getGenericParameterTypes();</div><div class="line">     this.parameterAnnotationsArray = method.getParameterAnnotations();</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   public ServiceMethod build() &#123;</div><div class="line">     callAdapter = createCallAdapter();</div><div class="line">     responseType = callAdapter.responseType();</div><div class="line">     if (responseType == Response.class || responseType == okhttp3.Response.class) &#123;</div><div class="line">       throw methodError(&quot;&apos;&quot;</div><div class="line">           + Utils.getRawType(responseType).getName()</div><div class="line">           + &quot;&apos; is not a valid response body type. Did you mean ResponseBody?&quot;);</div><div class="line">     &#125;</div><div class="line">     responseConverter = createResponseConverter();</div><div class="line"></div><div class="line">     for (Annotation annotation : methodAnnotations) &#123;</div><div class="line">       parseMethodAnnotation(annotation);</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     if (httpMethod == null) &#123;</div><div class="line">       throw methodError(&quot;HTTP method annotation is required (e.g., @GET, @POST, etc.).&quot;);</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     if (!hasBody) &#123;</div><div class="line">       if (isMultipart) &#123;</div><div class="line">         throw methodError(</div><div class="line">             &quot;Multipart can only be specified on HTTP methods with request body (e.g., @POST).&quot;);</div><div class="line">       &#125;</div><div class="line">       if (isFormEncoded) &#123;</div><div class="line">         throw methodError(&quot;FormUrlEncoded can only be specified on HTTP methods with &quot;</div><div class="line">             + &quot;request body (e.g., @POST).&quot;);</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     int parameterCount = parameterAnnotationsArray.length;</div><div class="line">     parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];</div><div class="line">     for (int p = 0; p &lt; parameterCount; p++) &#123;</div><div class="line">       Type parameterType = parameterTypes[p];</div><div class="line">       if (Utils.hasUnresolvableType(parameterType)) &#123;</div><div class="line">         throw parameterError(p, &quot;Parameter type must not include a type variable or wildcard: %s&quot;,</div><div class="line">             parameterType);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       Annotation[] parameterAnnotations = parameterAnnotationsArray[p];</div><div class="line">       if (parameterAnnotations == null) &#123;</div><div class="line">         throw parameterError(p, &quot;No Retrofit annotation found.&quot;);</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       parameterHandlers[p] = parseParameter(p, parameterType, parameterAnnotations);</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     if (relativeUrl == null &amp;&amp; !gotUrl) &#123;</div><div class="line">       throw methodError(&quot;Missing either @%s URL or @Url parameter.&quot;, httpMethod);</div><div class="line">     &#125;</div><div class="line">     if (!isFormEncoded &amp;&amp; !isMultipart &amp;&amp; !hasBody &amp;&amp; gotBody) &#123;</div><div class="line">       throw methodError(&quot;Non-body HTTP method cannot contain @Body.&quot;);</div><div class="line">     &#125;</div><div class="line">     if (isFormEncoded &amp;&amp; !gotField) &#123;</div><div class="line">       throw methodError(&quot;Form-encoded method must contain at least one @Field.&quot;);</div><div class="line">     &#125;</div><div class="line">     if (isMultipart &amp;&amp; !gotPart) &#123;</div><div class="line">       throw methodError(&quot;Multipart method must contain at least one @Part.&quot;);</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     return new ServiceMethod&lt;&gt;(this);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
 <p>build()方法会通过反射去解析method的标注、参数的类型等。详细的解析可参考源码ParameterHandler相关实现，这里主要对流程进行剖析。</p>
@@ -658,8 +651,7 @@ Github地址:Github
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/08/07/Retrofit源码学习随笔/"
-           data-title="Retrofit源码学习随笔" data-url="https://junbin1011.github.io/2018/08/07/Retrofit源码学习随笔/">
+      <div class="ds-thread" data-thread-key="2018/08/07/Retrofit源码学习随笔/" data-title="Retrofit源码学习随笔" data-url="https://junbin1011.github.io/2018/08/07/Retrofit源码学习随笔/">
       </div>
     
   </div>
@@ -684,7 +676,7 @@ Github地址:Github
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -695,9 +687,7 @@ Github地址:Github
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -708,7 +698,7 @@ Github地址:Github
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -721,7 +711,7 @@ Github地址:Github
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -796,7 +786,7 @@ Github地址:Github
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

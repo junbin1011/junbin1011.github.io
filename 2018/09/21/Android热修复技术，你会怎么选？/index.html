@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,35 +66,35 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="前言目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。
-什么是热修复技术？关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是">
+<meta name="description" content="前言目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。 什么是热修复技术？关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android热修复技术，你会怎么选？">
 <meta property="og:url" content="https://junbin1011.github.io/2018/09/21/Android热修复技术，你会怎么选？/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="前言目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。
-什么是热修复技术？关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是">
+<meta property="og:description" content="前言目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。 什么是热修复技术？关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-50c2fb502983a3bb?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-cb67bc0991f396fb?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-97e7a2b8568b2972?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -104,8 +104,7 @@
 <meta property="og:updated_time" content="2019-04-24T08:12:18.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android热修复技术，你会怎么选？">
-<meta name="twitter:description" content="前言目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。
-什么是热修复技术？关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是">
+<meta name="twitter:description" content="前言目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。 什么是热修复技术？关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-50c2fb502983a3bb?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -134,7 +133,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2018/09/21/Android热修复技术，你会怎么选？/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2018/09/21/Android热修复技术，你会怎么选？/">
 
 
 
@@ -184,7 +183,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -214,7 +213,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -224,7 +223,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -234,7 +233,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -244,7 +243,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -283,7 +282,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -785,8 +784,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/09/21/Android热修复技术，你会怎么选？/"
-           data-title="Android热修复技术，你会怎么选？" data-url="https://junbin1011.github.io/2018/09/21/Android热修复技术，你会怎么选？/">
+      <div class="ds-thread" data-thread-key="2018/09/21/Android热修复技术，你会怎么选？/" data-title="Android热修复技术，你会怎么选？" data-url="https://junbin1011.github.io/2018/09/21/Android热修复技术，你会怎么选？/">
       </div>
     
   </div>
@@ -811,7 +809,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -822,9 +820,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -835,7 +831,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -848,7 +844,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -923,7 +919,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

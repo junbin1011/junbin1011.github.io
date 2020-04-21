@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,21 +66,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Java,数据结构与算法," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Java,数据结构与算法,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
@@ -88,11 +88,13 @@
 
 
 <meta name="description" content="堆排序（Heap Sort）堆是具有下列性质的完全二叉树：每个节点的值都大于或等于其左右孩子节点的值，称为大顶堆，或者每个节点的值都小于或等于其左右孩子节点的值，称为小顶堆。堆排序的基本思想是，将待排序的序列构成一个大顶堆。此时整个序列的最大值就是堆顶的根节点。将它移走（其实就是将其余堆数组的末尾就是最大值），然后将剩余的n-1个序列重新构造成一个堆，这样就会得到n个元素的次小值，如此反复执行，便">
+<meta name="keywords" content="Java,数据结构与算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="排序算法-堆排序">
 <meta property="og:url" content="https://junbin1011.github.io/2016/12/14/排序算法-堆排序/index.html">
 <meta property="og:site_name" content="JunBin">
 <meta property="og:description" content="堆排序（Heap Sort）堆是具有下列性质的完全二叉树：每个节点的值都大于或等于其左右孩子节点的值，称为大顶堆，或者每个节点的值都小于或等于其左右孩子节点的值，称为小顶堆。堆排序的基本思想是，将待排序的序列构成一个大顶堆。此时整个序列的最大值就是堆顶的根节点。将它移走（其实就是将其余堆数组的末尾就是最大值），然后将剩余的n-1个序列重新构造成一个堆，这样就会得到n个元素的次小值，如此反复执行，便">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.781Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="排序算法-堆排序">
@@ -124,7 +126,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2016/12/14/排序算法-堆排序/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2016/12/14/排序算法-堆排序/">
 
 
 
@@ -174,7 +176,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -204,7 +206,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -214,7 +216,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -224,7 +226,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -234,7 +236,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -273,7 +275,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -437,8 +439,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/14/排序算法-堆排序/"
-           data-title="排序算法-堆排序" data-url="https://junbin1011.github.io/2016/12/14/排序算法-堆排序/">
+      <div class="ds-thread" data-thread-key="2016/12/14/排序算法-堆排序/" data-title="排序算法-堆排序" data-url="https://junbin1011.github.io/2016/12/14/排序算法-堆排序/">
       </div>
     
   </div>
@@ -465,9 +466,7 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -478,7 +477,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -491,7 +490,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -550,7 +549,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

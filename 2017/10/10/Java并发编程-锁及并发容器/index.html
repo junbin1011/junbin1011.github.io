@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,21 +66,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Java," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Java,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
@@ -88,11 +88,13 @@
 
 
 <meta name="description" content="锁锁是用来控制多个线程访问共享资源的方式，一般来说，一个锁能够防止多个线程同时访问共享资源（但是有些锁可以允许多个线程并发的访问共享资源，比如读写锁）。在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而JavaSE5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程-锁及并发容器">
 <meta property="og:url" content="https://junbin1011.github.io/2017/10/10/Java并发编程-锁及并发容器/index.html">
 <meta property="og:site_name" content="JunBin">
 <meta property="og:description" content="锁锁是用来控制多个线程访问共享资源的方式，一般来说，一个锁能够防止多个线程同时访问共享资源（但是有些锁可以允许多个线程并发的访问共享资源，比如读写锁）。在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而JavaSE5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-77d650be264e60e6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-d28778b6ec512021?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-ac27c7bad8a42712?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -128,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/10/10/Java并发编程-锁及并发容器/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/10/10/Java并发编程-锁及并发容器/">
 
 
 
@@ -178,7 +180,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -208,7 +210,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -218,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -228,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -238,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -277,7 +279,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -391,7 +393,7 @@
 <p>读的时候不需要加锁，如果读的时候有多个线程正在向ArrayList添加数据，读还是会读到旧的数据，因为写的时候不会锁住旧的ArrayList。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public E get(int index) &#123;</div><div class="line">    return get(getArray(), index);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="ConcurrentHashMap的实现原理与使用"><a href="#ConcurrentHashMap的实现原理与使用" class="headerlink" title="ConcurrentHashMap的实现原理与使用"></a>ConcurrentHashMap的实现原理与使用</h2><p>ConcurrentHashMap是线程安全且高效的HashMap。ConcurrentHashMap是由Segment数组结构和HashEntry数组结构组成。Segment是一种可重入锁ReentrantLock，在ConcurrentHashMap里扮演锁的角色，HashEntry则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment数组，Segment的结构和HashMap类似，是一种数组和链表结构，一个Segment里包含一个HashEntry数组，每个HashEntry是一个链表结构的元素， 每个Segment守护者一个HashEntry数组里的元素,当对HashEntry数组的数据进行修改时，必须首先获得它对应的Segment锁。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-ac27c7bad8a42712?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-ac27c7bad8a42712?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h3 id="为什么要使用ConcurrentHashMap"><a href="#为什么要使用ConcurrentHashMap" class="headerlink" title="为什么要使用ConcurrentHashMap"></a>为什么要使用ConcurrentHashMap</h3><ul>
 <li>线程不安全的HashMap</li>
 </ul>
@@ -568,8 +570,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/10/10/Java并发编程-锁及并发容器/"
-           data-title="Java并发编程-锁及并发容器" data-url="https://junbin1011.github.io/2017/10/10/Java并发编程-锁及并发容器/">
+      <div class="ds-thread" data-thread-key="2017/10/10/Java并发编程-锁及并发容器/" data-title="Java并发编程-锁及并发容器" data-url="https://junbin1011.github.io/2017/10/10/Java并发编程-锁及并发容器/">
       </div>
     
   </div>
@@ -594,7 +595,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -605,9 +606,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -618,7 +617,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -631,7 +630,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -706,7 +705,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

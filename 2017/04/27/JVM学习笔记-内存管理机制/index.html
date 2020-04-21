@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,35 +66,35 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="JVM,Java," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="JVM,Java,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="简介Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》
-运行时数据区域Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和">
+<meta name="description" content="简介Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》 运行时数据区域Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和">
+<meta name="keywords" content="JVM,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM学习笔记-内存管理机制">
 <meta property="og:url" content="https://junbin1011.github.io/2017/04/27/JVM学习笔记-内存管理机制/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="简介Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》
-运行时数据区域Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和">
+<meta property="og:description" content="简介Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》 运行时数据区域Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-ec514d3f1620b0c2?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-4f9fb3059d34d7a1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -102,8 +102,7 @@
 <meta property="og:updated_time" content="2019-04-24T08:12:18.774Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM学习笔记-内存管理机制">
-<meta name="twitter:description" content="简介Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》
-运行时数据区域Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和">
+<meta name="twitter:description" content="简介Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》 运行时数据区域Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2">
 
 
@@ -132,7 +131,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/04/27/JVM学习笔记-内存管理机制/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/04/27/JVM学习笔记-内存管理机制/">
 
 
 
@@ -182,7 +181,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -212,7 +211,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -222,7 +221,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -232,7 +231,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -242,7 +241,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -281,7 +280,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -361,7 +360,7 @@
       
         <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Java与C++之间有一堆由内存动态分配与垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。 —— 《深入理解Java虚拟机：JVM高级特性与最佳实践》</p>
 <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途。以及创建和销毁的时间。有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2" alt></p>
 <h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>程序计数器只占用了一块比较小的内存空间。</p>
 <p>可以看作是当前线程所执行的字节码文件（class）的行号指示器。在虚拟机的世界中，字节码解析器就是通过改变计数器的值来选取下一条执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等，都需要通过程序计数器来实现。</p>
 <p>因为处理器在一个确定的时刻只会执行一个线程中的指令，线程切换后，是通过计数器来记录执行痕迹，因而可以看出，程序计数器是每个线程私有的</p>
@@ -392,7 +391,7 @@
 <h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>运行时常量池是方法区的一部分，Class文件中除了有类的版本、字段、方法、接口等描述信息外们还有一项信息是常量池，用于存放编译期生成的各种常量和符合引用，这部分内容将在类加载后进入方法区的运行时常量池中存放</p>
 <h2 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h2><p>直接内存并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。在JDK1.4中新加入了MIO（New Input/Output）类，引入了一种基于通道（Channel）与缓冲区（Buffer）的I/O方式，他可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能，因此避免了在Java堆和Native堆中来回复制数据</p>
 <h1 id="new-一个对象-发生了什么？"><a href="#new-一个对象-发生了什么？" class="headerlink" title="new 一个对象 发生了什么？"></a>new 一个对象 发生了什么？</h1><h2 id="对象创建"><a href="#对象创建" class="headerlink" title="对象创建"></a>对象创建</h2><p>Java是一门面向对象的编程语言，在Java程序运行过程中无时无刻都有对象被创建出来，在语言层面只是使用new关键字，而在虚拟机中，对象的创建又是怎样一个过程呢？</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-ec514d3f1620b0c2?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-ec514d3f1620b0c2?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <ol>
 <li><p>类加载检查<br>虚拟机遇到一条new 指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符合引用，并且检查这个符合引用代表的类是否已被加载、解析和初始化过。如果没有，那必须先执行相应的类加载过程。</p>
 </li>
@@ -490,12 +489,12 @@
 <li>句柄访问</li>
 </ul>
 <p>如果使用句柄访问的话，Java堆中将会划分出一块内存来作为句柄池，reference中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据的具体各自的地址信息。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-4f9fb3059d34d7a1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-4f9fb3059d34d7a1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <ul>
 <li>指针访问对象</li>
 </ul>
 <p>使用直接指针访问的话，Java堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，reference中存储的直接就是对象地址</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-dfdf9058de2064b9?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-dfdf9058de2064b9?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>这两种对象访问方式各有优势，使用句柄来访问的最大好处就是reference中存储的是稳定句柄地址，在对象被移动（垃圾收集时移动对象是非常普遍的行为）时只会改变句柄中的实例数据指针，而reference本身不需要被修改。<br>使用直接指针来访问最大的好处就是速度更快，它节省了一次指针定位的时间开销，由于对象访问的在Java中非常频繁，因此这类开销积小成多也是一项非常可 观的执行成本。从上一部分讲解的对象内存布局可以看出，就虚拟机HotSpot而言，它是使用第二种方式进行对象访问，但在整个软件开发的范围来看，各种 语言、框架中使用句柄来访问的情况也十分常见</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>本文主要参考《深入理解Java虚拟机：JVM高级特性与最佳实践》后的学习笔记及总结</p>
 
@@ -574,8 +573,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/04/27/JVM学习笔记-内存管理机制/"
-           data-title="JVM学习笔记-内存管理机制" data-url="https://junbin1011.github.io/2017/04/27/JVM学习笔记-内存管理机制/">
+      <div class="ds-thread" data-thread-key="2017/04/27/JVM学习笔记-内存管理机制/" data-title="JVM学习笔记-内存管理机制" data-url="https://junbin1011.github.io/2017/04/27/JVM学习笔记-内存管理机制/">
       </div>
     
   </div>
@@ -600,7 +598,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -611,9 +609,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -624,7 +620,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -637,7 +633,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -712,7 +708,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

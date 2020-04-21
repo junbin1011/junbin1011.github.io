@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,44 +66,40 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Java,数据结构与算法," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Java,数据结构与算法,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="HashMap，日常最常用的数据结构之一。它是基于哈希表的 Map 接口的实现，以key-value的形式存在。在HashMap中，key-value总是会当做一个整体来处理，系统会根据hash算法来来计算key-value的存储位置，我们总是可以通过key快速地存、取value。下面将通过源码分析存储结构、初始化、插入、查询、移除等来深入分析Hashmap的实现原理。
-
-equal hashco">
+<meta name="description" content="HashMap，日常最常用的数据结构之一。它是基于哈希表的 Map 接口的实现，以key-value的形式存在。在HashMap中，key-value总是会当做一个整体来处理，系统会根据hash算法来来计算key-value的存储位置，我们总是可以通过key快速地存、取value。下面将通过源码分析存储结构、初始化、插入、查询、移除等来深入分析Hashmap的实现原理。  equal hashco">
+<meta name="keywords" content="Java,数据结构与算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="顺序存储与链式存储的集合-HashMap、HashTable">
 <meta property="og:url" content="https://junbin1011.github.io/2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="HashMap，日常最常用的数据结构之一。它是基于哈希表的 Map 接口的实现，以key-value的形式存在。在HashMap中，key-value总是会当做一个整体来处理，系统会根据hash算法来来计算key-value的存储位置，我们总是可以通过key快速地存、取value。下面将通过源码分析存储结构、初始化、插入、查询、移除等来深入分析Hashmap的实现原理。
-
-equal hashco">
+<meta property="og:description" content="HashMap，日常最常用的数据结构之一。它是基于哈希表的 Map 接口的实现，以key-value的形式存在。在HashMap中，key-value总是会当做一个整体来处理，系统会根据hash算法来来计算key-value的存储位置，我们总是可以通过key快速地存、取value。下面将通过源码分析存储结构、初始化、插入、查询、移除等来深入分析Hashmap的实现原理。  equal hashco">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://img.blog.csdn.net/20161124182807137?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.790Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="顺序存储与链式存储的集合-HashMap、HashTable">
-<meta name="twitter:description" content="HashMap，日常最常用的数据结构之一。它是基于哈希表的 Map 接口的实现，以key-value的形式存在。在HashMap中，key-value总是会当做一个整体来处理，系统会根据hash算法来来计算key-value的存储位置，我们总是可以通过key快速地存、取value。下面将通过源码分析存储结构、初始化、插入、查询、移除等来深入分析Hashmap的实现原理。
-
-equal hashco">
+<meta name="twitter:description" content="HashMap，日常最常用的数据结构之一。它是基于哈希表的 Map 接口的实现，以key-value的形式存在。在HashMap中，key-value总是会当做一个整体来处理，系统会根据hash算法来来计算key-value的存储位置，我们总是可以通过key快速地存、取value。下面将通过源码分析存储结构、初始化、插入、查询、移除等来深入分析Hashmap的实现原理。  equal hashco">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20161124182807137?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 
 
@@ -132,7 +128,7 @@ equal hashco">
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/">
 
 
 
@@ -182,7 +178,7 @@ equal hashco">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -212,7 +208,7 @@ equal hashco">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -222,7 +218,7 @@ equal hashco">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -232,7 +228,7 @@ equal hashco">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -242,7 +238,7 @@ equal hashco">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -281,7 +277,7 @@ equal hashco">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -372,7 +368,7 @@ equal hashco">
 <li>但hashCode相等，不一定equals（）</li>
 </ul>
 <h1 id="1-存储结构"><a href="#1-存储结构" class="headerlink" title="1.存储结构"></a>1.存储结构</h1><p>HashMapde的存储结构是采用顺序存储结构及链式存储结构。顺序存储结构存储着每个链表的头结点。每个Key根据计算bucketindex来确定数组下标。bucketindex=hash&amp;（length-1）。当bucketindex相同时，插入链表头部。</p>
-<p><img src="http://img.blog.csdn.net/20161124182807137?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="http://img.blog.csdn.net/20161124182807137?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">// Entry是单向链表。  </div><div class="line">// 它是 “HashMap链式存储法”对应的链表。  </div><div class="line">// 它实现了Map.Entry 接口，即实现getKey(), getValue(), setValue(V value), equals(Object o), hashCode()这些函数  </div><div class="line">static class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; &#123;  </div><div class="line">final K key;  </div><div class="line">V value;  </div><div class="line">// 指向下一个节点  </div><div class="line">Entry&lt;K,V&gt; next;  </div><div class="line">final int hash;  </div><div class="line"></div><div class="line">// 构造函数。  </div><div class="line">// 输入参数包括&quot;哈希值(h)&quot;, &quot;键(k)&quot;, &quot;值(v)&quot;, &quot;下一节点(n)&quot;  </div><div class="line">Entry(int h, K k, V v, Entry&lt;K,V&gt; n) &#123;  </div><div class="line">value = v;  </div><div class="line">next = n;  </div><div class="line">key = k;  </div><div class="line">hash = h;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">public final K getKey() &#123;  </div><div class="line">return key;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">public final V getValue() &#123;  </div><div class="line">return value;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">public final V setValue(V newValue) &#123;  </div><div class="line">V oldValue = value;  </div><div class="line">value = newValue;  </div><div class="line">return oldValue;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">// 判断两个Entry是否相等  </div><div class="line">// 若两个Entry的“key”和“value”都相等，则返回true。  </div><div class="line">// 否则，返回false  </div><div class="line">public final boolean equals(Object o) &#123;  </div><div class="line">if (!(o instanceof Map.Entry))  </div><div class="line">return false;  </div><div class="line">Map.Entry e = (Map.Entry)o;  </div><div class="line">Object k1 = getKey();  </div><div class="line">Object k2 = e.getKey();  </div><div class="line">if (k1 == k2 || (k1 != null &amp;&amp; k1.equals(k2))) &#123;  </div><div class="line">Object v1 = getValue();  </div><div class="line">Object v2 = e.getValue();  </div><div class="line">if (v1 == v2 || (v1 != null &amp;&amp; v1.equals(v2)))  </div><div class="line">return true;  </div><div class="line">&#125;  </div><div class="line">return false;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">// 实现hashCode()  </div><div class="line">public final int hashCode() &#123;  </div><div class="line">return (key==null ? 0 : key.hashCode()) ^  </div><div class="line">(value==null ? 0 : value.hashCode());  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">public final String toString() &#123;  </div><div class="line">return getKey() + &quot;=&quot; + getValue();  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">// 当向HashMap中添加元素时，绘调用recordAccess()。  </div><div class="line">// 这里不做任何处理  </div><div class="line">void recordAccess(HashMap&lt;K,V&gt; m) &#123;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">// 当从HashMap中删除元素时，绘调用recordRemoval()。  </div><div class="line">// 这里不做任何处理  </div><div class="line">void recordRemoval(HashMap&lt;K,V&gt; m) &#123;  </div><div class="line">&#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h1 id="2-初始化（加载因子）"><a href="#2-初始化（加载因子）" class="headerlink" title="2.初始化（加载因子）"></a>2.初始化（加载因子）</h1><p> HashMap有两个参数影响其性能：初始容量和加载因子。默认初始容量是16，加载因子是0.75。容量是哈希表中桶(Entry数组)的数量，初始容量只是哈希表在创建时的容量。加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。当哈希表中的条目数超出了加载因子与当前容量的乘积时，会调用方法将容量翻倍。所以这是时间和空间的矛盾，最后根据自己的业务来设定。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">// 默认的初始容量（容量为HashMap中槽的数目）是16，且实际容量必须是2的整数次幂。      </div><div class="line">    static final int DEFAULT_INITIAL_CAPACITY = 16;      </div><div class="line">     </div><div class="line">    // 最大容量（必须是2的幂且小于2的30次方，传入容量过大将被这个值替换）      </div><div class="line">    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;      </div><div class="line">     </div><div class="line">    // 默认加载因子为0.75     </div><div class="line">    static final float DEFAULT_LOAD_FACTOR = 0.75f;      </div><div class="line">   // 指定“容量大小”和“加载因子”的构造函数      </div><div class="line">    public HashMap(int initialCapacity, float loadFactor) &#123;      </div><div class="line">        if (initialCapacity &lt; 0)      </div><div class="line">            throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot; +      </div><div class="line">                                               initialCapacity);      </div><div class="line">        // HashMap的最大容量只能是MAXIMUM_CAPACITY      </div><div class="line">        if (initialCapacity &gt; MAXIMUM_CAPACITY)      </div><div class="line">            initialCapacity = MAXIMUM_CAPACITY;      </div><div class="line">        //加载因此不能小于0    </div><div class="line">        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))      </div><div class="line">            throw new IllegalArgumentException(&quot;Illegal load factor: &quot; +      </div><div class="line">                                               loadFactor);      </div><div class="line">     </div><div class="line">        // 找出“大于initialCapacity”的最小的2的幂      </div><div class="line">        int capacity = 1;      </div><div class="line">        while (capacity &lt; initialCapacity)      </div><div class="line">            capacity &lt;&lt;= 1;      </div><div class="line">     </div><div class="line">        // 设置“加载因子”      </div><div class="line">        this.loadFactor = loadFactor;      </div><div class="line">        // 设置“HashMap阈值”，当HashMap中存储数据的数量达到threshold时，就需要将HashMap的容量加倍。      </div><div class="line">        threshold = (int)(capacity * loadFactor);      </div><div class="line">        // 创建Entry数组，用来保存数据      </div><div class="line">        table = new Entry[capacity];      </div><div class="line">        init();      </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
@@ -468,8 +464,7 @@ equal hashco">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/"
-           data-title="顺序存储与链式存储的集合-HashMap、HashTable" data-url="https://junbin1011.github.io/2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/">
+      <div class="ds-thread" data-thread-key="2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/" data-title="顺序存储与链式存储的集合-HashMap、HashTable" data-url="https://junbin1011.github.io/2016/11/24/顺序存储与链式存储的集合-HashMap、HashTable/">
       </div>
     
   </div>
@@ -494,7 +489,7 @@ equal hashco">
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -505,9 +500,7 @@ equal hashco">
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -518,7 +511,7 @@ equal hashco">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -531,7 +524,7 @@ equal hashco">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -606,7 +599,7 @@ equal hashco">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,37 +66,35 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下： 
-经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接
-Android各版本状态栏区别首先我们需要注意，Android不">
+<meta name="description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下：  经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接 Android各版本状态栏区别首先我们需要注意，Android不">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="玩转Android状态栏">
 <meta property="og:url" content="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下： 
-经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接
-Android各版本状态栏区别首先我们需要注意，Android不">
+<meta property="og:description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下：  经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接 Android各版本状态栏区别首先我们需要注意，Android不">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-3c19e25bec23ae1a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-682a47055173face?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-296dc3db09ecc9c0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -109,9 +107,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.783Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="玩转Android状态栏">
-<meta name="twitter:description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下： 
-经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接
-Android各版本状态栏区别首先我们需要注意，Android不">
+<meta name="twitter:description" content="前言前段时间，突然收到一个状态栏颜色优化设计的任务，将原本应用整体的黑色状态栏修改为根据标题栏颜色进行沉浸式设计，显示效果如下：  经过分析及踩过N多坑，终于完成了APP全局的修改。现将一些需要注意的问题及踩过的坑进行梳理总结，主要从系统版本区别、各大厂商的ROM区别及具体的设置进行分析，期间也参考了很多资料，会在文末附上对应的链接 Android各版本状态栏区别首先我们需要注意，Android不">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-3c19e25bec23ae1a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -140,7 +136,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/">
 
 
 
@@ -190,7 +186,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -220,7 +216,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -230,7 +226,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -240,7 +236,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -250,7 +246,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -289,7 +285,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -512,8 +508,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/12/14/玩转Android状态栏/"
-           data-title="玩转Android状态栏" data-url="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/">
+      <div class="ds-thread" data-thread-key="2017/12/14/玩转Android状态栏/" data-title="玩转Android状态栏" data-url="https://junbin1011.github.io/2017/12/14/玩转Android状态栏/">
       </div>
     
   </div>
@@ -538,7 +533,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -549,9 +544,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -562,7 +555,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -575,7 +568,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -650,7 +643,7 @@ Android各版本状态栏区别首先我们需要注意，Android不">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

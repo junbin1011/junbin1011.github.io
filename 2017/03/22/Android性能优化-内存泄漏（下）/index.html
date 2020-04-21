@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,37 +66,35 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,Android性能优化," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,Android性能优化,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="如何进行内存泄漏的分析使用Android Studio  MonitorsAndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。
-
-这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内">
+<meta name="description" content="如何进行内存泄漏的分析使用Android Studio  MonitorsAndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。  这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内">
+<meta name="keywords" content="Android,Android性能优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android性能优化-内存泄漏（下）">
 <meta property="og:url" content="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（下）/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="如何进行内存泄漏的分析使用Android Studio  MonitorsAndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。
-
-这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内">
+<meta property="og:description" content="如何进行内存泄漏的分析使用Android Studio  MonitorsAndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。  这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-16714b3ef941e1b6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEB0621ed808d662b530f710a7b94838ed4?method=download&shareKey=25da5526e52b0833c0b282887d70aeec">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-6e9e7d2b51e0d4ee?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -114,9 +112,7 @@
 <meta property="og:updated_time" content="2019-04-24T08:12:18.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android性能优化-内存泄漏（下）">
-<meta name="twitter:description" content="如何进行内存泄漏的分析使用Android Studio  MonitorsAndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。
-
-这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内">
+<meta name="twitter:description" content="如何进行内存泄漏的分析使用Android Studio  MonitorsAndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。  这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-16714b3ef941e1b6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -145,7 +141,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（下）/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（下）/">
 
 
 
@@ -195,7 +191,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -225,7 +221,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -235,7 +231,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -245,7 +241,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -255,7 +251,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -294,7 +290,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -373,9 +369,9 @@
 
       
         <h1 id="如何进行内存泄漏的分析"><a href="#如何进行内存泄漏的分析" class="headerlink" title="如何进行内存泄漏的分析"></a>如何进行内存泄漏的分析</h1><h2 id="使用Android-Studio-Monitors"><a href="#使用Android-Studio-Monitors" class="headerlink" title="使用Android Studio  Monitors"></a>使用Android Studio  Monitors</h2><p>AndroidMonitors是Android Studio自带的功能，我们可以通过里面的Memory模块来进行内存泄漏的分析，平时开发我们也可以通过该模块来观察内存的抖动情况。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-16714b3ef941e1b6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-16714b3ef941e1b6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>这里我们首先知道，标注1是进行GC的操作，标注2是进行Dump操作，也就是可以生成我们瞬时的堆内存快照，我们主要也是通过分析堆内存的快照来进行内存泄漏分析。<br>一般我们先进行几次gc操作，待内存平稳后，执行dump操作。会生成一个phrof的内存快照</p>
-<p><img src="http://note.youdao.com/yws/api/personal/file/WEB0621ed808d662b530f710a7b94838ed4?method=download&amp;shareKey=25da5526e52b0833c0b282887d70aeec" alt=""></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB0621ed808d662b530f710a7b94838ed4?method=download&amp;shareKey=25da5526e52b0833c0b282887d70aeec" alt></p>
 <p>此时我们可以看到几个面板：</p>
 <ol>
 <li>ClassName：堆内存中存在的类</li>
@@ -389,19 +385,19 @@
 <li>Dominating Size:释放该对象能节省的堆内存（Byte）</li>
 </ol>
 <p>将快照转换为Mat能够导入的格式<br>在as的captures中可以右键选择export to standard  .hprof 将快照转换为mat能够带入的文件格式</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-6e9e7d2b51e0d4ee?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-6e9e7d2b51e0d4ee?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="使用MAT"><a href="#使用MAT" class="headerlink" title="使用MAT"></a>使用MAT</h2><p>MAT是一款功能更强大的内存泄漏分析工具，在实际的内存分析中，我们可以结合Monitors进行内存泄漏分析。</p>
 <p><a href="http://www.eclipse.org/mat/" target="_blank" rel="external">下载地址http://www.eclipse.org/mat/</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-8ba2a74943e4efaa?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>导入快照后，我们可以通过Histogram查看内存快照<br><img src="http://note.youdao.com/yws/api/personal/file/WEB8211d428e66bc581253f74e28ee78f78?method=download&amp;shareKey=7b8c7db3758507fb6f409e66aba03f23" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-8ba2a74943e4efaa?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>导入快照后，我们可以通过Histogram查看内存快照<br><img src="http://note.youdao.com/yws/api/personal/file/WEB8211d428e66bc581253f74e28ee78f78?method=download&amp;shareKey=7b8c7db3758507fb6f409e66aba03f23" alt></p>
 <p>在Histogram中，我们可以通过筛选过滤出我们项目中的包和类，这个操作实际中很有用。</p>
-<p><img src="http://note.youdao.com/yws/api/personal/file/WEB12eff1828f48890b194fdec8b247ff20?method=download&amp;shareKey=f417238f179bd1c6621097f153512d5d" alt=""></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB12eff1828f48890b194fdec8b247ff20?method=download&amp;shareKey=f417238f179bd1c6621097f153512d5d" alt></p>
 <p>选中具体的对象后，右键list objects–with incoming references可以查看对改对象持有的应用</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-a1edb426316f38ce?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-a1edb426316f38ce?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>我们可以看到，这个时候引用还是非常的，我们需要过滤一些无用的软引用之类的。通过右键-megre shortest path to GC roots-exclude all phantom/sofe/weak etc.refrences进行过滤,这个时候基本就能查出我们自己写的代码的引用</p>
-<p><img src="http://note.youdao.com/yws/api/personal/file/WEB613af7e59acfc2bbc08ca85504030f81?method=download&amp;shareKey=c60166a7574820f768b041b480bb98e9" alt=""></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB613af7e59acfc2bbc08ca85504030f81?method=download&amp;shareKey=c60166a7574820f768b041b480bb98e9" alt></p>
 <p>另外Mat还支持2个快照进行比对，这个功能也是非常有用的。<br>我们可以在Navigation History中选择 Histogram，然后右键选择Add to compare basket加入比较选项，将2个快照的Histogram加入后在compare basket栏中点击红色感叹号就可以执行快照的比对。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-5ab78b29c0689fdc?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-5ab78b29c0689fdc?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="使用leakcanary"><a href="#使用leakcanary" class="headerlink" title="使用leakcanary"></a>使用leakcanary</h2><p>Square开源了一个内存泄露自动探测神器——LeakCanary，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。</p>
 <p><a href="https://github.com/square/leakcanary" target="_blank" rel="external">github https://github.com/square/leakcanary</a></p>
 <p>通过官方的文档介绍，我们可以轻松在项目集成</p>
@@ -409,17 +405,17 @@
 <p>Application 配置:<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public class ExampleApplication extends Application &#123;</div><div class="line"></div><div class="line">  ......</div><div class="line">  //在自己的Application中添加如下代码</div><div class="line">public static RefWatcher getRefWatcher(Context context) &#123;</div><div class="line">    ExampleApplication application = (ExampleApplication) context</div><div class="line">            .getApplicationContext();</div><div class="line">    return application.refWatcher;</div><div class="line">&#125;</div><div class="line"></div><div class="line">  //在自己的Application中添加如下代码</div><div class="line">private RefWatcher refWatcher;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onCreate() &#123;</div><div class="line">    super.onCreate();</div><div class="line">    ......</div><div class="line">        //在自己的Application中添加如下代码</div><div class="line">    refWatcher = LeakCanary.install(this);</div><div class="line">    ......</div><div class="line">&#125;</div><div class="line"></div><div class="line">.....</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>使用 RefWatcher 监控那些本该被回收的对象：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public abstract class BaseFragment extends Fragment &#123;</div><div class="line"></div><div class="line">  @Override public void onDestroy() &#123;</div><div class="line">    super.onDestroy();</div><div class="line">    RefWatcher refWatcher = ExampleApplication.getRefWatcher(getActivity());</div><div class="line">    refWatcher.watch(this);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p> 最后如果有内存泄漏，会接收到相应的推送。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-8884ec7e4a009422?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-8884ec7e4a009422?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>这样我们就能在编码的阶段，尽量的避免出现内存泄漏的情况。</p>
 <h2 id="如何对自己的项目进行内存泄漏分析"><a href="#如何对自己的项目进行内存泄漏分析" class="headerlink" title="如何对自己的项目进行内存泄漏分析"></a>如何对自己的项目进行内存泄漏分析</h2><p>上面说了这么多，怎么来对我们自己的项目进行内存泄漏的分析呢？</p>
 <p>一般我们都是在不知道项目中那里有存在内存泄漏的情况下，怎么来查找出那个地方出现了内存泄漏？</p>
 <p>这里我们主要检查Activity及Fragment的内存泄漏情况。</p>
 <p>使用Memory Usage查看Activity及Fragment的内存泄漏情况，首先先运行自己项目到MainActivity，观察 Menory Usage。</p>
-<p><img src="http://note.youdao.com/yws/api/personal/file/WEB7ec616be1982e225160c263823001c54?method=download&amp;shareKey=c90694f64906445c1d63fbc13114072b" alt=""></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB7ec616be1982e225160c263823001c54?method=download&amp;shareKey=c90694f64906445c1d63fbc13114072b" alt></p>
 <p>待gc内存稳定后，我们可以执行一些操作，如进入其他的Activity执行其他操作，然后 检测内存的抖动情况及gc稳定后，内存与初始内存的对比。</p>
-<p>这里我使用开启不保留活动来模拟MainActivity的异常退出及恢复。继续看Menory Usage。<br><img src="http://note.youdao.com/yws/api/personal/file/WEB774b02e733d81a05f918c4ee11a34dbd?method=download&amp;shareKey=624484855f442464e7e67299fb762225" alt=""><br>这个时候，我只有在MainActivity出现过， 理论上应当只有一个MainActivity的实例，这个地方就是一个值得怀疑的内存泄漏的点。这个时候我们就可以通过Mioniter和Mat进行内存分析</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-34e698b3baf98a80?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>这个时候我们可以看到引用的的可怀疑对象，接着我们就进入源码分析。<br><img src="http://upload-images.jianshu.io/upload_images/5125122-1f1856e3fc019bb2?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这里我使用开启不保留活动来模拟MainActivity的异常退出及恢复。继续看Menory Usage。<br><img src="http://note.youdao.com/yws/api/personal/file/WEB774b02e733d81a05f918c4ee11a34dbd?method=download&amp;shareKey=624484855f442464e7e67299fb762225" alt><br>这个时候，我只有在MainActivity出现过， 理论上应当只有一个MainActivity的实例，这个地方就是一个值得怀疑的内存泄漏的点。这个时候我们就可以通过Mioniter和Mat进行内存分析</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-34e698b3baf98a80?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p>这个时候我们可以看到引用的的可怀疑对象，接着我们就进入源码分析。<br><img src="http://upload-images.jianshu.io/upload_images/5125122-1f1856e3fc019bb2?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>果然这里有一个单例持有了MainActivity的使用。</p>
 <p>分析内存泄漏是一个体力活，我们大概在项目中主要要记住。</p>
 <ol>
@@ -508,8 +504,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/22/Android性能优化-内存泄漏（下）/"
-           data-title="Android性能优化-内存泄漏（下）" data-url="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（下）/">
+      <div class="ds-thread" data-thread-key="2017/03/22/Android性能优化-内存泄漏（下）/" data-title="Android性能优化-内存泄漏（下）" data-url="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（下）/">
       </div>
     
   </div>
@@ -534,7 +529,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -545,9 +540,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -558,7 +551,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -571,7 +564,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -646,7 +639,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

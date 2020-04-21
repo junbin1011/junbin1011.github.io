@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,45 +66,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Java," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Java,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果
-CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换
-减">
+<meta name="description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果 CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换 减">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程-基础原理">
 <meta property="og:url" content="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果
-CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换
-减">
+<meta property="og:description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果 CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换 减">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-cdeffbbfe86e5c74?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程-基础原理">
-<meta name="twitter:description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果
-CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换
-减">
+<meta name="twitter:description" content="并发编的挑战上下文切换（并行不一定比串行快）时间片是CPU分配给各个线程的时间，一般是几十毫秒。因为时间片非常短，所以CPU通过不停地切换线程执行，达到多个线程同时执行的效果 CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换 减">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -133,7 +129,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/">
 
 
 
@@ -183,7 +179,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -213,7 +209,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -223,7 +219,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -233,7 +229,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -243,7 +239,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -282,7 +278,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -376,7 +372,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 <li>对于数据库锁，加锁和解锁必现在一个数据库连接池里，否则会出现解锁失败的现象</li>
 </ul>
 <h2 id="资源限制"><a href="#资源限制" class="headerlink" title="资源限制"></a>资源限制</h2><p>资源限制是指在进行并发编程时，程序的执行速度受限于计算机硬件或软件资源。硬件资源限制有带宽的上传/下载速度、硬盘读写速度和CPU处理速度。软件资源限制有数据库的连接数和socket连接数等。<br>对于硬件资源限制，可以考虑使用集群并行执行程序。对于软件资源限制，可以考虑使用资源池将资源复用。需要根据不同的资源限制调整程序的并发度</p>
-<h1 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h1><p>Java的并发采用的是共享内存模型，Java线程之间的通讯总是隐式进行，整个通信过程对程序员完全透明。Java线程之间的通信由Java内存模型（JMM）控制，JMM决定一个线程对共享变量的写入核实对另一个线程可见<br><img src="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h1><p>Java的并发采用的是共享内存模型，Java线程之间的通讯总是隐式进行，整个通信过程对程序员完全透明。Java线程之间的通信由Java内存模型（JMM）控制，JMM决定一个线程对共享变量的写入核实对另一个线程可见<br><img src="http://upload-images.jianshu.io/upload_images/5125122-2fb19f7bf25ce364?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <ol>
 <li>线程对共享变量的所有操作都必须在自己的工作内存中进行，不能直接在主内存中读写</li>
 <li>不同线程之间无法直接访问其他线程工作内存中的变量，线程间变量值的传递需要通过主内存来完成。</li>
@@ -399,7 +395,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 <p> 线程执行run()的时候我们需要在线程中不停的做一些事情，比如while循环，那么这时候该如何停止线程呢？如果线程做的事情不是耗时的，那么只需要使用一个标志即可。如果需要退出时，调用setStop()即可。这里就使用了关键字volatile，这个关键字的目的是如果修改了isStop的值，那么在while循环中可以立即读取到修改后的值</p>
 <h1 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Synchronized在JVM的实现原理，主要是使用了monitorenter和monitorexit指令实现。monitorenter指令是在编译后插入到同步代码块的开始位置，而monitorexit是插入到方法结束处和异常处，JVM要保证整个monitorenter必须有对应的monitorexit与之配对。任何对象都有一个monitor与之关联，当且有一个monitor被持有后，它将处于锁定状态。线程执行到monitorenter指令时，将会尝试获取对象所对应的monitor的所有权，即尝试获得对象的锁</p>
 <p>synchronized用的锁是存在Java对象头里面的。Java对象头里的Mark Word里默认存储对象的HashCode、分代年龄和锁标记位。在运行期间，Mark Word里存储的数据会随着锁标志位的变化而变化<br>锁的状态总共有四种：无锁状态、偏向锁、轻量级锁和重量级锁。随着锁的竞争，锁可以从偏向锁升级到轻量级锁，再升级的重量级锁（但是锁的升级是单向的，也就是说只能从低到高升级，不会出现锁的降级）。JDK 1.6中默认是开启偏向锁和轻量级锁的，我们也可以通过-XX:-UseBiasedLocking来禁用偏向锁</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-cdeffbbfe86e5c74?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-cdeffbbfe86e5c74?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <table>
 <thead>
 <tr>
@@ -532,8 +528,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/09/23/Java并发编程-基础原理/"
-           data-title="Java并发编程-基础原理" data-url="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/">
+      <div class="ds-thread" data-thread-key="2017/09/23/Java并发编程-基础原理/" data-title="Java并发编程-基础原理" data-url="https://junbin1011.github.io/2017/09/23/Java并发编程-基础原理/">
       </div>
     
   </div>
@@ -558,7 +553,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -569,9 +564,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -582,7 +575,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -595,7 +588,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -670,7 +663,7 @@ CPU通过时间片分配算法来循环执行任务，当前任务执行一个�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

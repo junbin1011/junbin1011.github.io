@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,51 +66,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,源码," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,源码,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="OkHttp是什么？简介OkHttp是一款优秀的HTTP框架，它支持get请求和post请求，支持基于Http的文件上传和下载，支持加载图片，支持下载文件透明的GZIP压缩，支持响应缓存避免重复的网络请求，支持使用连接池来降低响应延迟问题。OkHttp由Square公司开发，是目前Android最热门的网络框架之一。
-官网网址：OKHttp官网
-Github地址:Github
-特点
-支持HTTP2">
+<meta name="description" content="OkHttp是什么？简介OkHttp是一款优秀的HTTP框架，它支持get请求和post请求，支持基于Http的文件上传和下载，支持加载图片，支持下载文件透明的GZIP压缩，支持响应缓存避免重复的网络请求，支持使用连接池来降低响应延迟问题。OkHttp由Square公司开发，是目前Android最热门的网络框架之一。 官网网址：OKHttp官网 Github地址:Github 特点 支持HTTP2">
+<meta name="keywords" content="Android,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OkHttp源码学习随笔">
 <meta property="og:url" content="https://junbin1011.github.io/2018/08/02/OkHttp源码学习随笔/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="OkHttp是什么？简介OkHttp是一款优秀的HTTP框架，它支持get请求和post请求，支持基于Http的文件上传和下载，支持加载图片，支持下载文件透明的GZIP压缩，支持响应缓存避免重复的网络请求，支持使用连接池来降低响应延迟问题。OkHttp由Square公司开发，是目前Android最热门的网络框架之一。
-官网网址：OKHttp官网
-Github地址:Github
-特点
-支持HTTP2">
+<meta property="og:description" content="OkHttp是什么？简介OkHttp是一款优秀的HTTP框架，它支持get请求和post请求，支持基于Http的文件上传和下载，支持加载图片，支持下载文件透明的GZIP压缩，支持响应缓存避免重复的网络请求，支持使用连接池来降低响应延迟问题。OkHttp由Square公司开发，是目前Android最热门的网络框架之一。 官网网址：OKHttp官网 Github地址:Github 特点 支持HTTP2">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-308f8d448174afa5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-0e1febbb5a84fe77?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.777Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OkHttp源码学习随笔">
-<meta name="twitter:description" content="OkHttp是什么？简介OkHttp是一款优秀的HTTP框架，它支持get请求和post请求，支持基于Http的文件上传和下载，支持加载图片，支持下载文件透明的GZIP压缩，支持响应缓存避免重复的网络请求，支持使用连接池来降低响应延迟问题。OkHttp由Square公司开发，是目前Android最热门的网络框架之一。
-官网网址：OKHttp官网
-Github地址:Github
-特点
-支持HTTP2">
+<meta name="twitter:description" content="OkHttp是什么？简介OkHttp是一款优秀的HTTP框架，它支持get请求和post请求，支持基于Http的文件上传和下载，支持加载图片，支持下载文件透明的GZIP压缩，支持响应缓存避免重复的网络请求，支持使用连接池来降低响应延迟问题。OkHttp由Square公司开发，是目前Android最热门的网络框架之一。 官网网址：OKHttp官网 Github地址:Github 特点 支持HTTP2">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-308f8d448174afa5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -139,7 +129,7 @@ Github地址:Github
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2018/08/02/OkHttp源码学习随笔/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2018/08/02/OkHttp源码学习随笔/">
 
 
 
@@ -189,7 +179,7 @@ Github地址:Github
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -219,7 +209,7 @@ Github地址:Github
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -229,7 +219,7 @@ Github地址:Github
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -239,7 +229,7 @@ Github地址:Github
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -249,7 +239,7 @@ Github地址:Github
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -288,7 +278,7 @@ Github地址:Github
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -596,8 +586,7 @@ Github地址:Github
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/08/02/OkHttp源码学习随笔/"
-           data-title="OkHttp源码学习随笔" data-url="https://junbin1011.github.io/2018/08/02/OkHttp源码学习随笔/">
+      <div class="ds-thread" data-thread-key="2018/08/02/OkHttp源码学习随笔/" data-title="OkHttp源码学习随笔" data-url="https://junbin1011.github.io/2018/08/02/OkHttp源码学习随笔/">
       </div>
     
   </div>
@@ -622,7 +611,7 @@ Github地址:Github
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -633,9 +622,7 @@ Github地址:Github
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -646,7 +633,7 @@ Github地址:Github
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -659,7 +646,7 @@ Github地址:Github
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -734,7 +721,7 @@ Github地址:Github
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

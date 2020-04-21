@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,52 +66,42 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="JVM,Java," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="JVM,Java,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="垃圾收集算法JVM垃圾收集算法有四种：标记-清除算法、复制算法、标记-整理算法、分代收集算法
-标记-清除算法标记-清除是最基础的收集算法。算法分为“标记”和清除两个阶段。首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。它的主要不足有两个：
-
-效率问题，标记和清除两个过程效率都不高
-空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要">
+<meta name="description" content="垃圾收集算法JVM垃圾收集算法有四种：标记-清除算法、复制算法、标记-整理算法、分代收集算法 标记-清除算法标记-清除是最基础的收集算法。算法分为“标记”和清除两个阶段。首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。它的主要不足有两个：  效率问题，标记和清除两个过程效率都不高 空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要">
+<meta name="keywords" content="JVM,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM学习笔记(3)-垃圾收集算法">
 <meta property="og:url" content="https://junbin1011.github.io/2017/05/08/JVM学习笔记-3-垃圾收集算法/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="垃圾收集算法JVM垃圾收集算法有四种：标记-清除算法、复制算法、标记-整理算法、分代收集算法
-标记-清除算法标记-清除是最基础的收集算法。算法分为“标记”和清除两个阶段。首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。它的主要不足有两个：
-
-效率问题，标记和清除两个过程效率都不高
-空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要">
+<meta property="og:description" content="垃圾收集算法JVM垃圾收集算法有四种：标记-清除算法、复制算法、标记-整理算法、分代收集算法 标记-清除算法标记-清除是最基础的收集算法。算法分为“标记”和清除两个阶段。首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。它的主要不足有两个：  效率问题，标记和清除两个过程效率都不高 空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-48b83adf2c09bf67?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-806c627e99c49a50?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-7fd6a26b4c6c579f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.773Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM学习笔记(3)-垃圾收集算法">
-<meta name="twitter:description" content="垃圾收集算法JVM垃圾收集算法有四种：标记-清除算法、复制算法、标记-整理算法、分代收集算法
-标记-清除算法标记-清除是最基础的收集算法。算法分为“标记”和清除两个阶段。首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。它的主要不足有两个：
-
-效率问题，标记和清除两个过程效率都不高
-空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要">
+<meta name="twitter:description" content="垃圾收集算法JVM垃圾收集算法有四种：标记-清除算法、复制算法、标记-整理算法、分代收集算法 标记-清除算法标记-清除是最基础的收集算法。算法分为“标记”和清除两个阶段。首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。它的主要不足有两个：  效率问题，标记和清除两个过程效率都不高 空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-48b83adf2c09bf67?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -140,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/05/08/JVM学习笔记-3-垃圾收集算法/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/05/08/JVM学习笔记-3-垃圾收集算法/">
 
 
 
@@ -190,7 +180,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -220,7 +210,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -230,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -240,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -250,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -289,7 +279,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -373,11 +363,11 @@
 <li>效率问题，标记和清除两个过程效率都不高</li>
 <li>空间问题。标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程汇总需要分配大对象时，无法找到足够的连续内存而不得不提前触发另外一次垃圾收集动作。其执行的过程如下：</li>
 </ol>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-48b83adf2c09bf67?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-48b83adf2c09bf67?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h2><p>为了解决效率问题，一种称为复制的收集算法出现了，它将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一个块上面，然后再把已使用的内存空间一次清理掉。这样使得每次都是对整个半区域进行内存回收，内存分配时也就不用考虑内存碎片等复杂情况，只要移动栈顶指针，按顺序分配内存即可，实现简单，运行高效。只是这种算法的代价是将内存缩小为了原来的一半，未免太高。其执行的过程如下：<br>现在的商业虚拟机都采用这种收集算法来回收新生代，IBM公司的专门研究表明，新生代中的对象是98%是“朝生夕死”的，所以并不需要按照1:1的比例来划分内存空间，而是将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中的一块Survivor。当回收时，将Eden和Survivor中还存活着的对象一次性复制到另外一块Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间。HotSpot虚拟机默认Eden和Survivor的大小比例是8:1，也就是每次新生代中可用内存空间为整个新生代容量的90%，只有10%的内存会被浪费。当然，98%的对象可回收只是一般场景下的数据，我们没办法保证每次回收都有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存（年老代）进行分配担保。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-806c627e99c49a50?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-806c627e99c49a50?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h2><p>复制收集算法在对象存活率较高时要进行较多的复制操作，效率将会变低。更关键的是，如果不想浪费50%的空间闷酒需要有额外的空间进行内存分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以年老代一般不能直接选用这种算法。<br>根据年老代的特点，有人提出了另外一种“标记-整理”算法，标记过程任然与“标记-清除”算法一样，但后续步骤不足是直接对可回收对象进行清理，而是让所有的对象都向一段移动，然后直接清理掉端边界以外的内存，“标记-整理”算法其过程如下：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-7fd6a26b4c6c579f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/5125122-7fd6a26b4c6c579f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <h2 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h2><p>当前商业虚拟机的垃圾收集都采用“分代收集”算法，这种算法并没有什么新的思想，只是根据对象存活周期的不同将内存划分为几块。一般是把Java堆分为新生代和老年代，这样就可以根据各个年代的特点采用最适合的收集算法，在新生代中，每次垃圾收集时都发现有大批对象死去，只有少量存活，那就选用复制算法，只需付出少量存活对象的复制成本就可以完成手机，而老年代因为对象存活率高，没有额外空间对它进行分配担保，就必须使用“标记-清理”或者“标记-整理”算法来进行回收。</p>
 
       
@@ -455,8 +445,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/05/08/JVM学习笔记-3-垃圾收集算法/"
-           data-title="JVM学习笔记(3)-垃圾收集算法" data-url="https://junbin1011.github.io/2017/05/08/JVM学习笔记-3-垃圾收集算法/">
+      <div class="ds-thread" data-thread-key="2017/05/08/JVM学习笔记-3-垃圾收集算法/" data-title="JVM学习笔记(3)-垃圾收集算法" data-url="https://junbin1011.github.io/2017/05/08/JVM学习笔记-3-垃圾收集算法/">
       </div>
     
   </div>
@@ -481,7 +470,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -492,9 +481,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -505,7 +492,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -518,7 +505,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -593,7 +580,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,50 +66,40 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Java,数据结构与算法," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Java,数据结构与算法,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="插入排序（Insert Sort）直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。
-时间复杂度：
- 1）最好情况o(n)
- 2）最坏情况o(n²/4) 插入排序比选择排序及冒泡排序性能好些 
-1234567891011121314static void insertSort(int[] array) &amp;#123;">
+<meta name="description" content="插入排序（Insert Sort）直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。 时间复杂度：  1）最好情况o(n)  2）最坏情况o(n²/4) 插入排序比选择排序及冒泡排序性能好些  1234567891011121314static void insertSort(int[] array) &amp;#123;">
+<meta name="keywords" content="Java,数据结构与算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="排序算法-插入排序">
 <meta property="og:url" content="https://junbin1011.github.io/2016/12/12/排序算法-插入排序/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="插入排序（Insert Sort）直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。
-时间复杂度：
- 1）最好情况o(n)
- 2）最坏情况o(n²/4) 插入排序比选择排序及冒泡排序性能好些 
-1234567891011121314static void insertSort(int[] array) &amp;#123;">
+<meta property="og:description" content="插入排序（Insert Sort）直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。 时间复杂度：  1）最好情况o(n)  2）最坏情况o(n²/4) 插入排序比选择排序及冒泡排序性能好些  1234567891011121314static void insertSort(int[] array) &amp;#123;">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://img.blog.csdn.net/20161212174059326?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.781Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="排序算法-插入排序">
-<meta name="twitter:description" content="插入排序（Insert Sort）直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。
-时间复杂度：
- 1）最好情况o(n)
- 2）最坏情况o(n²/4) 插入排序比选择排序及冒泡排序性能好些 
-1234567891011121314static void insertSort(int[] array) &amp;#123;">
+<meta name="twitter:description" content="插入排序（Insert Sort）直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。 时间复杂度：  1）最好情况o(n)  2）最坏情况o(n²/4) 插入排序比选择排序及冒泡排序性能好些  1234567891011121314static void insertSort(int[] array) &amp;#123;">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20161212174059326?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 
 
@@ -138,7 +128,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2016/12/12/排序算法-插入排序/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2016/12/12/排序算法-插入排序/">
 
 
 
@@ -188,7 +178,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -218,7 +208,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -228,7 +218,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -238,7 +228,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -248,7 +238,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -287,7 +277,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -368,7 +358,7 @@
         <p><strong>插入排序（Insert Sort）</strong><br>直接插入排序的基本操作是将一个记录插入到已经排好的有序表中，从而得到一个新的、记录数增1的有序表，类似打扑克牌排列表。</p>
 <p>时间复杂度：</p>
 <p> 1）最好情况o(n)</p>
-<p> 2）最坏情况o(n²/4)<br> 插入排序比选择排序及冒泡排序性能好些<br> <img src="http://img.blog.csdn.net/20161212174059326?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p> 2）最坏情况o(n²/4)<br> 插入排序比选择排序及冒泡排序性能好些<br> <img src="http://img.blog.csdn.net/20161212174059326?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">static void insertSort(int[] array) &#123;  </div><div class="line">       if (array != null &amp;&amp; array.length &gt; 0) &#123;  </div><div class="line">           int i, j, key;  </div><div class="line">           for (i = 1; i &lt; array.length; i++) &#123;  </div><div class="line">               key = array[i];  </div><div class="line">               j = i - 1;  </div><div class="line">               while (j &gt;= 0 &amp;&amp; key &lt; array[j]) &#123;  </div><div class="line">                   array[j + 1] = array[j];//// 如果要插入的元素小于第j个元素,就将第j个元素向后移动  </div><div class="line">                   j--;  </div><div class="line">               &#125;  </div><div class="line">               array[j + 1] = key;// 直到要插入的元素不小于第j个元素,将insertNote插入到数组中  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line"> * 将数组的2个位置交换 </div><div class="line"> */  </div><div class="line">static void swap(int[] array, int i, int j) &#123;  </div><div class="line">    if (array != null &amp;&amp; array.length &gt; 0) &#123;  </div><div class="line">        if (i &gt;= 0 &amp;&amp; j &gt;= 0 &amp;&amp; i &lt;= array.length &amp;&amp; j &lt;= array.length) &#123;  </div><div class="line">            int temp = array[i];  </div><div class="line">            array[i] = array[j];  </div><div class="line">            array[j] = temp;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
@@ -447,8 +437,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/12/排序算法-插入排序/"
-           data-title="排序算法-插入排序" data-url="https://junbin1011.github.io/2016/12/12/排序算法-插入排序/">
+      <div class="ds-thread" data-thread-key="2016/12/12/排序算法-插入排序/" data-title="排序算法-插入排序" data-url="https://junbin1011.github.io/2016/12/12/排序算法-插入排序/">
       </div>
     
   </div>
@@ -475,9 +464,7 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -488,7 +475,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -501,7 +488,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -560,7 +547,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

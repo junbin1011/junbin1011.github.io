@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,44 +66,40 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="持续集成," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="持续集成,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
-本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
-集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta name="description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。 本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。 集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta name="keywords" content="持续集成">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何快速为你的Github项目搭建CICD">
 <meta property="og:url" content="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
-本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
-集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta property="og:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。 本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。 集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&shareKey=09bc64e9133e43f61c1651a59c9c92d7">
 <meta property="og:updated_time" content="2020-03-16T06:15:26.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何快速为你的Github项目搭建CICD">
-<meta name="twitter:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。
-本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。
-集成账号Travis CITravis CI 是目前比较流行的持续集成工">
+<meta name="twitter:description" content="背景作为一个程序员，我们经常会在Github上开源自己的项目，本文将介绍如何通过Travis CI进行持续集成，并通过蒲公英进行项目的部署。介绍如何简单快速的为你的Github项目添加CICD，提高项目的构建、质量及测试的效率。 本文将通过一个Android项目进行示例说明。具体不同的平台的命令配置不一样，但整体的流程一致。 集成账号Travis CITravis CI 是目前比较流行的持续集成工">
 <meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&shareKey=09bc64e9133e43f61c1651a59c9c92d7">
 
 
@@ -132,7 +128,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/">
 
 
 
@@ -182,7 +178,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -212,7 +208,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -222,7 +218,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -232,7 +228,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -242,7 +238,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -281,7 +277,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -384,7 +380,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">before_install:</div><div class="line">  - echo y | sdkmanager &quot;ndk-bundle&quot;</div><div class="line">  - echo y | sdkmanager &quot;ndk;20.1.5948944&quot;</div><div class="line">  - echo y | sdkmanager &quot;cmake;3.10.2.4988404&quot;</div><div class="line">before_script:</div><div class="line">  - export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle</div><div class="line">  - export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT</div></pre></td></tr></table></figure>
 <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
 <p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
-<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&amp;shareKey=09bc64e9133e43f61c1651a59c9c92d7" alt=""></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&amp;shareKey=09bc64e9133e43f61c1651a59c9c92d7" alt></p>
 <ul>
 <li>作者：黄俊彬 </li>
 <li><a href="https://junbin.tech/" target="_blank" rel="external">博客：junbin.tech</a></li>
@@ -465,8 +461,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2020/02/23/如何快速为你的Github项目搭建CICD/"
-           data-title="如何快速为你的Github项目搭建CICD" data-url="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/">
+      <div class="ds-thread" data-thread-key="2020/02/23/如何快速为你的Github项目搭建CICD/" data-title="如何快速为你的Github项目搭建CICD" data-url="https://junbin1011.github.io/2020/02/23/如何快速为你的Github项目搭建CICD/">
       </div>
     
   </div>
@@ -491,7 +486,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -502,9 +497,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -515,7 +508,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -528,7 +521,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -603,7 +596,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,41 +66,35 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,源码," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,源码,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="Glide是什么？Glide是一个Android的图片加载和缓存库，它主要专注于大量图片的流畅加载。是google所推荐的图片加载库，作者是bumptech。这个库被广泛运用在google的开源项目中，包括2014年的google I/O大会上发布的官方App。
-简介WIKI地址：WIKI官网
-Github地址:Github
-特点1、多样化媒体加载
-Glide 不仅是一个图片缓存，它支持 Gif、">
+<meta name="description" content="Glide是什么？Glide是一个Android的图片加载和缓存库，它主要专注于大量图片的流畅加载。是google所推荐的图片加载库，作者是bumptech。这个库被广泛运用在google的开源项目中，包括2014年的google I/O大会上发布的官方App。 简介WIKI地址：WIKI官网 Github地址:Github 特点1、多样化媒体加载 Glide 不仅是一个图片缓存，它支持 Gif、">
+<meta name="keywords" content="Android,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Glide源码学习随笔">
 <meta property="og:url" content="https://junbin1011.github.io/2018/08/13/Glide源码学习随笔/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="Glide是什么？Glide是一个Android的图片加载和缓存库，它主要专注于大量图片的流畅加载。是google所推荐的图片加载库，作者是bumptech。这个库被广泛运用在google的开源项目中，包括2014年的google I/O大会上发布的官方App。
-简介WIKI地址：WIKI官网
-Github地址:Github
-特点1、多样化媒体加载
-Glide 不仅是一个图片缓存，它支持 Gif、">
+<meta property="og:description" content="Glide是什么？Glide是一个Android的图片加载和缓存库，它主要专注于大量图片的流畅加载。是google所推荐的图片加载库，作者是bumptech。这个库被广泛运用在google的开源项目中，包括2014年的google I/O大会上发布的官方App。 简介WIKI地址：WIKI官网 Github地址:Github 特点1、多样化媒体加载 Glide 不仅是一个图片缓存，它支持 Gif、">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-b89371e35681b7ad?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-53e1cf2300e601e1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-4cc50012bc64e4ef?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -108,11 +102,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.773Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Glide源码学习随笔">
-<meta name="twitter:description" content="Glide是什么？Glide是一个Android的图片加载和缓存库，它主要专注于大量图片的流畅加载。是google所推荐的图片加载库，作者是bumptech。这个库被广泛运用在google的开源项目中，包括2014年的google I/O大会上发布的官方App。
-简介WIKI地址：WIKI官网
-Github地址:Github
-特点1、多样化媒体加载
-Glide 不仅是一个图片缓存，它支持 Gif、">
+<meta name="twitter:description" content="Glide是什么？Glide是一个Android的图片加载和缓存库，它主要专注于大量图片的流畅加载。是google所推荐的图片加载库，作者是bumptech。这个库被广泛运用在google的开源项目中，包括2014年的google I/O大会上发布的官方App。 简介WIKI地址：WIKI官网 Github地址:Github 特点1、多样化媒体加载 Glide 不仅是一个图片缓存，它支持 Gif、">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-b89371e35681b7ad?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -141,7 +131,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2018/08/13/Glide源码学习随笔/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2018/08/13/Glide源码学习随笔/">
 
 
 
@@ -191,7 +181,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -221,7 +211,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -231,7 +221,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -241,7 +231,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -251,7 +241,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -290,7 +280,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -573,7 +563,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 <p>10、getNextGenerator，根据Stage获取到相应的Generator后会执行currentGenerator.startNext()，如果中途startNext返回true，则直接回调，否则最终会得到SOURCE的stage，重新调度任务。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">private void runGenerators() &#123;</div><div class="line">  currentThread = Thread.currentThread();</div><div class="line">  startFetchTime = LogTime.getLogTime();</div><div class="line">  boolean isStarted = false;</div><div class="line">  while (!isCancelled &amp;&amp; currentGenerator != null</div><div class="line">      &amp;&amp; !(isStarted = currentGenerator.startNext())) &#123;</div><div class="line">    stage = getNextStage(stage);</div><div class="line">    currentGenerator = getNextGenerator();</div><div class="line"></div><div class="line">    if (stage == Stage.SOURCE) &#123;</div><div class="line">      reschedule();</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  // We&apos;ve run out of stages and generators, give up.</div><div class="line">  if ((stage == Stage.FINISHED || isCancelled) &amp;&amp; !isStarted) &#123;</div><div class="line">    notifyFailed();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // Otherwise a generator started a new load and we expect to be called back in</div><div class="line">  // onDataFetcherReady.</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>11、这里我们分析最后SourceGenerator的startNext的执行，实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public boolean startNext() &#123;</div><div class="line">  if (dataToCache != null) &#123;</div><div class="line">    Object data = dataToCache;</div><div class="line">    dataToCache = null;</div><div class="line">    cacheData(data);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  if (sourceCacheGenerator != null &amp;&amp; sourceCacheGenerator.startNext()) &#123;</div><div class="line">    return true;</div><div class="line">  &#125;</div><div class="line">  sourceCacheGenerator = null;</div><div class="line"></div><div class="line">  loadData = null;</div><div class="line">  boolean started = false;</div><div class="line">  while (!started &amp;&amp; hasNextModelLoader()) &#123;</div><div class="line">    loadData = helper.getLoadData().get(loadDataListIndex++);</div><div class="line">    if (loadData != null</div><div class="line">        &amp;&amp; (helper.getDiskCacheStrategy().isDataCacheable(loadData.fetcher.getDataSource())</div><div class="line">        || helper.hasLoadPath(loadData.fetcher.getDataClass()))) &#123;</div><div class="line">      started = true;</div><div class="line">      loadData.fetcher.loadData(helper.getPriority(), this);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return started;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>最后会通过Glide初始化时，Register注册的ModelLoader去执行对应的loadData方法，最后回调onDataFetcherReady(),获取得到DataSource，并将 runReason = RunReason.DECODE_DATA。触发调用decodeFromRetrievedData()进行源数据的转换</p>
-<p>12、decodeFromRetrievedData，获取数据成功后，进行处理，内部调用的是runLoadPath(Data data, DataSource dataSource,LoadPath<data, resourcetype,="" r=""> path),decode完成后的回调，对decode的资源进行transform。</data,></p>
+<p>12、decodeFromRetrievedData，获取数据成功后，进行处理，内部调用的是runLoadPath(Data data, DataSource dataSource,LoadPath<data, resourcetype, r> path),decode完成后的回调，对decode的资源进行transform。</data,></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">private void decodeFromRetrievedData() &#123;</div><div class="line">   if (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</div><div class="line">     logWithTimeAndKey(&quot;Retrieved data&quot;, startFetchTime,</div><div class="line">         &quot;data: &quot; + currentData</div><div class="line">             + &quot;, cache key: &quot; + currentSourceKey</div><div class="line">             + &quot;, fetcher: &quot; + currentFetcher);</div><div class="line">   &#125;</div><div class="line">   Resource&lt;R&gt; resource = null;</div><div class="line">   try &#123;</div><div class="line">     resource = decodeFromData(currentFetcher, currentData, currentDataSource);</div><div class="line">   &#125; catch (GlideException e) &#123;</div><div class="line">     e.setLoggingDetails(currentAttemptingKey, currentDataSource);</div><div class="line">     throwables.add(e);</div><div class="line">   &#125;</div><div class="line">   if (resource != null) &#123;</div><div class="line">     notifyEncodeAndRelease(resource, currentDataSource);</div><div class="line">   &#125; else &#123;</div><div class="line">     runGenerators();</div><div class="line">   &#125;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> </div><div class="line">   @SuppressWarnings(&quot;unchecked&quot;)</div><div class="line"> private &lt;Data&gt; Resource&lt;R&gt; decodeFromFetcher(Data data, DataSource dataSource)</div><div class="line">     throws GlideException &#123;</div><div class="line">   LoadPath&lt;Data, ?, R&gt; path = decodeHelper.getLoadPath((Class&lt;Data&gt;) data.getClass());</div><div class="line">   return runLoadPath(data, dataSource, path);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>13、decodeFromRetrievedData()中，数据decode和transform后会执行notifyEncodeAndRelease方法，在该方法中调用 notifyComplete(result, dataSource)，接着调用callback.onResourceReady，实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public void onResourceReady(Resource&lt;R&gt; resource, DataSource dataSource) &#123;</div><div class="line">  this.resource = resource;</div><div class="line">  this.dataSource = dataSource;</div><div class="line">  MAIN_THREAD_HANDLER.obtainMessage(MSG_COMPLETE, this).sendToTarget();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>14、通过Handler将回调切换到主线程， 最后调用EngineJob的handleResultOnMainThread方法，实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">void handleResultOnMainThread() &#123;</div><div class="line">    stateVerifier.throwIfRecycled();</div><div class="line">    if (isCancelled) &#123;</div><div class="line">      resource.recycle();</div><div class="line">      release(false /*isRemovedFromQueue*/);</div><div class="line">      return;</div><div class="line">    &#125; else if (cbs.isEmpty()) &#123;</div><div class="line">      throw new IllegalStateException(&quot;Received a resource without any callbacks to notify&quot;);</div><div class="line">    &#125; else if (hasResource) &#123;</div><div class="line">      throw new IllegalStateException(&quot;Already have resource&quot;);</div><div class="line">    &#125;</div><div class="line">    engineResource = engineResourceFactory.build(resource, isCacheable);</div><div class="line">    hasResource = true;</div><div class="line"></div><div class="line">    // Hold on to resource for duration of request so we don&apos;t recycle it in the middle of</div><div class="line">    // notifying if it synchronously released by one of the callbacks.</div><div class="line">    engineResource.acquire();</div><div class="line">    listener.onEngineJobComplete(this, key, engineResource);</div><div class="line"></div><div class="line">    //noinspection ForLoopReplaceableByForEach to improve perf</div><div class="line">    for (int i = 0, size = cbs.size(); i &lt; size; i++) &#123;</div><div class="line">      ResourceCallback cb = cbs.get(i);</div><div class="line">      if (!isInIgnoredCallbacks(cb)) &#123;</div><div class="line">        engineResource.acquire();</div><div class="line">        cb.onResourceReady(engineResource, dataSource);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // Our request is complete, so we can release the resource.</div><div class="line">    engineResource.release();</div><div class="line"></div><div class="line">    release(false /*isRemovedFromQueue*/);</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
@@ -767,8 +757,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/08/13/Glide源码学习随笔/"
-           data-title="Glide源码学习随笔" data-url="https://junbin1011.github.io/2018/08/13/Glide源码学习随笔/">
+      <div class="ds-thread" data-thread-key="2018/08/13/Glide源码学习随笔/" data-title="Glide源码学习随笔" data-url="https://junbin1011.github.io/2018/08/13/Glide源码学习随笔/">
       </div>
     
   </div>
@@ -793,7 +782,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -804,9 +793,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -817,7 +804,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -830,7 +817,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -905,7 +892,7 @@ Glide 不仅是一个图片缓存，它支持 Gif、">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

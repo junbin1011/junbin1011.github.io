@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,72 +66,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,源码," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,源码,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="leakcanary是什么？leakcanary是Square开源的一个内存泄露自动探测神器，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。
-
-下图为官方应用图标：
-
- 
-简介Github地址:leakcanary
-特点
-使用简单
-实时检测
-及时的消息提醒及log日志
-
-内存泄漏本文主要介绍leakcanary的实现及原理。关于内存泄漏的定义及Andro">
+<meta name="description" content="leakcanary是什么？leakcanary是Square开源的一个内存泄露自动探测神器，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。  下图为官方应用图标：    简介Github地址:leakcanary 特点 使用简单 实时检测 及时的消息提醒及log日志  内存泄漏本文主要介绍leakcanary的实现及原理。关于内存泄漏的定义及Andro">
+<meta name="keywords" content="Android,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="leakcanary源码学习随笔">
 <meta property="og:url" content="https://junbin1011.github.io/2018/08/21/leakcanary源码学习随笔/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="leakcanary是什么？leakcanary是Square开源的一个内存泄露自动探测神器，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。
-
-下图为官方应用图标：
-
- 
-简介Github地址:leakcanary
-特点
-使用简单
-实时检测
-及时的消息提醒及log日志
-
-内存泄漏本文主要介绍leakcanary的实现及原理。关于内存泄漏的定义及Andro">
+<meta property="og:description" content="leakcanary是什么？leakcanary是Square开源的一个内存泄露自动探测神器，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。  下图为官方应用图标：    简介Github地址:leakcanary 特点 使用简单 实时检测 及时的消息提醒及log日志  内存泄漏本文主要介绍leakcanary的实现及原理。关于内存泄漏的定义及Andro">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-3d09326827f97519?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-bfc80c2b9a3ddcc4?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.779Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leakcanary源码学习随笔">
-<meta name="twitter:description" content="leakcanary是什么？leakcanary是Square开源的一个内存泄露自动探测神器，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。
-
-下图为官方应用图标：
-
- 
-简介Github地址:leakcanary
-特点
-使用简单
-实时检测
-及时的消息提醒及log日志
-
-内存泄漏本文主要介绍leakcanary的实现及原理。关于内存泄漏的定义及Andro">
+<meta name="twitter:description" content="leakcanary是什么？leakcanary是Square开源的一个内存泄露自动探测神器，它是一个Android和Java的内存泄露检测库，可以大幅度减少了开发中遇到的OOM问题。  下图为官方应用图标：    简介Github地址:leakcanary 特点 使用简单 实时检测 及时的消息提醒及log日志  内存泄漏本文主要介绍leakcanary的实现及原理。关于内存泄漏的定义及Andro">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-3d09326827f97519?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -160,7 +129,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2018/08/21/leakcanary源码学习随笔/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2018/08/21/leakcanary源码学习随笔/">
 
 
 
@@ -210,7 +179,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -240,7 +209,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -250,7 +219,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -260,7 +229,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -270,7 +239,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -309,7 +278,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -591,8 +560,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/08/21/leakcanary源码学习随笔/"
-           data-title="leakcanary源码学习随笔" data-url="https://junbin1011.github.io/2018/08/21/leakcanary源码学习随笔/">
+      <div class="ds-thread" data-thread-key="2018/08/21/leakcanary源码学习随笔/" data-title="leakcanary源码学习随笔" data-url="https://junbin1011.github.io/2018/08/21/leakcanary源码学习随笔/">
       </div>
     
   </div>
@@ -617,7 +585,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -628,9 +596,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -641,7 +607,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -654,7 +620,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -729,7 +695,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

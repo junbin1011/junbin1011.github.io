@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,21 +66,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
@@ -88,11 +88,13 @@
 
 
 <meta name="description" content="1.Context基本概念Context的中文翻译为：语境; 上下文; 背景; 环境，在开发中我们经常说称之为“上下文”。从Android系统的角度来理解：Context是一个场景，代表与操作系统的交互的一种过程。Context在加载资源、启动Activity、获取系统服务、创建View等操作都要参与  。从程序的角度上来理解：Context是个抽象类，而Activity、Service、Appl">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android之Context底层原理">
 <meta property="og:url" content="https://junbin1011.github.io/2017/01/19/Android之Context底层原理/index.html">
 <meta property="og:site_name" content="JunBin">
 <meta property="og:description" content="1.Context基本概念Context的中文翻译为：语境; 上下文; 背景; 环境，在开发中我们经常说称之为“上下文”。从Android系统的角度来理解：Context是一个场景，代表与操作系统的交互的一种过程。Context在加载资源、启动Activity、获取系统服务、创建View等操作都要参与  。从程序的角度上来理解：Context是个抽象类，而Activity、Service、Appl">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://img.blog.csdn.net/20170119095448703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="http://img.blog.csdn.net/20170119095507953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.770Z">
@@ -127,7 +129,7 @@
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/01/19/Android之Context底层原理/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/01/19/Android之Context底层原理/">
 
 
 
@@ -177,7 +179,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -207,7 +209,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -217,7 +219,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -227,7 +229,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -237,7 +239,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -276,7 +278,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -355,9 +357,9 @@
 
       
         <h1 id="1-Context基本概念"><a href="#1-Context基本概念" class="headerlink" title="1.Context基本概念"></a>1.Context基本概念</h1><p>Context的中文翻译为：语境; 上下文; 背景; 环境，在开发中我们经常说称之为“上下文”。从Android系统的角度来理解：Context是一个场景，代表与操作系统的交互的一种过程。Context在加载资源、启动Activity、获取系统服务、创建View等操作都要参与  。从程序的角度上来理解：Context是个抽象类，而Activity、Service、Application等都是该类的一个实现。</p>
-<h1 id="2-Context与Activity、Service、Application关系"><a href="#2-Context与Activity、Service、Application关系" class="headerlink" title="2.Context与Activity、Service、Application关系"></a>2.Context与Activity、Service、Application关系</h1><p><img src="http://img.blog.csdn.net/20170119095448703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<h1 id="2-Context与Activity、Service、Application关系"><a href="#2-Context与Activity、Service、Application关系" class="headerlink" title="2.Context与Activity、Service、Application关系"></a>2.Context与Activity、Service、Application关系</h1><p><img src="http://img.blog.csdn.net/20170119095448703?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt></p>
 <p>Context类本身是一个纯abstract类，他有两个具体的实现子类：ContextImpl和ContextWrapper。其中ContextWrapper类，只是一个包装而已，ContextWrapper构造函数中必须包含一个真正的Context引用，同时ContextWrapper提供了attachBaseContext（）用于给ContextWrapper对象中指定真正的Context对象，调用ContextWrapper的方法都会被转向其所包含的真正的Context对象。<br>ContextThemeWrapper类，其内部包含了与主题（Theme）相关的接口，这里所说的主题就是指在AndroidMainifest.xml中通过android：theme为Application元素或者Activity元素指定的主题。当然，只有Activity才需要主题，Service是不需要主题的，Application同理。<br>而ContextImpl类则真正实现了Context中的所有函数，应用程序中所调用的各种Context类的方法，其实现均来于该类。Context的两个子类分工明确，其中ContextImpl是Context的具体实现类，ContextWrapper是Context的包装类。</p>
-<h1 id="3-Context作用域"><a href="#3-Context作用域" class="headerlink" title="3.Context作用域"></a>3.Context作用域</h1><p><img src="http://img.blog.csdn.net/20170119095507953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br>Activity的作用域最广，Application和Service在启动Activity需要创建一个新的task，一般不推荐。layout infalte也是合法的，但是会使用系统默认的主题样式，如果自定义某些样式可能不会被使用</p>
+<h1 id="3-Context作用域"><a href="#3-Context作用域" class="headerlink" title="3.Context作用域"></a>3.Context作用域</h1><p><img src="http://img.blog.csdn.net/20170119095507953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt><br>Activity的作用域最广，Application和Service在启动Activity需要创建一个新的task，一般不推荐。layout infalte也是合法的，但是会使用系统默认的主题样式，如果自定义某些样式可能不会被使用</p>
 <h1 id="4-Context的使用"><a href="#4-Context的使用" class="headerlink" title="4.Context的使用"></a>4.Context的使用</h1><h2 id="4-1Context的数量"><a href="#4-1Context的数量" class="headerlink" title="4.1Context的数量"></a>4.1Context的数量</h2><p>一个应用程序中到底有多少个Context呢？根据Context的类型可以得出，一共有Application、Activity和Service三种类型，因此一个应用程序的Context数量为：<br>Context数量=Activity数量+Service数量+1</p>
 <h2 id="4-2如何获取Context"><a href="#4-2如何获取Context" class="headerlink" title="4.2如何获取Context"></a>4.2如何获取Context</h2><p>1）View.getContext,返回当前Activity所在的应用进程的Context对象，通常是当前正在展示的Activity对象<br>2）Activity.getApplicationContext,获取当前Activity所在的（应用）进程的Context对象，通常我们使用Context对象时，要优先考虑这个全局的进程Context。<br>3）Activity.this返回当前的Activity实例，如果是UI控件需要使用Activity作为Context对象，但是默认的Toast因为是系统层级的Windows，直接使用ApplicationContext则可。<br>4）getApplication和getApplicationContext获取的对象时一致的。但是getApplication方法只有在Activity和Service中才能调到。但例如BroadcasrReceiver中需要获取Application，则需要借助getApplicationContext（）方法。</p>
 <h2 id="4-3Context引起的内测泄漏"><a href="#4-3Context引起的内测泄漏" class="headerlink" title="4.3Context引起的内测泄漏"></a>4.3Context引起的内测泄漏</h2><p>1）错误的单例模式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;  </div><div class="line">    private static Singleton instance;  </div><div class="line">    private Context mContext;  </div><div class="line">  </div><div class="line">    private Singleton(Context context) &#123;  </div><div class="line">        this.mContext = context;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    public static Singleton getInstance(Context context) &#123;  </div><div class="line">        if (instance == null) &#123;  </div><div class="line">            instance = new Singleton(context);  </div><div class="line">        &#125;  </div><div class="line">        return instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -442,8 +444,7 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/01/19/Android之Context底层原理/"
-           data-title="Android之Context底层原理" data-url="https://junbin1011.github.io/2017/01/19/Android之Context底层原理/">
+      <div class="ds-thread" data-thread-key="2017/01/19/Android之Context底层原理/" data-title="Android之Context底层原理" data-url="https://junbin1011.github.io/2017/01/19/Android之Context底层原理/">
       </div>
     
   </div>
@@ -468,7 +469,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -479,9 +480,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -492,7 +491,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -505,7 +504,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -580,7 +579,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>

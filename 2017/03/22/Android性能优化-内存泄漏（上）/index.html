@@ -6,15 +6,15 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -32,7 +32,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -66,65 +66,40 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,Android性能优化," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="Android,Android性能优化,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
 
 
 
-<meta name="description" content="为什么要做性能优化？
-手机性能越来越好，不用纠结这些细微的性能？
-
-Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的手机分配的可用内存可能只有（32M、64M等），所谓的4GB、6GB运行内存其实对于我们的应用不是可以任意索取
-
-优秀的算法与效率低下的算法之间的运行效率要远远超过计算机硬件的的发展，虽然手机单核、双核到4核、8核的发展，但性能优化任然不可忽略
-
-
-
-手机应用一">
+<meta name="description" content="为什么要做性能优化？ 手机性能越来越好，不用纠结这些细微的性能？  Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的手机分配的可用内存可能只有（32M、64M等），所谓的4GB、6GB运行内存其实对于我们的应用不是可以任意索取  优秀的算法与效率低下的算法之间的运行效率要远远超过计算机硬件的的发展，虽然手机单核、双核到4核、8核的发展，但性能优化任然不可忽略    手机应用一">
+<meta name="keywords" content="Android,Android性能优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android性能优化-内存泄漏（上）">
 <meta property="og:url" content="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（上）/index.html">
 <meta property="og:site_name" content="JunBin">
-<meta property="og:description" content="为什么要做性能优化？
-手机性能越来越好，不用纠结这些细微的性能？
-
-Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的手机分配的可用内存可能只有（32M、64M等），所谓的4GB、6GB运行内存其实对于我们的应用不是可以任意索取
-
-优秀的算法与效率低下的算法之间的运行效率要远远超过计算机硬件的的发展，虽然手机单核、双核到4核、8核的发展，但性能优化任然不可忽略
-
-
-
-手机应用一">
+<meta property="og:description" content="为什么要做性能优化？ 手机性能越来越好，不用纠结这些细微的性能？  Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的手机分配的可用内存可能只有（32M、64M等），所谓的4GB、6GB运行内存其实对于我们的应用不是可以任意索取  优秀的算法与效率低下的算法之间的运行效率要远远超过计算机硬件的的发展，虽然手机单核、双核到4核、8核的发展，但性能优化任然不可忽略    手机应用一">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:updated_time" content="2019-04-24T08:12:18.770Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android性能优化-内存泄漏（上）">
-<meta name="twitter:description" content="为什么要做性能优化？
-手机性能越来越好，不用纠结这些细微的性能？
-
-Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的手机分配的可用内存可能只有（32M、64M等），所谓的4GB、6GB运行内存其实对于我们的应用不是可以任意索取
-
-优秀的算法与效率低下的算法之间的运行效率要远远超过计算机硬件的的发展，虽然手机单核、双核到4核、8核的发展，但性能优化任然不可忽略
-
-
-
-手机应用一">
+<meta name="twitter:description" content="为什么要做性能优化？ 手机性能越来越好，不用纠结这些细微的性能？  Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的手机分配的可用内存可能只有（32M、64M等），所谓的4GB、6GB运行内存其实对于我们的应用不是可以任意索取  优秀的算法与效率低下的算法之间的运行效率要远远超过计算机硬件的的发展，虽然手机单核、双核到4核、8核的发展，但性能优化任然不可忽略    手机应用一">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -153,7 +128,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
 
 
 
-  <link rel="canonical" href="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（上）/"/>
+  <link rel="canonical" href="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（上）/">
 
 
 
@@ -203,7 +178,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">JunBin</span>
         <span class="logo-line-after"><i></i></span>
@@ -233,7 +208,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -243,7 +218,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -253,7 +228,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -263,7 +238,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -302,7 +277,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
     </span>
 
@@ -401,7 +376,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
 <p>所以为了我们的应用的健壮性、有良好的用户体验。性能优化技术，需要我们用心去研究和应用。</p>
 </li>
 </ol>
-<h1 id="什么是内存泄漏？"><a href="#什么是内存泄漏？" class="headerlink" title="什么是内存泄漏？"></a>什么是内存泄漏？</h1><h2 id="JVM内存管理"><a href="#JVM内存管理" class="headerlink" title="JVM内存管理"></a>JVM内存管理</h2><p><img src="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="什么是内存泄漏？"><a href="#什么是内存泄漏？" class="headerlink" title="什么是内存泄漏？"></a>什么是内存泄漏？</h1><h2 id="JVM内存管理"><a href="#JVM内存管理" class="headerlink" title="JVM内存管理"></a>JVM内存管理</h2><p><img src="http://upload-images.jianshu.io/upload_images/5125122-27e80eb1c5c73953.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <p>Java采用GC进行内存管理。深入的JVM内存管理知识，推荐《深入理解Java虚拟机》。关于内存泄漏我们要知道，JVM内存分配的几种策略。</p>
 <ol>
 <li><p>静态的</p>
@@ -615,8 +590,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/22/Android性能优化-内存泄漏（上）/"
-           data-title="Android性能优化-内存泄漏（上）" data-url="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（上）/">
+      <div class="ds-thread" data-thread-key="2017/03/22/Android性能优化-内存泄漏（上）/" data-title="Android性能优化-内存泄漏（上）" data-url="https://junbin1011.github.io/2017/03/22/Android性能优化-内存泄漏（上）/">
       </div>
     
   </div>
@@ -641,7 +615,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -652,9 +626,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f"
-               alt="黄俊彬" />
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
           <p class="site-author-name" itemprop="name">黄俊彬</p>
            
               <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
@@ -665,7 +637,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -678,7 +650,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -733,7 +705,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要做性能优化？"><span class="nav-number">1.</span> <span class="nav-text">为什么要做性能优化？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是内存泄漏？"><span class="nav-number">2.</span> <span class="nav-text">什么是内存泄漏？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM内存管理"><span class="nav-number">2.1.</span> <span class="nav-text">JVM内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏的定义"><span class="nav-number">2.2.</span> <span class="nav-text">内存泄漏的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏与内存溢出的区别"><span class="nav-number">2.3.</span> <span class="nav-text">内存泄漏与内存溢出的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏带来的影响"><span class="nav-number">2.4.</span> <span class="nav-text">内存泄漏带来的影响</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android开发常见的内存泄漏"><span class="nav-number">3.</span> <span class="nav-text">Android开发常见的内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单例造成的内存泄漏"><span class="nav-number">3.1.</span> <span class="nav-text">单例造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非静态内部类创建静态实例造成的内存泄漏"><span class="nav-number">3.2.</span> <span class="nav-text">非静态内部类创建静态实例造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Handler造成的内存泄漏"><span class="nav-number">3.3.</span> <span class="nav-text">Handler造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程造成的内存泄漏"><span class="nav-number">3.4.</span> <span class="nav-text">线程造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源未关闭造成的内存泄漏"><span class="nav-number">3.5.</span> <span class="nav-text">资源未关闭造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用了静态的Activity和View"><span class="nav-number">3.6.</span> <span class="nav-text">使用了静态的Activity和View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册了系统的服务，但onDestory未注销"><span class="nav-number">3.7.</span> <span class="nav-text">注册了系统的服务，但onDestory未注销</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不需要用的监听未移除会发生内存泄露"><span class="nav-number">3.8.</span> <span class="nav-text">不需要用的监听未移除会发生内存泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip-1"><span class="nav-number">3.8.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下一篇将介绍如何进行内存泄漏的分析"><span class="nav-number">4.</span> <span class="nav-text">下一篇将介绍如何进行内存泄漏的分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要做性能优化？"><span class="nav-number">1.</span> <span class="nav-text">为什么要做性能优化？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是内存泄漏？"><span class="nav-number">2.</span> <span class="nav-text">什么是内存泄漏？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM内存管理"><span class="nav-number">2.1.</span> <span class="nav-text">JVM内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏的定义"><span class="nav-number">2.2.</span> <span class="nav-text">内存泄漏的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏与内存溢出的区别"><span class="nav-number">2.3.</span> <span class="nav-text">内存泄漏与内存溢出的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏带来的影响"><span class="nav-number">2.4.</span> <span class="nav-text">内存泄漏带来的影响</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Android开发常见的内存泄漏"><span class="nav-number">3.</span> <span class="nav-text">Android开发常见的内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单例造成的内存泄漏"><span class="nav-number">3.1.</span> <span class="nav-text">单例造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非静态内部类创建静态实例造成的内存泄漏"><span class="nav-number">3.2.</span> <span class="nav-text">非静态内部类创建静态实例造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Handler造成的内存泄漏"><span class="nav-number">3.3.</span> <span class="nav-text">Handler造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程造成的内存泄漏"><span class="nav-number">3.4.</span> <span class="nav-text">线程造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源未关闭造成的内存泄漏"><span class="nav-number">3.5.</span> <span class="nav-text">资源未关闭造成的内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用了静态的Activity和View"><span class="nav-number">3.6.</span> <span class="nav-text">使用了静态的Activity和View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册了系统的服务，但onDestory未注销"><span class="nav-number">3.7.</span> <span class="nav-text">注册了系统的服务，但onDestory未注销</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不需要用的监听未移除会发生内存泄露"><span class="nav-number">3.8.</span> <span class="nav-text">不需要用的监听未移除会发生内存泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tip-1"><span class="nav-number">3.8.0.1.</span> <span class="nav-text">Tip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下一篇将介绍如何进行内存泄漏的分析"><span class="nav-number">4.</span> <span class="nav-text">下一篇将介绍如何进行内存泄漏的分析</span></a></li></div>
             
 
           </div>
@@ -753,7 +725,7 @@ Android每一个应用都是运行的独立的Dalivk虚拟机，根据不同的�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
