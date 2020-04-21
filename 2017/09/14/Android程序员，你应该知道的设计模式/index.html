@@ -409,7 +409,7 @@
 </tr>
 </tbody>
 </table>
-<p>详细可参考：<a href="http://huangjunbin.com/2017/01/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%AD%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank" rel="external">设计模式-面向对象的六大设计原则</a></p>
+<p>详细可参考：<a href="http://huangjunbin.com/2017/01/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%AD%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank" rel="noopener">设计模式-面向对象的六大设计原则</a></p>
 <h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="代码中常用的设计模式"><a href="#代码中常用的设计模式" class="headerlink" title="代码中常用的设计模式"></a>代码中常用的设计模式</h2><table>
 <thead>
 <tr>
@@ -424,31 +424,31 @@
 <td>单例模式</td>
 <td>确保某一个类只有一个实例，而且自行示例化并向整个系统提供这个实例。确保某个类有且只有一个对象的场景，避免产生多个对象消耗过多的资源</td>
 <td>实际开发中，好多数据库Dao操作、或者Service都是直接采用单例的方式，应注意线程安全及内存泄漏问题</td>
-<td><a href="http://huangjunbin.com/2017/01/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">单例模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/01/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">单例模式 </a></td>
 </tr>
 <tr>
 <td>建造者模式</td>
 <td>Builder模式是一步一步创建一个复制对象的创建型模式，他允许用户在不知道内部构建细节的情况下，可以更精细地控制对象的构造流程</td>
 <td>new AlertDialog.Builder(self).setTitle(“列表框”).setItems(new String[] {“列表项1”,”列表项2”,”列表项3”}, null).setNegativeButton(“确定”, null) .show();有时候Activity的启动构造参数复杂，也可使用Builder模式进行控制</td>
-<td><a href="http://huangjunbin.com/2017/01/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">建造者模式</a></td>
+<td><a href="http://huangjunbin.com/2017/01/18/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">建造者模式</a></td>
 </tr>
 <tr>
 <td>适配器模式</td>
 <td>适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法再一起工作的两个类能够在一起工作</td>
 <td>ListView作为重要的控件，它需要能够显示各种各样的视图（ItemView），每个人需要的显示效果各不同。Android的做法是增加一个Adapter层来隔离变化，将ListView需要的关于Item View接口抽象到Adapter对象中，并且在ListView内部调用Adapter这些接口完成布局操作。这样只用用户实现了Adapter的接口，并且将该Adapter设置给ListView，ListView就可以按照用户设定的UI效果、数量、数据来显示每一项数据</td>
-<td><a href="http://huangjunbin.com/2017/02/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">适配器模式</a></td>
+<td><a href="http://huangjunbin.com/2017/02/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">适配器模式</a></td>
 </tr>
 <tr>
 <td>观察者模式</td>
 <td>观察者模式是一个使用率非常高的模式，它最常用的地方是GUI系统，订阅-发布系统。因为这个模式的一个重要作用就是解耦，将被观察者和观察者解耦，使得它们之间的依赖性更小</td>
 <td>广播、EventBus、Rxjava，一些上传下载进度回调监听</td>
-<td><a href="http://huangjunbin.com/2017/02/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">观察者模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/02/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">观察者模式 </a></td>
 </tr>
 <tr>
 <td>外观模式</td>
 <td>外观模式（Facade）在开发过程中的运用频率非常高，尤其是在现阶段各个第三方SDK充斥在我们的周边，而这些SDK很大概率会使用外观模式，通过一个外观类使得整个系统的接口只有一个统一的高层接口，这样能够降低用户的使用成本，也对用户屏蔽了很多实现细节</td>
 <td>例如Context统一了很多系统资源的范围，实际开发过程中使用的图片库、网络库等，提供统一的Facade，避免更换影响全局</td>
-<td><a href="http://huangjunbin.com/2017/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">外观模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">外观模式 </a></td>
 </tr>
 </tbody>
 </table>
@@ -466,49 +466,49 @@
 <td>模板模式</td>
 <td>定义一个操作中的算法框架，而将一些步骤延迟到子类中，使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</td>
 <td>AsyncTask，在使用AsyncTask时，我们都知道把耗时的方法放在doInBackground（Params… params）中，在doInBackground之前，如果还想做一些类似初始化的操作，可以把实现卸载onPreExecutre方法中，当doInBackground方法执行完成后，会执行onPostExecutre方法</td>
-<td><a href="http://huangjunbin.com/2017/01/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">模板模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/01/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">模板模式 </a></td>
 </tr>
 <tr>
 <td>中介者模式</td>
 <td>该模式将对象之间的多对多关系变成一对多关系</td>
 <td>Android的Activity实际就是一个中介者模式，形形式式的View交互都在Activity中统一执行，View之间彼此不交互（你有可能点一个Button,让一个ImageView变化图片，但这个逻辑不会写在Button中）</td>
-<td><a href="http://huangjunbin.com/2017/02/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">中介者模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/02/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">中介者模式 </a></td>
 </tr>
 <tr>
 <td>责任链模式</td>
 <td>责任链模式是行为型设计模式之一。使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止</td>
 <td>在Android源码中比较类似的实现就是对于触摸事件的分发处理。每当用户接触屏幕时，Android都会将对应的事件包装成一个事件对象从ViewTree的顶部至上而下地分发传递。ViewGroup事件投递的递归调用就类似于一条责任链，一旦寻找到责任者，那么将由责任者持有并消费掉该次事件，具体地体现在View的onTouchEvent方法中返回值的设置，如果onTouchEvent返回false，那么意味着当前View不会是该次事件的复制人，将不会对其持有；如果为true则相反，此时View会持有该事件并不再向外传递</td>
-<td><a href="http://huangjunbin.com/2017/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">责任链模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">责任链模式 </a></td>
 </tr>
 <tr>
 <td>装饰模式</td>
 <td>装饰模式也称为包装模式，结构型设计模式之一，其使用一种对客户端透明的方式来动态地扩展对象的功能，同时它也是继承关系的一种替代方案之一。动态地给一个对象添加一些额外的职责</td>
 <td>Context类本身是一个纯abstract类，他有两个具体的实现子类：ContextImpl和ContextWrapper。其中ContextWrapper类，只是一个包装而已，ContextWrapper构造函数中必须包含一个真正的Context引用，同时ContextWrapper提供了attachBaseContext（）用于给ContextWrapper对象中指定真正的Context对象，调用ContextWrapper的方法都会被转向其所包含的真正的Context对象</td>
-<td><a href="http://huangjunbin.com/2017/02/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">装饰模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/02/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">装饰模式 </a></td>
 </tr>
 <tr>
 <td>组合模式</td>
 <td>组合模式也称为部分整体模式，结构型设计模式之一，组合模式比较简单，它将一组相似的对象看作一个对象处理，并根据一个树状结构来组合对象，然后提供一个统一的方法去访问相应的对象</td>
 <td>Android源码中关于组合模式有一个非常经典的实现，我们几乎每天都会使用到，那就是View和ViewGroup的嵌套组合</td>
-<td><a href="http://huangjunbin.com/2017/02/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">组合模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/02/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">组合模式 </a></td>
 </tr>
 <tr>
 <td>备忘录模式</td>
 <td>备忘录模式是一种行为模式，该模式用于保存对象当前状态，并且在之后可以再次恢复到此状态。备忘录模式实现的方式需要保证被保存的对象状态不能被对象从外部访问，目的是为了保护好被保存的这些对象状态的完整性以及内部实现不向外暴露</td>
 <td>在Android开发中，状态模式应用是Android中的状态保持，也就是里面的onSaveInstanceState和onRestoreInstanceState。当Activity不是正常方式退出，且Activity在随后的时间内被系统杀死之前会调用这两个方法让开发人员可以有机会存储Activity的相关信息，并且在下次放好Activity的时候恢复这些数据</td>
-<td><a href="http://huangjunbin.com/2017/03/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">备忘录模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/03/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">备忘录模式 </a></td>
 </tr>
 <tr>
 <td>享元模式</td>
 <td>享元模式是池技术的重要实现方式，使用共享对象可有效地支持大量的细粒度的对象</td>
 <td>数据库链接池、长连接池</td>
-<td><a href="http://huangjunbin.com/2017/03/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">享元模式 </a></td>
+<td><a href="http://huangjunbin.com/2017/03/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">享元模式 </a></td>
 </tr>
 <tr>
 <td>迭代器模式</td>
 <td>迭代器模式提供一种方法顺序访问一个容器对象的各个元素，而又不需要暴露该对象的内部表示</td>
 <td>JDK中各种集合的遍历</td>
-<td><a href="http://huangjunbin.com/2017/02/23/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">迭代器模式</a></td>
+<td><a href="http://huangjunbin.com/2017/02/23/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">迭代器模式</a></td>
 </tr>
 </tbody>
 </table>
@@ -524,47 +524,47 @@
 <tr>
 <td>工厂模式</td>
 <td>工厂模式是创建型设计模式之一。定义一个用户创建对象的接口，让子类决定实例化那个类。工厂模式是new一个对象的替代品，所以在所有需要生成对象的地方都可以使用</td>
-<td><a href="http://huangjunbin.com/2017/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">工厂模式</a></td>
+<td><a href="http://huangjunbin.com/2017/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">工厂模式</a></td>
 </tr>
 <tr>
 <td>抽象工厂模式</td>
 <td>抽象工厂也是创建型设计模式之一。为创建一组相关或者是相互依赖的对象提供一个接口，而不需要指定他们的具体类。一个对象族有相同约束时可以使用抽象工厂模式</td>
-<td><a href="http://huangjunbin.com/2017/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">抽象工厂模式</a></td>
+<td><a href="http://huangjunbin.com/2017/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">抽象工厂模式</a></td>
 </tr>
 <tr>
 <td>代理模式</td>
 <td>为其他对象提供一种代理以控制对这个对象的访问，有静态代码和动态代理</td>
-<td><a href="http://huangjunbin.com/2017/02/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">代理模式</a></td>
+<td><a href="http://huangjunbin.com/2017/02/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">代理模式</a></td>
 </tr>
 <tr>
 <td>原型模式</td>
 <td>用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象</td>
-<td><a href="http://huangjunbin.com/2017/02/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">原型模式</a></td>
+<td><a href="http://huangjunbin.com/2017/02/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">原型模式</a></td>
 </tr>
 <tr>
 <td>策略模式</td>
 <td>策略模式定义了一系列的算法，并将每一个算法封装起来，而且使他们还可以互相替换。策略模式让算法独立于使用它的客户而独立变化</td>
-<td><a href="http://huangjunbin.com/2017/02/21/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">策略模式</a></td>
+<td><a href="http://huangjunbin.com/2017/02/21/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">策略模式</a></td>
 </tr>
 <tr>
 <td>访问者模式</td>
 <td>封装一些作用于某种数据结构中的各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作</td>
-<td><a href="http://huangjunbin.com/2017/03/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">访问者模式</a></td>
+<td><a href="http://huangjunbin.com/2017/03/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">访问者模式</a></td>
 </tr>
 <tr>
 <td>状态模式</td>
 <td>状态模式中的行为是由状态来决定的，不同的状态下又不同的行为。状态模式和策略模式的结构几乎完全一样，但他们的目的，本质却完全不一样。状态模式的行为是平行的、不可替换的，策略模式的行为是彼此独立、互相替换的</td>
-<td><a href="http://huangjunbin.com/2017/03/04/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">状态模式</a></td>
+<td><a href="http://huangjunbin.com/2017/03/04/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">状态模式</a></td>
 </tr>
 <tr>
 <td>解释器模式</td>
 <td>解释器模式是一种用得比较少的行为模式，其提供了一种解释语言的语法或表达式的方式，该模式定义了一个表达式接口，通过该接口解释一个特定的上下文</td>
-<td><a href="http://huangjunbin.com/2017/03/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">解释器模式</a></td>
+<td><a href="http://huangjunbin.com/2017/03/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">解释器模式</a></td>
 </tr>
 <tr>
 <td>桥梁模式</td>
 <td>桥梁模式也称为桥接模式，是结构型设计模式之一。将抽象和实现解耦，使得两者可以独立地变化</td>
-<td><a href="http://huangjunbin.com/2017/03/08/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">桥梁模式</a></td>
+<td><a href="http://huangjunbin.com/2017/03/08/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F/" target="_blank" rel="noopener">桥梁模式</a></td>
 </tr>
 </tbody>
 </table>
@@ -695,7 +695,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">80</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -708,7 +708,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

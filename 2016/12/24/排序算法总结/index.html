@@ -361,10 +361,10 @@
 <h1 id="2-排序算法的综合分析"><a href="#2-排序算法的综合分析" class="headerlink" title="2.排序算法的综合分析"></a>2.排序算法的综合分析</h1><p>各算法的排序方式、平均情况、最好最坏情况、所需的辅助空间及稳定性如下：<br><img src="http://img.blog.csdn.net/20161224151927488?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt></p>
 <p>事实上，排序算法没有十全十美，本来想写一套模拟测试的数据来验证孰优孰略。但是突然发现可比性不高，需要根据排序源的情况，选择合适的排序算法。<br>从平均情况来看，显然最后3种改进的算法要优于希尔排序及其他3种简单的排序算法<br>从最坏情况来看，堆排序与归并排序又强过快速排序及其他简单排序<br>从辅助空间来看，简单排序算法及堆排序算法最优<br>从稳定性来看，改进的排序算法只有归并排序最稳定<br>选择怎样的排序算法需要根据各项指标来综合考虑，从待排序的个数上来说，待排序的个数n越小，采用简单排序的方法越合适，反之n越大，采用改进排序方法越合适，例如当关键字本身信息量很大，暂用存储空间大，移动比较花费时间，此时简单排序算法比较有优势。当然如果需要考虑算法的稳定性，显然改进的算法中只有归并排序合适。当然如果一定要说那个排序算法比较好，从综合的情况来说，改进的排序算法显然更优。</p>
 <h1 id="3-JDK1-7中的排序算法"><a href="#3-JDK1-7中的排序算法" class="headerlink" title="3.JDK1.7中的排序算法"></a>3.JDK1.7中的排序算法</h1><p>java的程序员都知道我们对排序经常使用Collections.sort()或者Arrays.sort(),当然Collections.sort(）最后也是调用了Arrays.sort(),如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;  </div><div class="line"> Object[] a = list.toArray();  </div><div class="line"> Arrays.sort(a);  </div><div class="line"> ListIterator&lt;T&gt; i = list.listIterator();  </div><div class="line"> for (int j=0; j&lt;a.length; j++) &#123;  </div><div class="line"> i.next();  </div><div class="line"> i.set((T)a[j]);  </div><div class="line"> &#125;  </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>那个Arrays.sort()，到底使用什么排序的算法呢？<br>分析源码得知：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public static void sort(int[] a) &#123;  </div><div class="line">  DualPivotQuicksort.sort(a);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;  </span><br><span class="line"> Object[] a = list.toArray();  </span><br><span class="line"> Arrays.sort(a);  </span><br><span class="line"> ListIterator&lt;T&gt; i = list.listIterator();  </span><br><span class="line"> for (int j=0; j&lt;a.length; j++) &#123;  </span><br><span class="line"> i.next();  </span><br><span class="line"> i.set((T)a[j]);  </span><br><span class="line"> &#125;  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>那个Arrays.sort()，到底使用什么排序的算法呢？<br>分析源码得知：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static void sort(int[] a) &#123;  </span><br><span class="line">  DualPivotQuicksort.sort(a);  </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
 <p>DualPivotQuicksort是一种在快速排序（单轴）上优化的排序算法，是一种双轴快排。该算法的实现印证了第2点中的描述，算法的选择根据了数据源的情况进行实现。DualPivotQuicksort的实现包含组合了 TimSort（ 是一个归并排序做了大量优化的版本）、插入排序、单轴快速排序等。</p>
-<p>有兴趣的深入了解DualPivotQuicksort的具体实现参考：<br><a href="http://www.tuicool.com/articles/BfY7Nz" target="_blank" rel="external">http://www.tuicool.com/articles/BfY7Nz</a></p>
+<p>有兴趣的深入了解DualPivotQuicksort的具体实现参考：<br><a href="http://www.tuicool.com/articles/BfY7Nz" target="_blank" rel="noopener">http://www.tuicool.com/articles/BfY7Nz</a></p>
 
       
     </div>
@@ -488,7 +488,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">80</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -501,7 +501,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

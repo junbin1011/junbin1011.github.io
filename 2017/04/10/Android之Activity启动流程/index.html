@@ -361,7 +361,7 @@
 <li>知己知彼，了解系统的运行原理。在实际的项目开发中，解决一些疑难杂症，对于排障分析有很重要的意义。（开发中最怕就是特殊机型兼容，一些无日志的问题，这个时候只能靠经验来分析，熟悉系统的运行流程就显得很重要）</li>
 <li>不要做一个只会堆砌API的工程师，否则无论3年或者5年，你始终会感觉到瓶颈的到来。其实换个角度学Android，例如源码分析、性能优化。你可能可以看到不一样的世界。</li>
 </ol>
-<h2 id="什么是Activity的启动流程"><a href="#什么是Activity的启动流程" class="headerlink" title="什么是Activity的启动流程"></a>什么是Activity的启动流程</h2><p>很多童鞋可能想，这还不简单，项目中用了千千万万遍了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startActivity(new Intent(this, Activity.class));</div></pre></td></tr></table></figure></p>
+<h2 id="什么是Activity的启动流程"><a href="#什么是Activity的启动流程" class="headerlink" title="什么是Activity的启动流程"></a>什么是Activity的启动流程</h2><p>很多童鞋可能想，这还不简单，项目中用了千千万万遍了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startActivity(new Intent(this, Activity.class));</span><br></pre></td></tr></table></figure></p>
 <p>只能说Too young,Too simple。</p>
 <p>我一开始也以为只是简单调用个startActivity，然后屏幕就跳转到指定的Activity，这就是Activity的启动流程。</p>
 <p>我们都知道Activity有一个栈，当我们按了back键的时候，就会回到上一个Activity。那么系统是如何来管理这个栈的呢？</p>
@@ -705,7 +705,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">80</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -718,7 +718,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

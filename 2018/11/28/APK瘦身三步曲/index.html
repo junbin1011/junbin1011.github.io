@@ -437,9 +437,9 @@
 <blockquote>
 <p>这里需要注意，特别有使用第三方的SDK，有些代码是在jar包里面，但是资源独立拷贝进工程，这样也会被识别成无引用的资源。但是这类资源一般都有特定的命名格式。</p>
 </blockquote>
-<h3 id="Grdle配置"><a href="#Grdle配置" class="headerlink" title="Grdle配置"></a>Grdle配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">        buildTypes &#123;</div><div class="line">            release &#123;</div><div class="line">                minifyEnabled true //是否开启混淆</div><div class="line">                shrinkResources true //压缩</div><div class="line">                zipAlignEnabled true ////去掉无用的resourse文件</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="Grdle配置"><a href="#Grdle配置" class="headerlink" title="Grdle配置"></a>Grdle配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">        buildTypes &#123;</span><br><span class="line">            release &#123;</span><br><span class="line">                minifyEnabled true //是否开启混淆</span><br><span class="line">                shrinkResources true //压缩</span><br><span class="line">                zipAlignEnabled true ////去掉无用的resourse文件</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>启用shrinkResources，gradle在打包的时候会自动进行资源的清理。</p>
-<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><h3 id="PNG压缩优化"><a href="#PNG压缩优化" class="headerlink" title="PNG压缩优化"></a>PNG压缩优化</h3><p>推荐使用<a href="https://tinypng.com/" target="_blank" rel="external">tinypng</a>。</p>
+<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><h3 id="PNG压缩优化"><a href="#PNG压缩优化" class="headerlink" title="PNG压缩优化"></a>PNG压缩优化</h3><p>推荐使用<a href="https://tinypng.com/" target="_blank" rel="noopener">tinypng</a>。</p>
 <p>tinypng通过合并图片中相似的颜色，通过将 24 位的 PNG 图片压缩成小得多的 8 位色值的图片，并且去掉了图片中不必要的 metadata（元数据，从 Photoshop 等工具中导出的图片都会带有此类信息），这种方式几乎能完美支持原图片的透明度。有部分文档指出tinypng同时采用了pngquant、optipng、advpng几种脚本。图片的压缩率能达到50%以上。</p>
 <h3 id="webp使用"><a href="#webp使用" class="headerlink" title="webp使用"></a>webp使用</h3><p>WebP格式，谷歌（google）开发的一种旨在加快图片加载速度的图片格式。无损压缩比PNG文件小45%，即使PNG已经过其他的优化，也能达到28%。缺点，加载比PNG慢。</p>
 <p>Android Studio自带了对WebP的转换支持。选中资源，右键Convert to WebP。</p>
@@ -482,9 +482,9 @@
 <li>删除注释和无用的代码</li>
 <li>将java文件文件名及方法名改成短名 a.java </li>
 </ol>
-<p>支持的方式也很简单，Gradle默认支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">        buildTypes &#123;</div><div class="line">            release &#123;</div><div class="line">                minifyEnabled true //是否开启混淆</div><div class="line">                 proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<h3 id="资源混淆"><a href="#资源混淆" class="headerlink" title="资源混淆"></a>资源混淆</h3><p><a href="https://github.com/shwenzhang/AndResGuard/blob/master/README.zh-cn.md" target="_blank" rel="external">AndResGuard</a>是一个帮助你缩小APK大小的工具，他的原理类似Java Proguard，但是只针对资源。他会将原本冗长的资源路径变短，例如将res/drawable/wechat变为r/d/a。</p>
-<p>具体的原理可参看<a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=208135658&amp;idx=1&amp;sn=ac9bd6b4927e9e82f9fa14e396183a8f#rd" target="_blank" rel="external">安装包立减1M–微信Android资源混淆打包工具</a></p>
+<p>支持的方式也很简单，Gradle默认支持<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">        buildTypes &#123;</span><br><span class="line">            release &#123;</span><br><span class="line">                minifyEnabled true //是否开启混淆</span><br><span class="line">                 proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="资源混淆"><a href="#资源混淆" class="headerlink" title="资源混淆"></a>资源混淆</h3><p><a href="https://github.com/shwenzhang/AndResGuard/blob/master/README.zh-cn.md" target="_blank" rel="noopener">AndResGuard</a>是一个帮助你缩小APK大小的工具，他的原理类似Java Proguard，但是只针对资源。他会将原本冗长的资源路径变短，例如将res/drawable/wechat变为r/d/a。</p>
+<p>具体的原理可参看<a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=208135658&amp;idx=1&amp;sn=ac9bd6b4927e9e82f9fa14e396183a8f#rd" target="_blank" rel="noopener">安装包立减1M–微信Android资源混淆打包工具</a></p>
 <p>集成也非常简单，详细参看Github中的使用说明则可。</p>
 <p>通过资源混淆后，115的优化情况如下：</p>
 <table>
@@ -566,9 +566,9 @@
 <li>插件化（动态加载）</li>
 </ol>
 <p>方案当然还有很多，本文只介绍常规使用的一些方法，有兴趣的伙伴可以继续深入了解。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://tinypng.com/" target="_blank" rel="external">tinypng</a></p>
-<p><a href="https://github.com/shwenzhang/AndResGuard/blob/master/README.zh-cn.md" target="_blank" rel="external">AndResGuard</a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=208135658&amp;idx=1&amp;sn=ac9bd6b4927e9e82f9fa14e396183a8f#rd" target="_blank" rel="external">安装包立减1M–微信Android资源混淆打包工具</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://tinypng.com/" target="_blank" rel="noopener">tinypng</a></p>
+<p><a href="https://github.com/shwenzhang/AndResGuard/blob/master/README.zh-cn.md" target="_blank" rel="noopener">AndResGuard</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=208135658&amp;idx=1&amp;sn=ac9bd6b4927e9e82f9fa14e396183a8f#rd" target="_blank" rel="noopener">安装包立减1M–微信Android资源混淆打包工具</a></p>
 
       
     </div>
@@ -692,7 +692,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">80</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -705,7 +705,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

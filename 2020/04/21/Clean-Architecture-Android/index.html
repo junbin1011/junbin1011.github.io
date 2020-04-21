@@ -1,0 +1,794 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="架构,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="整洁架构  独立于框架 可测试 独立于UI 独立于数据库 独立于外部依赖  TODO   架构设计  Data Layer（数据层）仓储模式（Repository Pattern）是存在于业务和数据库之间单独分离出来的一层，是对数据访问的封装。   业务层无需知道具体实现达到分离关注点 提高对数据访问的维护，对于仓储的改变并不改变业务的逻辑   接口12345678910 public inter">
+<meta name="keywords" content="架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clean Architecture - Android">
+<meta property="og:url" content="https://junbin1011.github.io/2020/04/21/Clean-Architecture-Android/index.html">
+<meta property="og:site_name" content="JunBin">
+<meta property="og:description" content="整洁架构  独立于框架 可测试 独立于UI 独立于数据库 独立于外部依赖  TODO   架构设计  Data Layer（数据层）仓储模式（Repository Pattern）是存在于业务和数据库之间单独分离出来的一层，是对数据访问的封装。   业务层无需知道具体实现达到分离关注点 提高对数据访问的维护，对于仓储的改变并不改变业务的逻辑   接口12345678910 public inter">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://camo.githubusercontent.com/a2342fe9acb71d058612dd06e1d09779dc7bf79a/68747470733a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f343039392d303464666262663230373261643261662e6a70673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f3737322f666f726d61742f77656270">
+<meta property="og:image" content="https://github.com/googlesamples/android-architecture/wiki/images/todoapp.gif">
+<meta property="og:image" content="https://github.com/googlesamples/android-architecture/wiki/images/mvp-clean.png">
+<meta property="og:image" content="https://camo.githubusercontent.com/8429a23cf2de87e9c0537b2eaa808672c849cf22/68747470733a2f2f6665726e616e646f63656a61732e636f6d2f6173736574732f696d616765732f636c65616e5f6172636869746563747572655f636c65616e5f7761795f30352e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/df065e887ac07fe185e4d8e43ec12a6fa8a8015d/68747470733a2f2f6665726e616e646f63656a61732e636f6d2f6173736574732f696d616765732f636c65616e5f6172636869746563747572655f636c65616e5f7761795f30342e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/5185ca8da84fcda38262041e407fa5ae2b857d83/68747470733a2f2f6665726e616e646f63656a61732e636f6d2f6173736574732f696d616765732f636c65616e5f6172636869746563747572655f636c65616e5f7761795f30332e706e67">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&shareKey=09bc64e9133e43f61c1651a59c9c92d7">
+<meta property="og:updated_time" content="2020-04-21T09:24:01.727Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Clean Architecture - Android">
+<meta name="twitter:description" content="整洁架构  独立于框架 可测试 独立于UI 独立于数据库 独立于外部依赖  TODO   架构设计  Data Layer（数据层）仓储模式（Repository Pattern）是存在于业务和数据库之间单独分离出来的一层，是对数据访问的封装。   业务层无需知道具体实现达到分离关注点 提高对数据访问的维护，对于仓储的改变并不改变业务的逻辑   接口12345678910 public inter">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/a2342fe9acb71d058612dd06e1d09779dc7bf79a/68747470733a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f343039392d303464666262663230373261643261662e6a70673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f3737322f666f726d61742f77656270">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2020/04/21/Clean-Architecture-Android/">
+
+
+
+
+
+  <title> Clean Architecture - Android | JunBin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JunBin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一花一世界，一码一浮生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/04/21/Clean-Architecture-Android/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Clean Architecture - Android
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-21T17:19:55+08:00">
+                2020-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/21/Clean-Architecture-Android/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/04/21/Clean-Architecture-Android/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="整洁架构"><a href="#整洁架构" class="headerlink" title="整洁架构"></a>整洁架构</h1><p><img src="https://camo.githubusercontent.com/a2342fe9acb71d058612dd06e1d09779dc7bf79a/68747470733a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f343039392d303464666262663230373261643261662e6a70673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f3737322f666f726d61742f77656270" alt="image.png"></p>
+<ul>
+<li>独立于框架</li>
+<li>可测试</li>
+<li>独立于UI</li>
+<li>独立于数据库</li>
+<li><p>独立于外部依赖</p>
+<hr>
+<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1></li>
+</ul>
+<p><img src="https://github.com/googlesamples/android-architecture/wiki/images/todoapp.gif" alt="image"></p>
+<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><p><img src="https://github.com/googlesamples/android-architecture/wiki/images/mvp-clean.png" alt="image"></p>
+<hr>
+<h1 id="Data-Layer（数据层）"><a href="#Data-Layer（数据层）" class="headerlink" title="Data Layer（数据层）"></a>Data Layer（数据层）</h1><p>仓储模式（Repository Pattern）是存在于业务和数据库之间单独分离出来的一层，是对数据访问的封装。 </p>
+<ul>
+<li>业务层无需知道具体实现达到分离关注点</li>
+<li>提高对数据访问的维护，对于仓储的改变并不改变业务的逻辑</li>
+</ul>
+<p><img src="https://camo.githubusercontent.com/8429a23cf2de87e9c0537b2eaa808672c849cf22/68747470733a2f2f6665726e616e646f63656a61732e636f6d2f6173736574732f696d616765732f636c65616e5f6172636869746563747572655f636c65616e5f7761795f30352e706e67" alt="image"></p>
+<h1 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TasksDataSource</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getTask</span><span class="params">(@NonNull String taskId, @NonNull GetTaskCallback callback)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">saveTask</span><span class="params">(@NonNull Task task)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">completeTask</span><span class="params">(@NonNull Task task)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">deleteTask</span><span class="params">(@NonNull String taskId)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="Domain-Layer-领域层"><a href="#Domain-Layer-领域层" class="headerlink" title="Domain Layer (领域层)"></a>Domain Layer (领域层)</h1><ul>
+<li>包含所有的业务逻辑</li>
+<li>Use case 定义应用程序需要的操作</li>
+<li>该层是一个纯Java模块，没有任何Android依赖项</li>
+</ul>
+<p><img src="https://camo.githubusercontent.com/df065e887ac07fe185e4d8e43ec12a6fa8a8015d/68747470733a2f2f6665726e616e646f63656a61732e636f6d2f6173736574732f696d616765732f636c65616e5f6172636869746563747572655f636c65616e5f7761795f30342e706e67" alt="image"></p>
+<h1 id="Task-Domain"><a href="#Task-Domain" class="headerlink" title="Task Domain"></a>Task Domain</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Task</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String mId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String mTitle;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String mDescription;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> mCompleted;</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompleteTask</span> <span class="keyword">extends</span> <span class="title">UseCase</span>&lt;<span class="title">CompleteTask</span>.<span class="title">RequestValues</span>, <span class="title">CompleteTask</span>.<span class="title">ResponseValue</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> TasksRepository mTasksRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">executeUseCase</span><span class="params">(<span class="keyword">final</span> RequestValues values)</span> </span>&#123;</span><br><span class="line">        String completedTask = values.getCompletedTask();</span><br><span class="line">        mTasksRepository.completeTask(completedTask);</span><br><span class="line">        getUseCaseCallback().onSuccess(<span class="keyword">new</span> ResponseValue());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Statistics-Domain"><a href="#Statistics-Domain" class="headerlink" title="Statistics Domain"></a>Statistics Domain</h1> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Statistics</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> completedTasks;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> activeTasks;</span><br><span class="line">   <span class="comment">//... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetStatistics</span> <span class="keyword">extends</span> <span class="title">UseCase</span>&lt;<span class="title">GetStatistics</span>.<span class="title">RequestValues</span>, <span class="title">GetStatistics</span>.<span class="title">ResponseValue</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> TasksRepository mTasksRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">executeUseCase</span><span class="params">(RequestValues requestValues)</span> </span>&#123;</span><br><span class="line">        mTasksRepository.getTasks(<span class="keyword">new</span> TasksDataSource.LoadTasksCallback() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTasksLoaded</span><span class="params">(List&lt;Task&gt; tasks)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> activeTasks = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">int</span> completedTasks = <span class="number">0</span>;</span><br><span class="line">                <span class="comment">// We calculate number of active and completed tasks</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="Presentation-Layer-表现层"><a href="#Presentation-Layer-表现层" class="headerlink" title="Presentation Layer (表现层)"></a>Presentation Layer (表现层)</h1><ul>
+<li>根据Domain Layer的数据进行界面显示</li>
+<li><p><strong>将业务逻辑移动到领域层中更小粒度的Use case，避免Presenter的代码重复</strong></p>
+<p><img src="https://camo.githubusercontent.com/5185ca8da84fcda38262041e407fa5ae2b857d83/68747470733a2f2f6665726e616e646f63656a61732e636f6d2f6173736574732f696d616765732f636c65616e5f6172636869746563747572655f636c65616e5f7761795f30332e706e67" alt="image.png"></p>
+</li>
+</ul>
+<h1 id="Presenter"><a href="#Presenter" class="headerlink" title="Presenter"></a>Presenter</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"> public class TasksPresenter implements TasksContract.Presenter &#123;</span><br><span class="line"></span><br><span class="line">    private final TasksContract.View mTasksView;</span><br><span class="line">    private final GetTasks mGetTasks;</span><br><span class="line">    private final CompleteTask mCompleteTask;</span><br><span class="line"></span><br><span class="line">    private void loadTasks(boolean forceUpdate, final boolean showLoadingUI) &#123;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        GetTasks.RequestValues requestValue = new GetTasks.RequestValues(forceUpdate,</span><br><span class="line">                mCurrentFiltering);</span><br><span class="line"></span><br><span class="line">        mUseCaseHandler.execute(mGetTasks, requestValue,</span><br><span class="line">                new UseCase.UseCaseCallback&lt;GetTasks.ResponseValue&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void onSuccess(GetTasks.ResponseValue response) &#123;</span><br><span class="line">                        // ... ...</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onError() &#123;</span><br><span class="line">                        // The view may not be able to handle UI updates anymore</span><br><span class="line">                        if (!mTasksView.isActive()) &#123;</span><br><span class="line">                            return;</span><br><span class="line">                        &#125;</span><br><span class="line">                        mTasksView.showLoadingTasksError();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h1><ul>
+<li>Presentation Layer (表现层)：小型/中型测试， Robolectric、Espresso</li>
+<li>Domain Layer (领域层)：小型测试，Junit、Mockito</li>
+<li>Data Layer（数据层）： 小型/中型测试，Robolectric（因为该层具有android依赖项），Junit、Mockito</li>
+</ul>
+<h1 id="中型测试"><a href="#中型测试" class="headerlink" title="中型测试"></a>中型测试</h1> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(AndroidJUnit4.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TasksScreenTest</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">createTask</span><span class="params">(String title, String description)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Click on the add task button</span></span><br><span class="line">        onView(withId(R.id.fab_add_task)).perform(click());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Add task title and description</span></span><br><span class="line">        onView(withId(R.id.add_task_title)).perform(typeText(title),</span><br><span class="line">                closeSoftKeyboard()); <span class="comment">// Type new task title</span></span><br><span class="line">        onView(withId(R.id.add_task_description)).perform(typeText(description),</span><br><span class="line">                closeSoftKeyboard()); <span class="comment">// Type new task description and close the keyboard</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Save the task</span></span><br><span class="line">        onView(withId(R.id.fab_edit_task_done)).perform(click());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="小型测试"><a href="#小型测试" class="headerlink" title="小型测试"></a>小型测试</h1> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TasksPresenterTest</span> </span>&#123;</span><br><span class="line">       <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">completeTask_ShowsTaskMarkedComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">// Given a stubbed task</span></span><br><span class="line">       Task task = <span class="keyword">new</span> Task(<span class="string">"Details Requested"</span>, <span class="string">"For this task"</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// When task is marked as complete</span></span><br><span class="line">       mTasksPresenter.completeTask(task);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// Then repository is called and task marked complete UI is shown</span></span><br><span class="line">       verify(mTasksRepository).completeTask(eq(task.getId()));</span><br><span class="line">       verify(mTasksView).showTaskMarkedComplete();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="示例（Java）"><a href="#示例（Java）" class="headerlink" title="示例（Java）"></a>示例（Java）</h1><p>android/architecture-samples</p>
+<p><a href="https://github.com/android/architecture-samples/tree/todo-mvp-clean" target="_blank" rel="noopener">https://github.com/android/architecture-samples/tree/todo-mvp-clean</a></p>
+<h1 id="推荐（Kotlin）"><a href="#推荐（Kotlin）" class="headerlink" title="推荐（Kotlin）"></a>推荐（Kotlin）</h1><p> android10/Android-CleanArchitecture-Kotlin</p>
+<p> <a href="https://github.com/android10/Android-CleanArchitecture-Kotlin" target="_blank" rel="noopener">https://github.com/android10/Android-CleanArchitecture-Kotlin</a></p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
+<p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBa96dfd23abb87ebdf59dd39d5081a7be?method=download&amp;shareKey=09bc64e9133e43f61c1651a59c9c92d7" alt="image"></p>
+<ul>
+<li>作者：黄俊彬 </li>
+<li><a href="https://junbin.tech/" target="_blank" rel="noopener">博客：junbin.tech</a></li>
+<li><a href="https://github.com/junbin1011" target="_blank" rel="noopener">GitHub: junbin1011 </a></li>
+<li><a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" rel="noopener">知乎: @JunBin</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/21/Android项目指南/" rel="next" title="Android项目指南">
+                <i class="fa fa-chevron-left"></i> Android项目指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/04/21/Clean-Architecture-Android/" data-title="Clean Architecture - Android" data-url="https://junbin1011.github.io/2020/04/21/Clean-Architecture-Android/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#整洁架构"><span class="nav-number">1.</span> <span class="nav-text">整洁架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TODO"><span class="nav-number">2.</span> <span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构设计"><span class="nav-number">3.</span> <span class="nav-text">架构设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-Layer（数据层）"><span class="nav-number">4.</span> <span class="nav-text">Data Layer（数据层）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口"><span class="nav-number">5.</span> <span class="nav-text">接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Domain-Layer-领域层"><span class="nav-number">6.</span> <span class="nav-text">Domain Layer (领域层)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Task-Domain"><span class="nav-number">7.</span> <span class="nav-text">Task Domain</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Statistics-Domain"><span class="nav-number">8.</span> <span class="nav-text">Statistics Domain</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Presentation-Layer-表现层"><span class="nav-number">9.</span> <span class="nav-text">Presentation Layer (表现层)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Presenter"><span class="nav-number">10.</span> <span class="nav-text">Presenter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Test"><span class="nav-number">11.</span> <span class="nav-text">Test</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中型测试"><span class="nav-number">12.</span> <span class="nav-text">中型测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小型测试"><span class="nav-number">13.</span> <span class="nav-text">小型测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例（Java）"><span class="nav-number">14.</span> <span class="nav-text">示例（Java）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#推荐（Kotlin）"><span class="nav-number">15.</span> <span class="nav-text">推荐（Kotlin）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">15.1.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

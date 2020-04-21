@@ -435,9 +435,9 @@
 <h3 id="阶段二"><a href="#阶段二" class="headerlink" title="阶段二"></a>阶段二</h3><p>阶段二主要优化第三点。同样先上下简单类结构关系图</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/5125122-b2da226c7cfa08af?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <p>1、对FileChooseActivity进行扩展，使用Builder模式进行配置，支持文件类型的筛选显示。废除DiskMusicActivity、AddAttachmentActivity。</p>
-<p>音乐筛选页面代码跳转：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FileChooseActivity.IntentBuilder builder = new FileChooseActivity.IntentBuilder(this);</div><div class="line">       builder.setChoiceMode(ChoiceMode.MULTI)</div><div class="line">               .setEventBusFlag(Signature.signature(this))</div><div class="line">               .setShowLocalFileList(false)</div><div class="line">               .setYywSelectType(FileChoiceParams.MUSIC)</div><div class="line">               .setSupportCheckAll(true)</div><div class="line">               .launch();</div></pre></td></tr></table></figure></p>
+<p>音乐筛选页面代码跳转：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FileChooseActivity.IntentBuilder builder = new FileChooseActivity.IntentBuilder(this);</span><br><span class="line">       builder.setChoiceMode(ChoiceMode.MULTI)</span><br><span class="line">               .setEventBusFlag(Signature.signature(this))</span><br><span class="line">               .setShowLocalFileList(false)</span><br><span class="line">               .setYywSelectType(FileChoiceParams.MUSIC)</span><br><span class="line">               .setSupportCheckAll(true)</span><br><span class="line">               .launch();</span><br></pre></td></tr></table></figure></p>
 <p>图片筛选页面代码跳转：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">FileChooseActivity.IntentBuilder builder = new FileChooseActivity.IntentBuilder(this);</div><div class="line">       builder.setChoiceMode(ChoiceMode.MULTI)</div><div class="line">               .setEventBusFlag(Signature.signature(this))</div><div class="line">               .setShowLocalFileList(false)</div><div class="line">               .setMaxLimit(15)</div><div class="line">               .setYywSelectType(FileChoiceParams.PIC)</div><div class="line">               .setSupportCheckAll(false)</div><div class="line">               .launch();</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FileChooseActivity.IntentBuilder builder = new FileChooseActivity.IntentBuilder(this);</span><br><span class="line">       builder.setChoiceMode(ChoiceMode.MULTI)</span><br><span class="line">               .setEventBusFlag(Signature.signature(this))</span><br><span class="line">               .setShowLocalFileList(false)</span><br><span class="line">               .setMaxLimit(15)</span><br><span class="line">               .setYywSelectType(FileChoiceParams.PIC)</span><br><span class="line">               .setSupportCheckAll(false)</span><br><span class="line">               .launch();</span><br></pre></td></tr></table></figure>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>回到一开始抛出的问题，这里做一下自己的总结思考。</p>
 <p>1、业务需求多，时间赶这是常态，时间要靠自己规划及提高效率挤出来。在开发的时候也要充分考虑，不能盲目追求功能实现。 一般项目上线后，新功能策划都有一段空白期，善于利用</p>
 <p>2、不管公司重不重视代码重构。首先多思考、优化重构，对自己也是一种提升。相信在重构的过程，自己也可以有所收获</p>
@@ -564,7 +564,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">80</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -577,7 +577,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
