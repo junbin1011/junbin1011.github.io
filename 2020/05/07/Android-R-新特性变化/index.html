@@ -1,0 +1,825 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="目录 Android Q 主要新特性  Android R 版本发布计划  Android R 功能演示（Video）  Android R 新功能与API特性  总结与思考  1️⃣ Android Q 主要新特性&amp;emsp; &amp;emsp; 用于可折叠设备、深色主题、手势导航、连接等新特性    可折叠设备 Android 10 在 onResume 和 onPause 中添加了多项改进，用于支">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android R 新特性变化">
+<meta property="og:url" content="https://junbin1011.github.io/2020/05/07/Android-R-新特性变化/index.html">
+<meta property="og:site_name" content="JunBin">
+<meta property="og:description" content="目录 Android Q 主要新特性  Android R 版本发布计划  Android R 功能演示（Video）  Android R 新功能与API特性  总结与思考  1️⃣ Android Q 主要新特性&amp;emsp; &amp;emsp; 用于可折叠设备、深色主题、手势导航、连接等新特性    可折叠设备 Android 10 在 onResume 和 onPause 中添加了多项改进，用于支">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171edd4746f2c764">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171edd474c281dd2">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171edd475409817a">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171edd477864655a">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171eddafc7e3a6cf?w=946&h=252&f=png&s=41403">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171edd47479a77a8?w=1238&h=634&f=png&s=137237">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171eddf3fb3a7139?w=1066&h=386&f=png&s=117806">
+<meta property="og:updated_time" content="2020-05-07T07:24:46.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android R 新特性变化">
+<meta name="twitter:description" content="目录 Android Q 主要新特性  Android R 版本发布计划  Android R 功能演示（Video）  Android R 新功能与API特性  总结与思考  1️⃣ Android Q 主要新特性&amp;emsp; &amp;emsp; 用于可折叠设备、深色主题、手势导航、连接等新特性    可折叠设备 Android 10 在 onResume 和 onPause 中添加了多项改进，用于支">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2020/5/7/171edd4746f2c764">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2020/05/07/Android-R-新特性变化/">
+
+
+
+
+
+  <title> Android R 新特性变化 | JunBin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JunBin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一花一世界，一码一浮生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/05/07/Android-R-新特性变化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android R 新特性变化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-07T15:23:27+08:00">
+                2020-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/07/Android-R-新特性变化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/05/07/Android-R-新特性变化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><p>Android Q 主要新特性</p>
+</li>
+<li><p>Android R 版本发布计划</p>
+</li>
+<li><p>Android R 功能演示（Video）</p>
+</li>
+<li><p>Android R 新功能与API特性</p>
+</li>
+<li>总结与思考</li>
+</ul>
+<h1 id="1️⃣-Android-Q-主要新特性-emsp-emsp"><a href="#1️⃣-Android-Q-主要新特性-emsp-emsp" class="headerlink" title="1️⃣ Android Q 主要新特性&emsp; &emsp;"></a>1️⃣ Android Q 主要新特性&emsp; &emsp;</h1><blockquote>
+<p>用于可折叠设备、深色主题、手势导航、连接等新特性  </p>
+</blockquote>
+<h2 id="可折叠设备"><a href="#可折叠设备" class="headerlink" title="可折叠设备"></a>可折叠设备</h2><p><img src="https://user-gold-cdn.xitu.io/2020/5/7/171edd4746f2c764" width="400/"></p>
+<p>Android 10 在 onResume 和 onPause 中添加了多项改进，用于支持多项恢复，并在应用获得焦点时通知应用</p>
+<h2 id="深色主题"><a href="#深色主题" class="headerlink" title="深色主题"></a>深色主题</h2><p><img src="https://user-gold-cdn.xitu.io/2020/5/7/171edd474c281dd2" width="400/"></p>
+<p>Android 10 新增了一个系统级的深色主题，非常适合光线较暗的场景并能帮助节省电量。</p>
+<ul>
+<li>DayNight 主题</li>
+<li>Force Dark</li>
+</ul>
+<h2 id="手势导航"><a href="#手势导航" class="headerlink" title="手势导航"></a>手势导航</h2><p><img src="https://user-gold-cdn.xitu.io/2020/5/7/171edd475409817a" alt></p>
+<p>Android 10 引入了全手势导航模式，该模式不显示通知栏区域，允许应用使用全屏来提供更丰富、更让人沉浸的体验。</p>
+<h2 id="共享快捷方式"><a href="#共享快捷方式" class="headerlink" title="共享快捷方式"></a>共享快捷方式</h2><p><img src="https://user-gold-cdn.xitu.io/2020/5/7/171edd477864655a" width="400/"></p>
+<p>共享快捷方式功能可使共享更加轻松快捷，让用户能够直接跳转到其他应用来共享内容。</p>
+<h2 id="5G-网络"><a href="#5G-网络" class="headerlink" title="5G 网络"></a>5G 网络</h2><p>Android 10 新增了针对 5G 的平台支持，可以使用连接 API (ConnectivityManager)来检测设备是否具有高带宽连接，还可以检查连接是否按流量计费。借助这些功能，应用和游戏可以为使用 5G 的用户量身打造丰富的沉浸式体验。</p>
+<h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p> 安全、连接、性能优化</p>
+<blockquote>
+<p><a href="https://developer.android.com/about/versions/10/highlights" target="_blank" rel="noopener">https://developer.android.com/about/versions/10/highlights</a></p>
+</blockquote>
+<h1 id="2️⃣-Android-R-版本发布计划-emsp-emsp"><a href="#2️⃣-Android-R-版本发布计划-emsp-emsp" class="headerlink" title="2️⃣ Android R 版本发布计划&emsp; &emsp;"></a>2️⃣ Android R 版本发布计划&emsp; &emsp;</h1><h2 id="版本发布时间"><a href="#版本发布时间" class="headerlink" title="版本发布时间"></a>版本发布时间</h2><p><img src="https://user-gold-cdn.xitu.io/2020/5/7/171eddafc7e3a6cf?w=946&amp;h=252&amp;f=png&amp;s=41403" alt></p>
+<blockquote>
+<p>第3季度发布面向 AOSP 和生态系统发布 Android 11 最终版本</p>
+</blockquote>
+<h2 id="版本发布计划"><a href="#版本发布计划" class="headerlink" title="版本发布计划"></a>版本发布计划</h2><p> <img src="https://user-gold-cdn.xitu.io/2020/5/7/171edd47479a77a8?w=1238&amp;h=634&amp;f=png&amp;s=137237" alt></p>
+<h1 id="3️⃣-Android-R-功能演示（Video）-emsp-emsp"><a href="#3️⃣-Android-R-功能演示（Video）-emsp-emsp" class="headerlink" title="3️⃣ Android R 功能演示（Video）&emsp; &emsp;"></a>3️⃣ Android R 功能演示（Video）&emsp; &emsp;</h1><h2 id="Android-11-First-Look-7-Most-Exciting-Features"><a href="#Android-11-First-Look-7-Most-Exciting-Features" class="headerlink" title="Android 11 First Look: 7 Most Exciting Features!"></a>Android 11 First Look: 7 Most Exciting Features!</h2><p>  <a href="https://www.youtube.com/watch?v=04hjpFshguU" target="_blank" rel="noopener">https://www.youtube.com/watch?v=04hjpFshguU</a></p>
+<h2 id="新功能特性"><a href="#新功能特性" class="headerlink" title="新功能特性"></a>新功能特性</h2><ul>
+<li>Improved Notification Share</li>
+<li>Bubbles</li>
+<li>Better Permissions</li>
+<li>Screen Recorded</li>
+<li>Improved DND (Do Not Disturb)</li>
+<li>Auto Dark Mode</li>
+<li>Other Changes</li>
+</ul>
+<h1 id="4️⃣-Android-R-新API特性-emsp-emsp"><a href="#4️⃣-Android-R-新API特性-emsp-emsp" class="headerlink" title="4️⃣ Android R 新API特性&emsp; &emsp;"></a>4️⃣ Android R 新API特性&emsp; &emsp;</h1><blockquote>
+<p>5G、共享、连接、媒体、显示等方面的 API</p>
+</blockquote>
+<h2 id="帧速率"><a href="#帧速率" class="headerlink" title="帧速率"></a>帧速率</h2><p>Android 11 提供了一个 API，可让应用告知系统它们预期的帧速率。该 API 的主要目的是让应用能够更好地利用支持的所有显示屏刷新频率（90Hz 120Hz）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Surface.setFrameRate()</span><br><span class="line">SurfaceControl.Transaction.setFrameRate()</span><br><span class="line">ANativeWindow_setFrameRate()</span><br><span class="line">ASurfaceTransaction_setFrameRate()</span><br></pre></td></tr></table></figure>
+<h2 id="瀑布屏"><a href="#瀑布屏" class="headerlink" title="瀑布屏"></a>瀑布屏</h2><p>Android 11 提供了一些 API 来支持瀑布屏，这是一种无边框的全面屏。（超大的弯折角度）</p>
+<ul>
+<li><p>调用 DisplayCutout. getWaterfallInsets() 以获取瀑布边衬区的精确尺寸。</p>
+</li>
+<li><p>将窗口布局属性 layoutInDisplayCutoutMode 设为 LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS，以允许窗口延伸到屏幕各个边缘上的刘海和瀑布区域</p>
+</li>
+</ul>
+<h2 id="APK-签名方案-v4-amp-增量-APK-安装"><a href="#APK-签名方案-v4-amp-增量-APK-安装" class="headerlink" title="APK 签名方案 v4 &amp; 增量 APK 安装"></a>APK 签名方案 v4 &amp; 增量 APK 安装</h2><p>在设备上安装大型（2GB 以上）APK 可能需要很长的时间，增量 APK 安装通过安装 APK 中足以用来启动应用的部分，同时在后台流式传输剩余数据，加速了这一过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install --incremental</span><br></pre></td></tr></table></figure>
+<h2 id="NDK-图像解码器"><a href="#NDK-图像解码器" class="headerlink" title="NDK 图像解码器"></a>NDK 图像解码器</h2><p>NDK ImageDecoder API 提供了一种标准 API，供 Android C/C++ 应用直接解码图像。应用开发者不再需要使用框架 API（通过 JNI）或捆绑第三方图像解码库。</p>
+<h2 id="应用进程退出原因"><a href="#应用进程退出原因" class="headerlink" title="应用进程退出原因"></a>应用进程退出原因</h2><p> Android 11 引入了 getHistoricalProcessExitReasons() 方法，用于报告近期任何进程终止的原因。应用可以使用此方法来收集崩溃诊断信息，例如进程终止是由于 ANR、内存问题还是其他原因所致。</p>
+<h2 id="更好地支持包含多个帧的-HEIF-图片"><a href="#更好地支持包含多个帧的-HEIF-图片" class="headerlink" title="更好地支持包含多个帧的 HEIF 图片"></a>更好地支持包含多个帧的 HEIF 图片</h2><p>从 Android 11 开始，如果您调用 ImageDecoder.decodeDrawable() 并传递包含帧序列的 HEIF 图片（如动画或连拍照片），则该方法会返回包含整个图片序列的 AnimatedImageDrawable。</p>
+<blockquote>
+<p>HEIF就是”高效图像格式“，是新一代的图片压缩技术。在同样条件下，HEIF的体积可以比jpg小接近一</p>
+</blockquote>
+<h2 id="使用数据-blob-安全共享大型数据集"><a href="#使用数据-blob-安全共享大型数据集" class="headerlink" title="使用数据 blob 安全共享大型数据集"></a>使用数据 blob 安全共享大型数据集</h2><p>为帮助减少网络中和磁盘上的数据冗余，Android 11（API 级别“R”）会缓存共享数据集，为机器学习和媒体播放等用例提供支持.</p>
+<blockquote>
+<p>当一个应用下载完某个数据后，可以将该数据共享给指定的包名应用、或者相同签名应用、或者无限制公开，其他应用可以直接读取该数据</p>
+</blockquote>
+<h2 id="在-Android-模拟器上运行-ARM-应用"><a href="#在-Android-模拟器上运行-ARM-应用" class="headerlink" title="在 Android 模拟器上运行 ARM 应用"></a>在 Android 模拟器上运行 ARM 应用</h2><p>新的系统映像在执行 ARM 二进制文件方面取得了显著的性能提升。Android 11 系统映像能够在不影响整个系统的前提下，直接将 ARM 指令转换成 x86 指令。开发者无需搭建高负载的 ARM 环境即可执行 ARM 二进制文件并进行测试。</p>
+<blockquote>
+<p><a href="https://www.jianshu.com/p/d2def" target="_blank" rel="noopener">https://www.jianshu.com/p/d2def</a><br>eb32558</p>
+</blockquote>
+<h2 id="更多-1"><a href="#更多-1" class="headerlink" title="更多"></a>更多</h2><p>Android R 目前为 DP3  ，更多特性参考：</p>
+<blockquote>
+<p><a href="https://developer.android.com/preview/features" target="_blank" rel="noopener">https://developer.android.com/preview/features</a></p>
+</blockquote>
+<h1 id="5️⃣-总结与思考-💡-emsp-emsp"><a href="#5️⃣-总结与思考-💡-emsp-emsp" class="headerlink" title="5️⃣ 总结与思考 💡&emsp; &emsp;"></a>5️⃣ 总结与思考 💡&emsp; &emsp;</h1><ul>
+<li><p>Android R 最新版本为DP3,目前整体来看，主要是一些优化和改进，没有比较重大的更新。</p>
+</li>
+<li><p>从Android Q 开始，原生系统支持了国内ROM非常多的特性，包含深色主题、导航手势、滚动截屏、屏幕录像、共享快捷等</p>
+</li>
+</ul>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
+<p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/5/7/171eddf3fb3a7139?w=1066&amp;h=386&amp;f=png&amp;s=117806" alt></p>
+<ul>
+<li>作者：黄俊彬 </li>
+<li><a href="https://junbin.tech/" target="_blank" rel="noopener">博客：junbin.tech</a></li>
+<li><a href="https://github.com/junbin1011" target="_blank" rel="noopener">GitHub: junbin1011 </a></li>
+<li><a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" rel="noopener">知乎: @JunBin</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/21/Clean-Architecture-Android/" rel="next" title="Clean Architecture - Android">
+                <i class="fa fa-chevron-left"></i> Clean Architecture - Android
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/05/07/Android-R-新特性变化/" data-title="Android R 新特性变化" data-url="https://junbin1011.github.io/2020/05/07/Android-R-新特性变化/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1️⃣-Android-Q-主要新特性-emsp-emsp"><span class="nav-number">2.</span> <span class="nav-text">1️⃣ Android Q 主要新特性   </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可折叠设备"><span class="nav-number">2.1.</span> <span class="nav-text">可折叠设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深色主题"><span class="nav-number">2.2.</span> <span class="nav-text">深色主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手势导航"><span class="nav-number">2.3.</span> <span class="nav-text">手势导航</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享快捷方式"><span class="nav-number">2.4.</span> <span class="nav-text">共享快捷方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5G-网络"><span class="nav-number">2.5.</span> <span class="nav-text">5G 网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多"><span class="nav-number">2.6.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2️⃣-Android-R-版本发布计划-emsp-emsp"><span class="nav-number">3.</span> <span class="nav-text">2️⃣ Android R 版本发布计划   </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#版本发布时间"><span class="nav-number">3.1.</span> <span class="nav-text">版本发布时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本发布计划"><span class="nav-number">3.2.</span> <span class="nav-text">版本发布计划</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3️⃣-Android-R-功能演示（Video）-emsp-emsp"><span class="nav-number">4.</span> <span class="nav-text">3️⃣ Android R 功能演示（Video）   </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-11-First-Look-7-Most-Exciting-Features"><span class="nav-number">4.1.</span> <span class="nav-text">Android 11 First Look: 7 Most Exciting Features!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新功能特性"><span class="nav-number">4.2.</span> <span class="nav-text">新功能特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4️⃣-Android-R-新API特性-emsp-emsp"><span class="nav-number">5.</span> <span class="nav-text">4️⃣ Android R 新API特性   </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#帧速率"><span class="nav-number">5.1.</span> <span class="nav-text">帧速率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#瀑布屏"><span class="nav-number">5.2.</span> <span class="nav-text">瀑布屏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#APK-签名方案-v4-amp-增量-APK-安装"><span class="nav-number">5.3.</span> <span class="nav-text">APK 签名方案 v4 &amp; 增量 APK 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDK-图像解码器"><span class="nav-number">5.4.</span> <span class="nav-text">NDK 图像解码器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用进程退出原因"><span class="nav-number">5.5.</span> <span class="nav-text">应用进程退出原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更好地支持包含多个帧的-HEIF-图片"><span class="nav-number">5.6.</span> <span class="nav-text">更好地支持包含多个帧的 HEIF 图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用数据-blob-安全共享大型数据集"><span class="nav-number">5.7.</span> <span class="nav-text">使用数据 blob 安全共享大型数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-Android-模拟器上运行-ARM-应用"><span class="nav-number">5.8.</span> <span class="nav-text">在 Android 模拟器上运行 ARM 应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多-1"><span class="nav-number">5.9.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5️⃣-总结与思考-💡-emsp-emsp"><span class="nav-number">6.</span> <span class="nav-text">5️⃣ 总结与思考 💡   </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">6.1.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

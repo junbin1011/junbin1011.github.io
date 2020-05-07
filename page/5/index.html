@@ -271,6 +271,148 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/03/07/设计模式-享元模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/07/设计模式-享元模式/" itemprop="url">
+                  设计模式-享元模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-07T09:36:59+08:00">
+                2017-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/07/设计模式-享元模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/07/设计模式-享元模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-享元模式的定义及使用场景"><a href="#1-享元模式的定义及使用场景" class="headerlink" title="1.享元模式的定义及使用场景"></a>1.享元模式的定义及使用场景</h1><p>享元模式是对象池的一种实现。享元模式用来尽可能减少内存的使用量，它适合用于可能存在大量重复对象的场景，来缓存可共享的对象，达到对象共享、避免创建过多对象的效果，这样一来就可以提升性能、避免内存移除等。</p>
+<p>享元对象中的部分状态是可以共享，可以共享的状态分为内部状态，内部状态不会随着环境变化；不可共享的状态则称为外部状态，他们会随着环境的改变而改变。在享元模式中会建议一个对象容器，在经典的享元模式中该容器为一个Map，它的键是享元对象的内部状态，它的值就是享元对象本身。客户端程序通过这个内部状态从享元模式工厂中获取享元对象，如果有缓存则使用缓存对象，否则创建一个享元对象并且存入容器中，这样一来就避免了创建过多对象的问题。</p>
+<h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>享元模式是池技术的重要实现方式，使用共享对象可有效地支持大量的细粒度的对象</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li>系统中存在大量的相似对象</li>
+<li>细粒度的对象都具备较接近的外部状态，而且内部状态与环境无关，也就是说对象没有特点身份</li>
+<li>需要缓冲池的场景</li>
+</ul>
+<p><img src="http://img.blog.csdn.net/20170307093437266?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h1 id="2-享元模式的优缺点"><a href="#2-享元模式的优缺点" class="headerlink" title="2. 享元模式的优缺点"></a>2. 享元模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><p>享元模式是一个非常简单的模式，它可以大大减少应用程序创建的对象，降低程序内存的占用，增强程序的性能。</p>
+<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2><p>提高了系统的复杂性，需要分离出外部状态和内部状态，而且内部状态具有固化特性，不应随外部状态改变而改变</p>
+<h1 id="3-享元模式的实现方式"><a href="#3-享元模式的实现方式" class="headerlink" title="3. 享元模式的实现方式"></a>3. 享元模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface Flyweight &#123;</span><br><span class="line">    //一个示意性方法，参数state是外蕴状态</span><br><span class="line">    public void operation(String state);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteFlyweight implements Flyweight &#123;</span><br><span class="line">    private Character intrinsicState = null;</span><br><span class="line">    /**</span><br><span class="line">     * 构造函数，内蕴状态作为参数传入</span><br><span class="line">     * @param state</span><br><span class="line">     */</span><br><span class="line">    public ConcreteFlyweight(Character state)&#123;</span><br><span class="line">        this.intrinsicState = state;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 外蕴状态作为参数传入方法中，改变方法的行为，</span><br><span class="line">     * 但是并不改变对象的内蕴状态。</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void operation(String state) &#123;</span><br><span class="line">        // TODO Auto-generated method stub</span><br><span class="line">        System.out.println(&quot;Intrinsic State = &quot; + this.intrinsicState);</span><br><span class="line">        System.out.println(&quot;Extrinsic State = &quot; + state);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class FlyweightFactory &#123;</span><br><span class="line">    private Map&lt;Character,Flyweight&gt; files = new HashMap&lt;Character,Flyweight&gt;();</span><br><span class="line"></span><br><span class="line">    public Flyweight factory(Character state)&#123;</span><br><span class="line">        //先从缓存中查找对象</span><br><span class="line">        Flyweight fly = files.get(state);</span><br><span class="line">        if(fly == null)&#123;</span><br><span class="line">            //如果对象不存在则创建一个新的Flyweight对象</span><br><span class="line">            fly = new ConcreteFlyweight(state);</span><br><span class="line">            //把这个新的Flyweight对象添加到缓存中</span><br><span class="line">            files.put(state, fly);</span><br><span class="line">        &#125;</span><br><span class="line">        return fly;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        // TODO Auto-generated method stub</span><br><span class="line">        FlyweightFactory factory = new FlyweightFactory();</span><br><span class="line">        Flyweight fly = factory.factory(new Character(&apos;a&apos;));</span><br><span class="line">        fly.operation(&quot;First Call&quot;);</span><br><span class="line"></span><br><span class="line">        fly = factory.factory(new Character(&apos;b&apos;));</span><br><span class="line">        fly.operation(&quot;Second Call&quot;);</span><br><span class="line"></span><br><span class="line">        fly = factory.factory(new Character(&apos;a&apos;));</span><br><span class="line">        fly.operation(&quot;Third Call&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/03/06/设计模式-解释器模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1590,168 +1732,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/21/设计模式-策略模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JunBin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/21/设计模式-策略模式/" itemprop="url">
-                  设计模式-策略模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-21T10:11:13+08:00">
-                2017-02-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/21/设计模式-策略模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/21/设计模式-策略模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-策略模式的定义及使用场景"><a href="#1-策略模式的定义及使用场景" class="headerlink" title="1.策略模式的定义及使用场景"></a>1.策略模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>在软件的开发中常常遇到一个情况，实现某一个功能可以有多种算法或则策略，我们根据实际情况选择不同的算法或则策略来完成该功能。针对这种情况，一种常规的方法是将多种算法写在一个类中，通过if-else等条件判断语句来选择具体的算法，但明显违背了开闭原则和单一责任原则。如果将这些算法或则策略抽象出来，提供一个统一的接口，不同的算法或则策略有不同的实现，这样在程序客户端就可以通过注入不同的实现对象来实现算法或则策略的动态替换，这种模式的扩展性、可维护性更高。<br>策略模式定义了一系列的算法，并将每一个算法封装起来，而且使他们还可以互相替换。策略模式让算法独立于使用它的客户而独立变化</p>
-<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
-<li>针对同一类型问题的多种处理方式，仅仅是具体行为有差别时</li>
-<li>需要安全地封装多种同一类型的操作时</li>
-<li>出现同一抽象类有多个子类，而又需要使用if-else或者switch-case来选择具体子类时</li>
-</ul>
-<p><img src="http://img.blog.csdn.net/20170221100602329?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h1 id="2-策略模式的优缺点"><a href="#2-策略模式的优缺点" class="headerlink" title="2. 策略模式的优缺点"></a>2. 策略模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
-<li>算法可以自由切换</li>
-<li>避免使用多重条件判断</li>
-<li>扩展性良好<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2></li>
-<li>策略类数量增多</li>
-<li>所有的策略类都需要多外暴露<h1 id="3-注意实现"><a href="#3-注意实现" class="headerlink" title="3.注意实现"></a>3.注意实现</h1>如果系统中的一个策略家族的具体策略数量超过4个，则需要考虑使用混合模式，解决策略类膨胀和对外暴露问题，否则将增大日后的维护成本<h1 id="4-策略模式的实现方式"><a href="#4-策略模式的实现方式" class="headerlink" title="4. 策略模式的实现方式"></a>4. 策略模式的实现方式</h1></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Strategy &#123;</span><br><span class="line">   public void doSomeThing();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteStrategy1 implements Strategy &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void doSomeThing() &#123;</span><br><span class="line">        System.out.println(&quot;具体算法1的运算法则...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteStrategy2 implements Strategy &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void doSomeThing() &#123;</span><br><span class="line">        System.out.println(&quot;具体算法2的运算法则...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Context &#123;</span><br><span class="line">    private Strategy strategy;</span><br><span class="line"></span><br><span class="line">    public Context(Strategy strategy) &#123;</span><br><span class="line">        this.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setStrategy(Strategy strategy) &#123;</span><br><span class="line">        this.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void doSomeThing() &#123;</span><br><span class="line">        strategy.doSomeThing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>public class Test {
-    public static void main(String args[]) {
-        Strategy concreteStrategy1 = new ConcreteStrategy1();
-        Strategy concretStrategy2 = new ConcreteStrategy2();
-        Context context = new Context(concreteStrategy1);
-        context.doSomeThing();
-        context.setStrategy(concretStrategy2);
-        context.doSomeThing();
-    }
-}
-</code></pre><h1 id="5-策略模式在Android中的实际应用"><a href="#5-策略模式在Android中的实际应用" class="headerlink" title="5. 策略模式在Android中的实际应用"></a>5. 策略模式在Android中的实际应用</h1><p>在 RecyclerView 还没火起来前，ListView 是一个很重要的组件，我们通常在布局里写个 ListView 组件，然后在代码中 setAdapter，把 View 与 Model 结合的任务交给了 Adapter。</p>
-<p>比如 ListView 要显示的子布局是个简单的文字时，我们可以使用 ArrayAdapter :<br><img src="http://img.blog.csdn.net/20170221100750302?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>要显示复杂些的布局时，就需要用 BaseAdapter ：<br><img src="http://img.blog.csdn.net/20170221100806552?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>我们可以看到，当更换 Adapter 的具体实现时，仍然调用的是 ListView.setAdapter(…) 方法，查看 ListView 源码，发现 setAdapter 方法的参数是一个 ListAdapter:<br><img src="http://img.blog.csdn.net/20170221100817896?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>继续看 ListAdapter 源码和类结构：<br><img src="http://img.blog.csdn.net/20170221100829302?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>可以看到 ListAdapter 是一个接口，ArrayAdapter 和 BaseAdapter 是它的一个实现类。对比文章开始给出的 策略模式 UML 图，可以发现 ListAdapter 就是 strategy 接口，ArrayAdpater 等就是具体的实现类，而在 ListView 中引用的是 接口 ListAdapter，可以证实这就是一个 策略模式 的使用。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1794,7 +1779,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-count">81</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
