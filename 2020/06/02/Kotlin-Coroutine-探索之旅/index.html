@@ -1,0 +1,845 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Android,Kotlin,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="协程大家如果已经使用Kotlin语言进行开发，对协程这个概念应该不会很陌生。虽然在网上有很多Kotlin协程相关的文章，但当我开始准备使用的时候，还是有如下几个疑虑。  协程到底能够解决什么样的问题？ 协程和我们常用的Executor、RxJava有什么区别？ 项目上使用有什么风险吗？  接下来就带着这几个问题一起来揭开协程神秘的面纱。 如何使用关于协程，我在网上看到最多的说法是协程是轻量级的线程">
+<meta name="keywords" content="Android,Kotlin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin Coroutine 探索之旅">
+<meta property="og:url" content="https://junbin1011.github.io/2020/06/02/Kotlin-Coroutine-探索之旅/index.html">
+<meta property="og:site_name" content="JunBin">
+<meta property="og:description" content="协程大家如果已经使用Kotlin语言进行开发，对协程这个概念应该不会很陌生。虽然在网上有很多Kotlin协程相关的文章，但当我开始准备使用的时候，还是有如下几个疑虑。  协程到底能够解决什么样的问题？ 协程和我们常用的Executor、RxJava有什么区别？ 项目上使用有什么风险吗？  接下来就带着这几个问题一起来揭开协程神秘的面纱。 如何使用关于协程，我在网上看到最多的说法是协程是轻量级的线程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB5f6a56d727f90a44b7b6429ce020d197?method=download&shareKey=234ec553594f4eb914dced4a79b678be">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB8682567ec4f22dab1ed9c5350ec9db62?method=download&shareKey=06e819ed512febb7dcf540161b125867">
+<meta property="og:updated_time" content="2020-06-02T00:55:16.438Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kotlin Coroutine 探索之旅">
+<meta name="twitter:description" content="协程大家如果已经使用Kotlin语言进行开发，对协程这个概念应该不会很陌生。虽然在网上有很多Kotlin协程相关的文章，但当我开始准备使用的时候，还是有如下几个疑虑。  协程到底能够解决什么样的问题？ 协程和我们常用的Executor、RxJava有什么区别？ 项目上使用有什么风险吗？  接下来就带着这几个问题一起来揭开协程神秘的面纱。 如何使用关于协程，我在网上看到最多的说法是协程是轻量级的线程">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEB5f6a56d727f90a44b7b6429ce020d197?method=download&shareKey=234ec553594f4eb914dced4a79b678be">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2020/06/02/Kotlin-Coroutine-探索之旅/">
+
+
+
+
+
+  <title> Kotlin Coroutine 探索之旅 | JunBin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JunBin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一花一世界，一码一浮生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/06/02/Kotlin-Coroutine-探索之旅/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kotlin Coroutine 探索之旅
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-02T08:54:04+08:00">
+                2020-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/02/Kotlin-Coroutine-探索之旅/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/06/02/Kotlin-Coroutine-探索之旅/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><p>大家如果已经使用Kotlin语言进行开发，对协程这个概念应该不会很陌生。虽然在网上有很多Kotlin协程相关的文章，但当我开始准备使用的时候，还是有如下几个疑虑。</p>
+<ol>
+<li>协程到底能够解决什么样的问题？</li>
+<li>协程和我们常用的Executor、RxJava有什么区别？</li>
+<li>项目上使用有什么风险吗？</li>
+</ol>
+<p>接下来就带着这几个问题一起来揭开协程神秘的面纱。</p>
+<h1 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h1><p>关于协程，我在网上看到最多的说法是协程是轻量级的线程。那么协程首先应该解决的问题就是程序中我们常常遇到的 <strong>“异步”</strong> 的问题。我们看看官网介绍的几个使用例子。</p>
+<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">implementation &apos;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3&apos;</span><br><span class="line">implementation &apos;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import kotlinx.coroutines.*</span><br><span class="line"></span><br><span class="line">fun main() &#123;</span><br><span class="line">    GlobalScope.launch &#123; // 在后台启动一个新的协程并继续</span><br><span class="line">        delay(1000L)</span><br><span class="line">        println(&quot;World!&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">    println(&quot;Hello,&quot;) // 主线程中的代码会立即执行</span><br><span class="line">    runBlocking &#123;     // 但是这个表达式阻塞了主线程</span><br><span class="line">        delay(2000L)  // ……我们延迟 2 秒来保证 JVM 的存活</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="挂起函数"><a href="#挂起函数" class="headerlink" title="挂起函数"></a>挂起函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">suspend fun doSomethingUsefulOne(): Int &#123;</span><br><span class="line">    delay(1000L) // 假设我们在这里做了一些有用的事</span><br><span class="line">    return 13</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">suspend fun doSomethingUsefulTwo(): Int &#123;</span><br><span class="line">    delay(1000L) // 假设我们在这里也做了一些有用的事</span><br><span class="line">    return 29</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val time = measureTimeMillis &#123;</span><br><span class="line">    val one = doSomethingUsefulOne()</span><br><span class="line">    val two = doSomethingUsefulTwo()</span><br><span class="line">    println(&quot;The answer is $&#123;one + two&#125;&quot;)</span><br><span class="line">&#125;</span><br><span class="line">println(&quot;Completed in $time ms&quot;)</span><br></pre></td></tr></table></figure>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The answer is 42</span><br><span class="line">Completed in 2015 ms</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用-async-并发"><a href="#使用-async-并发" class="headerlink" title="使用 async 并发"></a>使用 async 并发</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">val time = measureTimeMillis &#123;</span><br><span class="line">    val one = async &#123; doSomethingUsefulOne() &#125;</span><br><span class="line">    val two = async &#123; doSomethingUsefulTwo() &#125;</span><br><span class="line">    println(&quot;The answer is $&#123;one.await() + two.await()&#125;&quot;)</span><br><span class="line">&#125;</span><br><span class="line">println(&quot;Completed in $time ms&quot;)</span><br></pre></td></tr></table></figure>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The answer is 42</span><br><span class="line">Completed in 1017 ms</span><br></pre></td></tr></table></figure></p>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class MyTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    fun testMySuspendingFunction() = runBlocking&lt;Unit&gt; &#123;</span><br><span class="line">        // 这里我们可以使用任何喜欢的断言风格来使用挂起函数</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更新详细的使用可参考<a href="https://www.kotlincn.net/docs/reference/coroutines/coroutines-guide.html" target="_blank" rel="noopener">官网示例</a></p>
+<h1 id="为何使用"><a href="#为何使用" class="headerlink" title="为何使用"></a>为何使用</h1><p>既然已经有这么多异步处理的框架，那我们为何还要使用协程。这里举个例子，看看对同个需求，不同异步框架的处理方式。</p>
+<blockquote>
+<p>现在有一个产品需求，生成一个二维码在页面展示给用户。我们来对比看看不同的做法。</p>
+</blockquote>
+<h1 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Thread(Runnable &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            val qrCode: Bitmap =</span><br><span class="line">            CodeCreator.createQRCode(this@ShareActivity, SHARE_QR_CODE)</span><br><span class="line">            runOnUiThread &#123; </span><br><span class="line">                img_qr_code.setImageBitmap(qrCode)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; catch (e: WriterException) &#123;</span><br><span class="line">                e.printStackTrace()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start()</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Executors"><a href="#Executors" class="headerlink" title="Executors"></a>Executors</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Executors.newSingleThreadExecutor().execute &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            val qrCode: Bitmap =</span><br><span class="line">            CodeCreator.createQRCode(this@ShareActivity, SHARE_QR_CODE)</span><br><span class="line">            runOnUiThread &#123;</span><br><span class="line">                img_qr_code.setImageBitmap(qrCode)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (e: WriterException) &#123;</span><br><span class="line">            e.printStackTrace()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="RxJava"><a href="#RxJava" class="headerlink" title="RxJava"></a>RxJava</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Observable.just(SHARE_QR_CODE)</span><br><span class="line">        .map(new Function&lt;String, Bitmap&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public Bitmap apply(String s) throws Exception &#123;</span><br><span class="line">                return CodeCreator.createQRCode(ShareActivity.this, s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .subscribe(new Consumer&lt;Bitmap&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void accept(Bitmap bitmap) throws Exception &#123;</span><br><span class="line">                img_qr_code.setImageBitmap(bitmap);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="Koroutine"><a href="#Koroutine" class="headerlink" title="Koroutine"></a>Koroutine</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> val job = GlobalScope.launch(Dispatchers.IO) &#123;</span><br><span class="line">            val bitmap = CodeCreator.createQRCode(ShareActivity.this, SHARE_QR_CODE)</span><br><span class="line">            launch(Dispatchers.Main) &#123;</span><br><span class="line">                img_qr_code.setImageBitmap(bitmap)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这个例子，可以看出使用协程的非常方便解决 <strong>“异步回调”</strong> 问题。<br>相比传统的Thread及Excutors，RxJava将嵌套回调转换成链式调用的形式，提高了代码可读性。协程直接将链式调用转换成了协程内的顺序调用，<strong>“代码更加精简”</strong>。 </p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>官网上对于协程的有一句介绍。</p>
+<blockquote>
+<p>本质上，协程是轻量级的线程</p>
+</blockquote>
+<p>那么协程的执行效率到底怎么样呢？下面我们采用官网的示例在相同的环境和设备下做下对比。</p>
+<blockquote>
+<p>启动了 1000个协程，并且为每个协程都输出一个点</p>
+</blockquote>
+<h1 id="Coroutine"><a href="#Coroutine" class="headerlink" title="Coroutine"></a>Coroutine</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var startTime = System.currentTimeMillis()</span><br><span class="line">          repeat(times) &#123; i -&gt; // 启动大量的协程</span><br><span class="line">              GlobalScope.launch(Dispatchers.IO) &#123;</span><br><span class="line">                  Log.d(this@MainActivity.toString(), &quot;$i=.&quot;)</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">          &#125;</span><br><span class="line">          var endTime = System.currentTimeMillis() - startTime;</span><br><span class="line">          Log.d(this@MainActivity.toString(), &quot;endTime=$endTime&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>执行结果：endTime=239 ms</strong></p>
+<h1 id="Thread-1"><a href="#Thread-1" class="headerlink" title="Thread"></a>Thread</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var startTime = System.currentTimeMillis()</span><br><span class="line">           repeat(times) &#123; i -&gt;// 启动大量的线程</span><br><span class="line">               Thread(Runnable &#123;</span><br><span class="line">                   Log.d(this@MainActivity.toString(), &quot;$i=.&quot;)</span><br><span class="line">               &#125;).start()</span><br><span class="line">           &#125;</span><br><span class="line">           var endTime = System.currentTimeMillis() - startTime;</span><br></pre></td></tr></table></figure>
+<p><strong>执行结果：endTime=3161 ms</strong></p>
+<h1 id="Excutors"><a href="#Excutors" class="headerlink" title="Excutors"></a>Excutors</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var startTime = System.currentTimeMillis()</span><br><span class="line">           var executors = Executors.newCachedThreadPool()</span><br><span class="line">           repeat(times) &#123; i -&gt; // 使用线程池</span><br><span class="line">               executors.execute &#123;</span><br><span class="line">                   Log.d(this@MainActivity.toString(), &quot;$i=.&quot;)</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           var endTime = System.currentTimeMillis() - startTime;</span><br><span class="line">           Log.d(this@MainActivity.toString(), &quot;endTime=$endTime&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>执行结果：endTime=143 ms</strong></p>
+<h1 id="rxjava"><a href="#rxjava" class="headerlink" title="rxjava"></a>rxjava</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var startTime = System.currentTimeMillis()</span><br><span class="line">      repeat(times) &#123; i -&gt; // 启动Rxjava</span><br><span class="line">          Observable.just(&quot;&quot;).subscribeOn(Schedulers.io())</span><br><span class="line">                  .subscribe &#123;</span><br><span class="line">                      Log.d(this@MainActivity.toString(), &quot;$i=.&quot;)</span><br><span class="line">                  &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      var endTime = System.currentTimeMillis() - startTime;</span><br><span class="line">      Log.d(this@MainActivity.toString(), &quot;endTime=$endTime&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>执行结果：endTime=241 ms</strong></p>
+<p>源码工程：<a href="https://github.com/junbin1011/CoroutineTest" target="_blank" rel="noopener">CorountineTest</a></p>
+<h2 id="Profiler"><a href="#Profiler" class="headerlink" title="Profiler"></a>Profiler</h2><p>利用AS自带的Profiler对运行时的CPU状态进行检测，我们可以看到Thread对CPU的消耗比较大，Koroutine、Executor、RxJava的消耗基本差不多。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB5f6a56d727f90a44b7b6429ce020d197?method=download&amp;shareKey=234ec553594f4eb914dced4a79b678be" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从执行时间和Profiler上看，Coroutine比使用Thread性能提升了一个量级，但与Excutor和RxJava性能是在一个量级上。</p>
+<blockquote>
+<p>注意这里的例子为了简便，因为异步执行的时间基本和repeat的时间差不多，我们没有等所有异步执行完再打印时间，这里们不追求精确的时间，只为做量级上的对比。</p>
+</blockquote>
+<h1 id="实现机制"><a href="#实现机制" class="headerlink" title="实现机制"></a>实现机制</h1><h2 id="协程底层异步实现机制"><a href="#协程底层异步实现机制" class="headerlink" title="协程底层异步实现机制"></a>协程底层异步实现机制</h2><p>我们先来看一段简单的Kotlin程序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GlobalScope.launch(Dispatchers.IO) &#123;</span><br><span class="line">            print(&quot;hello world&quot;)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>我们接着看下launch的实现代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public fun CoroutineScope.launch(</span><br><span class="line">    context: CoroutineContext = EmptyCoroutineContext,</span><br><span class="line">    start: CoroutineStart = CoroutineStart.DEFAULT,</span><br><span class="line">    block: suspend CoroutineScope.() -&gt; Unit</span><br><span class="line">): Job &#123;</span><br><span class="line">    val newContext = newCoroutineContext(context)</span><br><span class="line">    val coroutine = if (start.isLazy)</span><br><span class="line">        LazyStandaloneCoroutine(newContext, block) else</span><br><span class="line">        StandaloneCoroutine(newContext, active = true)</span><br><span class="line">    coroutine.start(start, coroutine, block)</span><br><span class="line">    return coroutine</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里注意，我们通过追踪最后的继承关系发现，DefaultScheduler.IO最后也是一个CoroutineContext。</p>
+<p>接着发现继续看coroutine.start的实现，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public fun &lt;R&gt; start(start: CoroutineStart, receiver: R, block: suspend R.() -&gt; T) &#123;</span><br><span class="line">       initParentJob()</span><br><span class="line">       start(block, receiver, this)</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>接着继续看CoroutineStart的start策略，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@InternalCoroutinesApi</span><br><span class="line">  public operator fun &lt;T&gt; invoke(block: suspend () -&gt; T, completion: Continuation&lt;T&gt;) =</span><br><span class="line">      when (this) &#123;</span><br><span class="line">          CoroutineStart.DEFAULT -&gt; block.startCoroutineCancellable(completion)</span><br><span class="line">          CoroutineStart.ATOMIC -&gt; block.startCoroutine(completion)</span><br><span class="line">          CoroutineStart.UNDISPATCHED -&gt; block.startCoroutineUndispatched(completion)</span><br><span class="line">          CoroutineStart.LAZY -&gt; Unit // will start lazily</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure></p>
+<p>继续看startCoroutineCancellable方法，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@InternalCoroutinesApi</span><br><span class="line">public fun &lt;T&gt; (suspend () -&gt; T).startCoroutineCancellable(completion: Continuation&lt;T&gt;) = runSafely(completion) &#123;</span><br><span class="line">    createCoroutineUnintercepted(completion).intercepted().resumeCancellableWith(Result.success(Unit))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>继续看resumeCancellableWith方法实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@InternalCoroutinesApi</span><br><span class="line">public fun &lt;T&gt; Continuation&lt;T&gt;.resumeCancellableWith(result: Result&lt;T&gt;) = when (this) &#123;</span><br><span class="line">    is DispatchedContinuation -&gt; resumeCancellableWith(result)</span><br><span class="line">    else -&gt; resumeWith(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后发现调用的resumeCancellableWith方法实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">inline fun resumeCancellableWith(result: Result&lt;T&gt;) &#123;</span><br><span class="line">     val state = result.toState()</span><br><span class="line">     if (dispatcher.isDispatchNeeded(context)) &#123;</span><br><span class="line">         _state = state</span><br><span class="line">         resumeMode = MODE_CANCELLABLE</span><br><span class="line">         dispatcher.dispatch(context, this)</span><br><span class="line">     &#125; else &#123;</span><br><span class="line">         executeUnconfined(state, MODE_CANCELLABLE) &#123;</span><br><span class="line">             if (!resumeCancelled()) &#123;</span><br><span class="line">                 resumeUndispatchedWith(result)</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这里关键的触发方法在这个地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatcher.dispatch(context, this)</span><br></pre></td></tr></table></figure>
+<p>我们看 DefaultScheduler.IO最后的dispatch方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">override fun dispatch(context: CoroutineContext, block: Runnable): Unit =</span><br><span class="line">    try &#123;</span><br><span class="line">        coroutineScheduler.dispatch(block)</span><br><span class="line">    &#125; catch (e: RejectedExecutionException) &#123;</span><br><span class="line">        DefaultExecutor.dispatch(context, block)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们最终发现是调用了CoroutineScheduler的dispatch方法，继续看CoroutineScheduler的实现发现，CoroutineScheduler继承了Executor。</p>
+<p>通过dispatch的调用最后可以发现CoroutineScheduler其实就是对Worker的调度，我们看看Worker的定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">internal inner class Worker private constructor() : Thread()</span><br></pre></td></tr></table></figure>
+<p>通过这里我们发现另外一个老朋友Thread，所以到这里也符合上面性能验证的测试结果。</p>
+<p><strong>到这里我们也有结论了，协程异步实现机制本质也就是自定义的线程池。</strong></p>
+<h2 id="非阻塞式挂起-suspend"><a href="#非阻塞式挂起-suspend" class="headerlink" title="非阻塞式挂起 suspend"></a>非阻塞式挂起 suspend</h2><p>suspend有什么作用，如何做到异步不用回调？下面先定义一个最简单的suspend方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">suspend fun hello()&#123;</span><br><span class="line">    delay(100)</span><br><span class="line">    print(&quot;hello world&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过Kotlin Bytecode转换为java 代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">@Nullable</span><br><span class="line">   public final Object hello(@NotNull Continuation $completion) &#123;</span><br><span class="line">      Object $continuation;</span><br><span class="line">      label20: &#123;</span><br><span class="line">         if ($completion instanceof &lt;undefinedtype&gt;) &#123;</span><br><span class="line">            $continuation = (&lt;undefinedtype&gt;)$completion;</span><br><span class="line">            if ((((&lt;undefinedtype&gt;)$continuation).label &amp; Integer.MIN_VALUE) != 0) &#123;</span><br><span class="line">               ((&lt;undefinedtype&gt;)$continuation).label -= Integer.MIN_VALUE;</span><br><span class="line">               break label20;</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         $continuation = new ContinuationImpl($completion) &#123;</span><br><span class="line">            // $FF: synthetic field</span><br><span class="line">            Object result;</span><br><span class="line">            int label;</span><br><span class="line">            Object L$0;</span><br><span class="line"></span><br><span class="line">            @Nullable</span><br><span class="line">            public final Object invokeSuspend(@NotNull Object $result) &#123;</span><br><span class="line">               this.result = $result;</span><br><span class="line">               this.label |= Integer.MIN_VALUE;</span><br><span class="line">               return Test.this.hello(this);</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      Object $result = ((&lt;undefinedtype&gt;)$continuation).result;</span><br><span class="line">      Object var6 = IntrinsicsKt.getCOROUTINE_SUSPENDED();</span><br><span class="line">      switch(((&lt;undefinedtype&gt;)$continuation).label) &#123;</span><br><span class="line">      case 0:</span><br><span class="line">         ResultKt.throwOnFailure($result);</span><br><span class="line">         ((&lt;undefinedtype&gt;)$continuation).L$0 = this;</span><br><span class="line">         ((&lt;undefinedtype&gt;)$continuation).label = 1;</span><br><span class="line">         if (DelayKt.delay(100L, (Continuation)$continuation) == var6) &#123;</span><br><span class="line">            return var6;</span><br><span class="line">         &#125;</span><br><span class="line">         break;</span><br><span class="line">      case 1:</span><br><span class="line">         Test var7 = (Test)((&lt;undefinedtype&gt;)$continuation).L$0;</span><br><span class="line">         ResultKt.throwOnFailure($result);</span><br><span class="line">         break;</span><br><span class="line">      default:</span><br><span class="line">         throw new IllegalStateException(&quot;call to &apos;resume&apos; before &apos;invoke&apos; with coroutine&quot;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      String var2 = &quot;hello world&quot;;</span><br><span class="line">      boolean var3 = false;</span><br><span class="line">      System.out.print(var2);</span><br><span class="line">      return Unit.INSTANCE;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里首先我们发现方法的参数多了一个Continuation completion并且内部回定义一个 Object continuation，看看Continuation的定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@SinceKotlin(&quot;1.3&quot;)</span><br><span class="line">public interface Continuation&lt;in T&gt; &#123;</span><br><span class="line">    /**</span><br><span class="line">     * The context of the coroutine that corresponds to this continuation.</span><br><span class="line">     */</span><br><span class="line">    public val context: CoroutineContext</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Resumes the execution of the corresponding coroutine passing a successful or failed [result] as the</span><br><span class="line">     * return value of the last suspension point.</span><br><span class="line">     */</span><br><span class="line">    public fun resumeWith(result: Result&lt;T&gt;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个回调接口，里面有一个关键的方法为resumeWith。 这个方法的具体调用通过上面的协程调用流程可以知道 ，在DispatchedContinuation的resumeCancellableWith会触发。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public fun &lt;T&gt; Continuation&lt;T&gt;.resumeCancellableWith(result: Result&lt;T&gt;) = when (this) &#123;</span><br><span class="line">    is DispatchedContinuation -&gt; resumeCancellableWith(result)</span><br><span class="line">    else -&gt; resumeWith(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么resumeWith里面做了那些事情？我们看下具体的实现在ContinuationImpl的父类BaseContinuationImpl中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public final override fun resumeWith(result: Result&lt;Any?&gt;) &#123;</span><br><span class="line">       // This loop unrolls recursion in current.resumeWith(param) to make saner and shorter stack traces on resume</span><br><span class="line">       var current = this</span><br><span class="line">       var param = result</span><br><span class="line">       while (true) &#123;</span><br><span class="line">           // Invoke &quot;resume&quot; debug probe on every resumed continuation, so that a debugging library infrastructure</span><br><span class="line">           // can precisely track what part of suspended callstack was already resumed</span><br><span class="line">           probeCoroutineResumed(current)</span><br><span class="line">           with(current) &#123;</span><br><span class="line">               val completion = completion!! // fail fast when trying to resume continuation without completion</span><br><span class="line">               val outcome: Result&lt;Any?&gt; =</span><br><span class="line">                   try &#123;</span><br><span class="line">                       val outcome = invokeSuspend(param)</span><br><span class="line">                       if (outcome === COROUTINE_SUSPENDED) return</span><br><span class="line">                       Result.success(outcome)</span><br><span class="line">                   &#125; catch (exception: Throwable) &#123;</span><br><span class="line">                       Result.failure(exception)</span><br><span class="line">                   &#125;</span><br><span class="line">               releaseIntercepted() // this state machine instance is terminating</span><br><span class="line">               if (completion is BaseContinuationImpl) &#123;</span><br><span class="line">                   // unrolling recursion via loop</span><br><span class="line">                   current = completion</span><br><span class="line">                   param = outcome</span><br><span class="line">               &#125; else &#123;</span><br><span class="line">                   // top-level completion reached -- invoke and return</span><br><span class="line">                   completion.resumeWith(outcome)</span><br><span class="line">                   return</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>首先我们发现这里其实是一个递归的循环，并且会调用invokeSuspend方法触发实际的调用，等待返回结果。通过上面的分析可以看出2点。</p>
+<ol>
+<li>非阻塞是因为本身启动一个协程也是使用线程池异步执行，所以不会阻塞</li>
+<li>协程并不是没有回调，而是将回调的接口（Continuation）及调度代码在编译器生成，不用自己编写。</li>
+<li>resumeWith是一个循环及递归，所以会将协程内定义的表达式顺序串联调用。达到挂起及恢复的链式调用。</li>
+</ol>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>协程到底能够解决什么样的问题？</li>
+</ol>
+<ul>
+<li>解决异步回调嵌套</li>
+<li>解决异步任务之间协作</li>
+</ul>
+<ol start="2">
+<li>协程和我们常用的Executor、RxJava有什么区别？</li>
+</ol>
+<ul>
+<li>从任务调度上看，本质都是线程池的封装</li>
+</ul>
+<ol start="3">
+<li>项目上使用有什么风险吗？</li>
+</ol>
+<ul>
+<li>从性能上看与线程池与RxJava在一个量级</li>
+<li>目前已是稳定版本1.3.3，开源项目使用多</li>
+<li>代码使用简便，可维护性高</li>
+<li>开源生态支持良好，方便使用（Retrofit、Jitpack已支持）</li>
+<li>团队学习及旧项目改造需要投入一定成本</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://www.kotlincn.net/docs/reference/coroutines/coroutines-guide.html" target="_blank" rel="noopener">www.kotlincn.net</a></p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
+<p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB8682567ec4f22dab1ed9c5350ec9db62?method=download&amp;shareKey=06e819ed512febb7dcf540161b125867" alt></p>
+<ul>
+<li>作者：黄俊彬 </li>
+<li><a href="https://junbin.tech/" target="_blank" rel="noopener">博客：junbin.tech</a></li>
+<li><a href="https://github.com/junbin1011" target="_blank" rel="noopener">GitHub: junbin1011 </a></li>
+<li><a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" rel="noopener">知乎: @JunBin</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/07/Android-R-新特性变化/" rel="next" title="Android R 新特性变化">
+                <i class="fa fa-chevron-left"></i> Android R 新特性变化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/06/02/Kotlin-Coroutine-探索之旅/" data-title="Kotlin Coroutine 探索之旅" data-url="https://junbin1011.github.io/2020/06/02/Kotlin-Coroutine-探索之旅/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#协程"><span class="nav-number">1.</span> <span class="nav-text">协程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖"><span class="nav-number">2.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入门"><span class="nav-number">2.2.</span> <span class="nav-text">入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挂起函数"><span class="nav-number">2.3.</span> <span class="nav-text">挂起函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-async-并发"><span class="nav-number">2.4.</span> <span class="nav-text">使用 async 并发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单元测试"><span class="nav-number">2.5.</span> <span class="nav-text">单元测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为何使用"><span class="nav-number">3.</span> <span class="nav-text">为何使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Thread"><span class="nav-number">4.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Executors"><span class="nav-number">5.</span> <span class="nav-text">Executors</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RxJava"><span class="nav-number">6.</span> <span class="nav-text">RxJava</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Koroutine"><span class="nav-number">7.</span> <span class="nav-text">Koroutine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能"><span class="nav-number">8.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coroutine"><span class="nav-number">9.</span> <span class="nav-text">Coroutine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Thread-1"><span class="nav-number">10.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Excutors"><span class="nav-number">11.</span> <span class="nav-text">Excutors</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rxjava"><span class="nav-number">12.</span> <span class="nav-text">rxjava</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Profiler"><span class="nav-number">12.1.</span> <span class="nav-text">Profiler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">12.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现机制"><span class="nav-number">13.</span> <span class="nav-text">实现机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#协程底层异步实现机制"><span class="nav-number">13.1.</span> <span class="nav-text">协程底层异步实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞式挂起-suspend"><span class="nav-number">13.2.</span> <span class="nav-text">非阻塞式挂起 suspend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结-1"><span class="nav-number">13.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">14.</span> <span class="nav-text">参考资料</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">14.1.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

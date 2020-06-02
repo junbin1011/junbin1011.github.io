@@ -271,6 +271,150 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/03/08/设计模式-桥梁模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/08/设计模式-桥梁模式/" itemprop="url">
+                  设计模式-桥梁模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-08T13:36:09+08:00">
+                2017-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/08/设计模式-桥梁模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/08/设计模式-桥梁模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-桥梁模式的定义及使用场景"><a href="#1-桥梁模式的定义及使用场景" class="headerlink" title="1.桥梁模式的定义及使用场景"></a>1.桥梁模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>桥梁模式也称为桥接模式，是结构型设计模式之一。将抽象和实现解耦，使得两者可以独立地变化</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
+<li>不希望或不适合使用继承的场景<br>例如继承层次过渡、无法更细化设计颗粒等场景，而要考虑使用桥梁模式</li>
+<li>接口或抽象类不稳定的场景<br>明知道接口不稳定还想通过实现或继承来实现业务需求，那是得不偿失，也是比较失败的做法</li>
+<li>重用性要求较高的场景</li>
+</ul>
+<p><img src="http://img.blog.csdn.net/20170308133538612?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h1 id="2-桥梁模式的优缺点"><a href="#2-桥梁模式的优缺点" class="headerlink" title="2. 桥梁模式的优缺点"></a>2. 桥梁模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
+<li>抽象和实现分离<br>这也是桥梁模式的主要特点，它完全是为了解决继承的缺点而提出的设计模式。在该模式下，实现可以不受抽象的约束，不用再绑定一个固定的抽象层次上</li>
+<li>优秀的扩充能力</li>
+<li>实现细节对客户透明<br>客户不用关心细节的实现，它已经由抽象层通过聚合关系完成了封装<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>良好的设计不易，对开发者来说要有一定的经验要求，原因是对于抽象和实现的分离需要有良好的把握。<h1 id="3-注意事项"><a href="#3-注意事项" class="headerlink" title="3.注意事项"></a>3.注意事项</h1>桥梁模式是非常简单的，使用该模式时注意考虑如何拆分抽象和实现，并不是一涉及继承就要考虑使用该模式，那还要继承干什么呢？桥梁模式的意图还是对变化的封装，尽量把可能变化的因素封装到最细、最小的逻辑单元中，避免风险扩散。因此在进行系统涉及是，发现类的继承有N层时，可以考虑使用桥梁模式。<h2 id="4-桥梁模式的实现方式"><a href="#4-桥梁模式的实现方式" class="headerlink" title="4. 桥梁模式的实现方式"></a>4. 桥梁模式的实现方式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public interface Implementor &#123;</span><br><span class="line">    //基本方法</span><br><span class="line">    public void doSomething();</span><br><span class="line">    public void doAnything();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteImplementor1 implements Implementor &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void doSomething() &#123;</span><br><span class="line">        System.out.println(&quot;ConcreteImplementor1 doSomething!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doAnything() &#123;</span><br><span class="line">        System.out.println(&quot;ConcreteImplementor1 doAnything!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteImplementor2 implements Implementor &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void doSomething() &#123;</span><br><span class="line">        System.out.println(&quot;ConcreteImplementor2 doSomething!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doAnything() &#123;</span><br><span class="line">        System.out.println(&quot;ConcreteImplementor2 doAnything!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Abstraction &#123;</span><br><span class="line">    //定义对实现化角色的引用</span><br><span class="line">    private Implementor imp;</span><br><span class="line"></span><br><span class="line">    //约束子类必须实现该构造函数</span><br><span class="line">    public Abstraction(Implementor imp) &#123;</span><br><span class="line">        this.imp = imp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //自身的行为和属性</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        this.imp.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Implementor getImp() &#123;</span><br><span class="line">        return imp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class RefineAbstraction extends Abstraction &#123;</span><br><span class="line"></span><br><span class="line">    public RefineAbstraction(Implementor imp) &#123;</span><br><span class="line">        super(imp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        /**</span><br><span class="line">         * 业务处理</span><br><span class="line">         */</span><br><span class="line">        super.request();</span><br><span class="line">        super.getImp().doAnything();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        Implementor imp = new ConcreteImplementor1();</span><br><span class="line">        Abstraction abstraction = new RefineAbstraction(imp);</span><br><span class="line">        abstraction.request();</span><br><span class="line"></span><br><span class="line">        Implementor imp2 = new ConcreteImplementor2();</span><br><span class="line">        abstraction = new RefineAbstraction(imp2);</span><br><span class="line">        abstraction.request();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/03/07/设计模式-享元模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1584,154 +1728,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2017/02/22/设计模式-适配器模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JunBin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/22/设计模式-适配器模式/" itemprop="url">
-                  设计模式-适配器模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-22T10:10:25+08:00">
-                2017-02-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/02/22/设计模式-适配器模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/22/设计模式-适配器模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-适配器模式的定义及使用场景"><a href="#1-适配器模式的定义及使用场景" class="headerlink" title="1.适配器模式的定义及使用场景"></a>1.适配器模式的定义及使用场景</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><p>适配器模式在我们的开发中使用率非常高，从代码中随处可见的Adapter就可以看出来，从最早的ListView、GridView，到现在最新的RecycleView都需要用到Adapter。说到底，适配器就是将两个不兼容的类融合在一起，它有点像粘合剂，将不同的东西通过一种转换使得他们能够协作起来。<br>适配器模式把一个类在接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法再一起工作的两个类能够在一起工作</p>
-<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><ul>
-<li>系统需要使用现有的类，而此类的接口不符合系统的需要，即接口不兼容</li>
-<li>想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
-<li>需要一个统一的输出接口，而输入端的类型不可预知</li>
-</ul>
-<p><img src="http://img.blog.csdn.net/20170222100849043?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvanVuYmluMTAxMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h1 id="2-适配器模式的优缺点"><a href="#2-适配器模式的优缺点" class="headerlink" title="2. 适配器模式的优缺点"></a>2. 适配器模式的优缺点</h1><h2 id="2-1优点"><a href="#2-1优点" class="headerlink" title="2.1优点"></a>2.1优点</h2><ul>
-<li>适配器模式可以让两个没有任何关系的类在一起运行</li>
-<li>增加了类的透明度，提高类的复用度</li>
-<li>增强灵活性<h2 id="2-2缺点"><a href="#2-2缺点" class="headerlink" title="2.2缺点"></a>2.2缺点</h2>过多地使用适配器，会让系统增加复杂度，不易整体把握。例如，明明看到调用的是A接口，其实内部被适配成了B接口的实现。因此，如果不是很有必要，可以不使用适配器，而是直接对系统进行必要的重构<h1 id="3-注意实现"><a href="#3-注意实现" class="headerlink" title="3.注意实现"></a>3.注意实现</h1>适配器模式最好在详细设计阶段不要考虑，它不是为了解决还出在开发阶段的问题，而是解决正在服役的项目问题，系统扩展了，不符合原有设计的时候才考虑通过适配器模式减少代码修改带来的风险。<h1 id="4-适配器模式的实现方式"><a href="#4-适配器模式的实现方式" class="headerlink" title="4. 适配器模式的实现方式"></a>4. 适配器模式的实现方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Target &#123;</span><br><span class="line">    public void request();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class ConcreteTarget implements Target &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        System.out.println(&quot;ConcreteTarget is doing request!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class Adaptee &#123;</span><br><span class="line">    public void doSomeThing() &#123;</span><br><span class="line">        System.out.println(&quot;Adaptee is doSomeThing now!！！！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Adapter extends Adaptee implements Target &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void request() &#123;</span><br><span class="line">        super.doSomeThing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        Target target = new ConcreteTarget();</span><br><span class="line">        target.request();</span><br><span class="line">        Target adapterTarget = new Adapter();</span><br><span class="line">        adapterTarget.request();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="5-适配器模式在Android中的实际应用"><a href="#5-适配器模式在Android中的实际应用" class="headerlink" title="5. 适配器模式在Android中的实际应用"></a>5. 适配器模式在Android中的实际应用</h1><p>ListView作为重要的控件，它需要能够显示各种各样的视图（ItemView），每个人需要的显示效果各不同。显示的数据类型、数量等也千变万化，那么如何应对这种变化成为架构师需要考虑的重要特性之一。</p>
-<p>Android的做法是增加一个Adapter层来隔离变化，将ListView需要的关于Item View接口抽象到Adapter对象中，并且在ListView内部调用Adapter这些接口完成布局操作。这样只用用户实现了Adapter的接口，并且将该Adapter设置给ListView，ListView就可以按照用户设定的UI效果、数量、数据来显示每一项数据。</p>
-<p>ListView最重要的问题是要解决每一项Item视图的输出，ItemView千变万化，但终究它是View类型，Adapter将统一ItemView 输出为View，这样就很好的应对了ItemView的可变性。这虽然有些脱离Adapter模式将不兼容的接口转换为可用接口的使用场景，但也是Adapter模式的一种变种实现。这里的Target角色就是View，Adapter角色就是将ItemView输出为View抽象的角色，Adaptee就是需要被处理的ItemView。</p>
-<p>通过增加Adapter一层来将ItemView的操作抽象起来，ListView等集合视图通过Adapter对象获取Item的个数、数据、ItemView等，从而达到适配各种数据、各种Item视图的效果。因为ItemView和数据类型千变万化，Android的架构师将这种变化的部分交给用户来处理，通过getCount，getItem，getView等几个抽象出来，也就是将ItemView的构造过程交给用户来处理，灵活地运用了设配器的模式，达到了无限适配，拥抱变化的目的。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1779,7 +1775,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-count">82</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1792,7 +1788,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
