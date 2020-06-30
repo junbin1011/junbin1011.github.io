@@ -1,0 +1,826 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="遗留系统,重构,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="遗留系统之痛问题在软件这个行业里，有一个有意思的名词叫“祖传代码”。泛指那些结构混乱的遗留系统代码。相信大家或多或少在工作中都会遇到过遗留系统，你是否遇到过下面的问题？  应用大泥球的结构，代码看起来都很费劲，更别说改 代码已经改不动了，想要重构，但却一点信心都没有 修一个bug，又引起了另外的bug  原因遗留系统常常有2个非常明显的特点。  代码耦合度高，相互依赖性高 没有足够的自动化测试覆盖">
+<meta name="keywords" content="遗留系统,重构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="遗留系统开发之道">
+<meta property="og:url" content="https://junbin1011.github.io/2020/06/30/遗留系统开发之道/index.html">
+<meta property="og:site_name" content="JunBin">
+<meta property="og:description" content="遗留系统之痛问题在软件这个行业里，有一个有意思的名词叫“祖传代码”。泛指那些结构混乱的遗留系统代码。相信大家或多或少在工作中都会遇到过遗留系统，你是否遇到过下面的问题？  应用大泥球的结构，代码看起来都很费劲，更别说改 代码已经改不动了，想要重构，但却一点信心都没有 修一个bug，又引起了另外的bug  原因遗留系统常常有2个非常明显的特点。  代码耦合度高，相互依赖性高 没有足够的自动化测试覆盖">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBc45772697e3c3991fcf7051e964a489a?method=download&shareKey=c77d8bef4693381506a9147c77da969b">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB6626d87b31f359480b73040e07a5f89e?method=download&shareKey=8b77d6594c673f7a8c1918b28a379e90">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEB8682567ec4f22dab1ed9c5350ec9db62?method=download&shareKey=06e819ed512febb7dcf540161b125867">
+<meta property="og:updated_time" content="2020-06-30T09:11:46.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="遗留系统开发之道">
+<meta name="twitter:description" content="遗留系统之痛问题在软件这个行业里，有一个有意思的名词叫“祖传代码”。泛指那些结构混乱的遗留系统代码。相信大家或多或少在工作中都会遇到过遗留系统，你是否遇到过下面的问题？  应用大泥球的结构，代码看起来都很费劲，更别说改 代码已经改不动了，想要重构，但却一点信心都没有 修一个bug，又引起了另外的bug  原因遗留系统常常有2个非常明显的特点。  代码耦合度高，相互依赖性高 没有足够的自动化测试覆盖">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBc45772697e3c3991fcf7051e964a489a?method=download&shareKey=c77d8bef4693381506a9147c77da969b">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://junbin1011.github.io/2020/06/30/遗留系统开发之道/">
+
+
+
+
+
+  <title> 遗留系统开发之道 | JunBin </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b3ffb4912eee79c795100275f268095c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JunBin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一花一世界，一码一浮生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/06/30/遗留系统开发之道/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                遗留系统开发之道
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-30T17:11:02+08:00">
+                2020-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/30/遗留系统开发之道/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/06/30/遗留系统开发之道/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="遗留系统之痛"><a href="#遗留系统之痛" class="headerlink" title="遗留系统之痛"></a>遗留系统之痛</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在软件这个行业里，有一个有意思的名词叫“祖传代码”。泛指那些结构混乱的遗留系统代码。相信大家或多或少在工作中都会遇到过遗留系统，你是否遇到过下面的问题？</p>
+<ol>
+<li>应用大泥球的结构，代码看起来都很费劲，更别说改</li>
+<li>代码已经改不动了，想要重构，但却一点信心都没有</li>
+<li>修一个bug，又引起了另外的bug</li>
+</ol>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>遗留系统常常有2个非常明显的特点。</p>
+<ol>
+<li>代码耦合度高，相互依赖性高</li>
+<li>没有足够的自动化测试覆盖，完成改动后要比较长的时间来反馈事情是否做对</li>
+</ol>
+<p>这使得我们对代码修改的成本非常大，并且往往容易出错。</p>
+<blockquote>
+<p>依赖性是软件开发中最为关键的问题之一。在处理遗留代码的过程中很大一部分工作都是围绕着“接触依赖性以便使改动变得更容易”这个目标来进行的</p>
+</blockquote>
+<h1 id="遗留代码开发心法"><a href="#遗留代码开发心法" class="headerlink" title="遗留代码开发心法"></a>遗留代码开发心法</h1><p><img src="https://note.youdao.com/yws/api/personal/file/WEBc45772697e3c3991fcf7051e964a489a?method=download&amp;shareKey=c77d8bef4693381506a9147c77da969b" alt></p>
+<p>对付依赖代码的工作其实就是动手改，但不是随意地改。我们必须在做出能够带来价值的功能性改动的同时使系统中的更多部分覆盖足够的测试。同时在这个过程中也有一些套路及手法可以参考，我们不需要摸着石头过河。</p>
+<h2 id="选择恰当时机"><a href="#选择恰当时机" class="headerlink" title="选择恰当时机"></a>选择恰当时机</h2><ul>
+<li>在修改遗留代码之前，对覆盖遗留代码的场景/服务增加大型/中型测试。</li>
+<li>在对功能扩展和修改时，对原有代码进行重构并加上对方法的小型测试</li>
+<li>在修复 Bug 时增加自动化测试保证问题不要再次出现</li>
+</ul>
+<h2 id="确定改动点"><a href="#确定改动点" class="headerlink" title="确定改动点"></a>确定改动点</h2><ul>
+<li><p>仔细阅读被测代码、文档、用例，或找其他同事了解，最大程度理解要修改的功能相关代码</p>
+</li>
+<li><p>参考常用的架构模式（MV*）和通用的设计原则，作为我们重构时的基准</p>
+</li>
+</ul>
+<h2 id="找出测试点"><a href="#找出测试点" class="headerlink" title="找出测试点"></a>找出测试点</h2><ul>
+<li><p>遗留系统中核心算法或者业务逻辑一般混杂在其他代码中，我们需要需要去识别核心的测试点</p>
+</li>
+<li><p>合理设置测试策略，避免贸然修改代码带来的风险，最大化重构&amp;自动化测试的 ROI</p>
+</li>
+</ul>
+<h2 id="解依赖"><a href="#解依赖" class="headerlink" title="解依赖"></a>解依赖</h2><p>解依赖往往是最难的地方。我们通常会遇到两个方面问题：一是难以在测试用例中实例化目标对象；二是难以在测试用例中运行方法。</p>
+<p>这时候就需要我用运用恰当的解依赖手法进行重构，接触依赖。<a href="#遗留代码开发三板斧">遗留代码解依赖三板斧</a></p>
+<h2 id="编写测试"><a href="#编写测试" class="headerlink" title="编写测试"></a>编写测试</h2><ul>
+<li>取一个“看名知其意”的测试名</li>
+<li>选择合适的测试替身</li>
+<li>编写测试代码</li>
+</ul>
+<h2 id="修改重构"><a href="#修改重构" class="headerlink" title="修改重构"></a>修改重构</h2><p>对被测试保护起来的代码进行清理，遵守整洁代码及消除坏味道，提高代码可读性</p>
+<h1 id="遗留系统解依赖三板斧"><a href="#遗留系统解依赖三板斧" class="headerlink" title="遗留系统解依赖三板斧"></a>遗留系统解依赖三板斧</h1><p><img src="https://note.youdao.com/yws/api/personal/file/WEB6626d87b31f359480b73040e07a5f89e?method=download&amp;shareKey=8b77d6594c673f7a8c1918b28a379e90" alt></p>
+<h2 id="参数化方法"><a href="#参数化方法" class="headerlink" title="参数化方法"></a>参数化方法</h2><blockquote>
+<p>假设你有一个方法，该方法在内部创建了某个对象，而你想要通过替换该对象来实现感知或分离。往往最简单的方法就是从外面将你的对象传进来</p>
+</blockquote>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>找出目标方法，将它复制一份</li>
+<li>给其中一份增加一个参数，并将方法体中相应的对象创建语句去掉，改为使用刚增加的这个参数</li>
+<li>将另一份复制的方法体删掉，代以对被参数化了的那个版本的调用，记得创建相应的对象作参数</li>
+</ol>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class TestCase &#123;</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        TestResult result = new TestResult();</span><br><span class="line">        result.runTest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TestResult &#123;</span><br><span class="line">    boolean flag = false;</span><br><span class="line"></span><br><span class="line">    void runTest() &#123;</span><br><span class="line">        flag = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class TestCase &#123;</span><br><span class="line">    public void run(TestResult result) &#123;</span><br><span class="line">        result.runTest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TestResult &#123;</span><br><span class="line">    boolean flag = false;</span><br><span class="line"></span><br><span class="line">    void runTest() &#123;</span><br><span class="line">        flag = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class TestCaseTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void should_return_flag_is_true_when_call_run() &#123;</span><br><span class="line">        TestCase testCase = new TestCase();</span><br><span class="line">        TestResult mockTestResult = new TestResult();</span><br><span class="line">        testCase.run(mockTestResult);</span><br><span class="line">        Assert.assertTrue(mockTestResult.flag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参数适配"><a href="#参数适配" class="headerlink" title="参数适配"></a>参数适配</h2><blockquote>
+<p>当无法对一个参数的类型使用接口提取，或者当该参数难以“伪装”的时候，可采用参数适配手法</p>
+</blockquote>
+<h3 id="步骤-1"><a href="#步骤-1" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>创建将被用于该方法的新接口，该接口越简单且能表达意图越好。但也要注意，该接口不应导致需要对该方法的代码作大规模修改</li>
+<li>为新接口创建一个用于产品代码的实现</li>
+<li>为新接口创建一个用于测试的“伪造”实现</li>
+<li>编写一个简单的测试用例，将伪对象传给该方法</li>
+<li>对该方法作必要的修改以使其能使用新的参数</li>
+<li>运行测试来确保你能使用伪对象来测试该方法</li>
+</ol>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class ARMDispatcher &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; marketBinding = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public void populate(HttpsParameters parameters) &#123;</span><br><span class="line">        String[] values = parameters.getCipherSuites();</span><br><span class="line">        if (values != null &amp;&amp; values.length &gt; 0) &#123;</span><br><span class="line">            marketBinding.add(values[0]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重构-1"><a href="#重构-1" class="headerlink" title="重构"></a>重构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ARMDispatcher &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; marketBinding = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public void populate(ParameterSource parameterSource) &#123;</span><br><span class="line">        String values = parameterSource.getParameterValue();</span><br><span class="line">        if (values != null) &#123;</span><br><span class="line">            marketBinding.add(values);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface ParameterSource &#123;</span><br><span class="line">    String getParameterValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class HttpParameterSource implements ParameterSource &#123;</span><br><span class="line">    HttpsParameters mHttpsParameters;</span><br><span class="line"></span><br><span class="line">    public HttpParameterSource(HttpsParameters httpsParameters) &#123;</span><br><span class="line">        mHttpsParameters = httpsParameters;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String getParameterValue() &#123;</span><br><span class="line">        String[] values = mHttpsParameters.getCipherSuites();</span><br><span class="line">        if (values != null &amp;&amp; values.length &gt; 0) &#123;</span><br><span class="line">            return values[0];</span><br><span class="line">        &#125;</span><br><span class="line">        return &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class FakeParameterSource implements ParameterSource &#123;</span><br><span class="line"></span><br><span class="line">    public String value;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String getParameterValue() &#123;</span><br><span class="line">        return value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ARMDispatcherTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testPopulate() &#123;</span><br><span class="line">        ARMDispatcher armDispatcher = new ARMDispatcher();</span><br><span class="line">        FakeParameterSource fakeParameterSource = new FakeParameterSource();</span><br><span class="line">        fakeParameterSource.value = &quot;hello world&quot;;</span><br><span class="line">        armDispatcher.populate(fakeParameterSource);</span><br><span class="line">        assertThat(armDispatcher.marketBinding.size(),is(1));</span><br><span class="line">        assertThat(armDispatcher.marketBinding.get(0),is(&quot;hello world&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="接口提取"><a href="#接口提取" class="headerlink" title="接口提取"></a>接口提取</h2><blockquote>
+<p>提取接口时并不一定要提取类上的所有公有方法，考虑递增式地扩充该接口。</p>
+</blockquote>
+<h3 id="步骤-2"><a href="#步骤-2" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>创建一个新接口，给它起一个好名字。暂时不要往里面添加任何方法</li>
+<li>令你提取接口的目标类实现该接口。这一步不会破坏任何东西，因为接口上还没有任何方法。但你也可以编译确认一下</li>
+<li>将你想要使用伪对象的地方从引用原类改为引用你新建的接口</li>
+<li>编译系统。如果编译器汇报接口上缺少某某方法，则添加对应的方法（同时也往伪类上面添加一个空的实现），直到编译通过</li>
+</ol>
+<h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class PaydayTransaction &#123;</span><br><span class="line">    TransactionLog transactionLog;</span><br><span class="line"></span><br><span class="line">    public PaydayTransaction(TransactionLog transactionLog) &#123;</span><br><span class="line">        this.transactionLog = transactionLog;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        transactionLog.saveTransaction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TransactionLog &#123;</span><br><span class="line">    public void saveTransaction() &#123;</span><br><span class="line">        //call database</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void recordError(int code) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重构-2"><a href="#重构-2" class="headerlink" title="重构"></a>重构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface TransactionRecorder &#123;</span><br><span class="line">    void saveTransaction();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class PaydayTransaction &#123;</span><br><span class="line">    TransactionRecorder transactionRecorder;</span><br><span class="line"></span><br><span class="line">    public PaydayTransaction(TransactionRecorder transactionRecorder) &#123;</span><br><span class="line">        this.transactionRecorder = transactionRecorder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        transactionRecorder.saveTransaction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TransactionLog implements TransactionRecorder &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void saveTransaction() &#123;</span><br><span class="line">        //call database</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void recordError(int code) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class FakeTransactionLog implements TransactionRecorder &#123;</span><br><span class="line">    public boolean isSave = false;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void saveTransaction() &#123;</span><br><span class="line">        isSave = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class PaydayTransactionTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testPayday() &#123;</span><br><span class="line">        FakeTransactionLog fakeTransactionLog = new FakeTransactionLog();</span><br><span class="line">        PaydayTransaction paydayTransaction = new PaydayTransaction(fakeTransactionLog);</span><br><span class="line">        paydayTransaction.run();</span><br><span class="line">        Assert.assertThat(fakeTransactionLog.isSave, is(true));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多解依赖手法的源码参考，<a href="https://github.com/junbin1011/LegacyCode" target="_blank" rel="noopener">LegacyCode</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://book.douban.com/subject/2248759/" target="_blank" rel="noopener">《修改代码的艺术》</a></p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
+<p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB8682567ec4f22dab1ed9c5350ec9db62?method=download&amp;shareKey=06e819ed512febb7dcf540161b125867" alt></p>
+<ul>
+<li>作者：黄俊彬 </li>
+<li><a href="https://junbin.tech/" target="_blank" rel="noopener">博客：junbin.tech</a></li>
+<li><a href="https://github.com/junbin1011" target="_blank" rel="noopener">GitHub: junbin1011 </a></li>
+<li><a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" rel="noopener">知乎: @JunBin</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/遗留系统/" rel="tag"># 遗留系统</a>
+          
+            <a href="/tags/重构/" rel="tag"># 重构</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/02/Kotlin-Coroutine-探索之旅/" rel="next" title="Kotlin Coroutine 探索之旅">
+                <i class="fa fa-chevron-left"></i> Kotlin Coroutine 探索之旅
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/06/30/遗留系统开发之道/" data-title="遗留系统开发之道" data-url="https://junbin1011.github.io/2020/06/30/遗留系统开发之道/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f" alt="黄俊彬">
+          <p class="site-author-name" itemprop="name">黄俊彬</p>
+           
+              <p class="site-description motion-element" itemprop="description">一花一世界，一码一浮生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">83</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/junbin1011" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#遗留系统之痛"><span class="nav-number">1.</span> <span class="nav-text">遗留系统之痛</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">1.2.</span> <span class="nav-text">原因</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遗留代码开发心法"><span class="nav-number">2.</span> <span class="nav-text">遗留代码开发心法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择恰当时机"><span class="nav-number">2.1.</span> <span class="nav-text">选择恰当时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确定改动点"><span class="nav-number">2.2.</span> <span class="nav-text">确定改动点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#找出测试点"><span class="nav-number">2.3.</span> <span class="nav-text">找出测试点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解依赖"><span class="nav-number">2.4.</span> <span class="nav-text">解依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写测试"><span class="nav-number">2.5.</span> <span class="nav-text">编写测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改重构"><span class="nav-number">2.6.</span> <span class="nav-text">修改重构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遗留系统解依赖三板斧"><span class="nav-number">3.</span> <span class="nav-text">遗留系统解依赖三板斧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数化方法"><span class="nav-number">3.1.</span> <span class="nav-text">参数化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">3.1.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">3.1.2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重构"><span class="nav-number">3.1.3.</span> <span class="nav-text">重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">3.1.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数适配"><span class="nav-number">3.2.</span> <span class="nav-text">参数适配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重构-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口提取"><span class="nav-number">3.3.</span> <span class="nav-text">接口提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例-2"><span class="nav-number">3.3.2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重构-2"><span class="nav-number">3.3.3.</span> <span class="nav-text">重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-2"><span class="nav-number">3.3.4.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于"><span class="nav-number">4.1.</span> <span class="nav-text">关于</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄俊彬</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"junbin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

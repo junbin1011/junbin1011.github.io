@@ -271,6 +271,229 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/06/30/遗留系统开发之道/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄俊彬">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JunBin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/06/30/遗留系统开发之道/" itemprop="url">
+                  遗留系统开发之道
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-30T17:11:02+08:00">
+                2020-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/30/遗留系统开发之道/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/06/30/遗留系统开发之道/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="遗留系统之痛"><a href="#遗留系统之痛" class="headerlink" title="遗留系统之痛"></a>遗留系统之痛</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>在软件这个行业里，有一个有意思的名词叫“祖传代码”。泛指那些结构混乱的遗留系统代码。相信大家或多或少在工作中都会遇到过遗留系统，你是否遇到过下面的问题？</p>
+<ol>
+<li>应用大泥球的结构，代码看起来都很费劲，更别说改</li>
+<li>代码已经改不动了，想要重构，但却一点信心都没有</li>
+<li>修一个bug，又引起了另外的bug</li>
+</ol>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>遗留系统常常有2个非常明显的特点。</p>
+<ol>
+<li>代码耦合度高，相互依赖性高</li>
+<li>没有足够的自动化测试覆盖，完成改动后要比较长的时间来反馈事情是否做对</li>
+</ol>
+<p>这使得我们对代码修改的成本非常大，并且往往容易出错。</p>
+<blockquote>
+<p>依赖性是软件开发中最为关键的问题之一。在处理遗留代码的过程中很大一部分工作都是围绕着“接触依赖性以便使改动变得更容易”这个目标来进行的</p>
+</blockquote>
+<h1 id="遗留代码开发心法"><a href="#遗留代码开发心法" class="headerlink" title="遗留代码开发心法"></a>遗留代码开发心法</h1><p><img src="https://note.youdao.com/yws/api/personal/file/WEBc45772697e3c3991fcf7051e964a489a?method=download&amp;shareKey=c77d8bef4693381506a9147c77da969b" alt></p>
+<p>对付依赖代码的工作其实就是动手改，但不是随意地改。我们必须在做出能够带来价值的功能性改动的同时使系统中的更多部分覆盖足够的测试。同时在这个过程中也有一些套路及手法可以参考，我们不需要摸着石头过河。</p>
+<h2 id="选择恰当时机"><a href="#选择恰当时机" class="headerlink" title="选择恰当时机"></a>选择恰当时机</h2><ul>
+<li>在修改遗留代码之前，对覆盖遗留代码的场景/服务增加大型/中型测试。</li>
+<li>在对功能扩展和修改时，对原有代码进行重构并加上对方法的小型测试</li>
+<li>在修复 Bug 时增加自动化测试保证问题不要再次出现</li>
+</ul>
+<h2 id="确定改动点"><a href="#确定改动点" class="headerlink" title="确定改动点"></a>确定改动点</h2><ul>
+<li><p>仔细阅读被测代码、文档、用例，或找其他同事了解，最大程度理解要修改的功能相关代码</p>
+</li>
+<li><p>参考常用的架构模式（MV*）和通用的设计原则，作为我们重构时的基准</p>
+</li>
+</ul>
+<h2 id="找出测试点"><a href="#找出测试点" class="headerlink" title="找出测试点"></a>找出测试点</h2><ul>
+<li><p>遗留系统中核心算法或者业务逻辑一般混杂在其他代码中，我们需要需要去识别核心的测试点</p>
+</li>
+<li><p>合理设置测试策略，避免贸然修改代码带来的风险，最大化重构&amp;自动化测试的 ROI</p>
+</li>
+</ul>
+<h2 id="解依赖"><a href="#解依赖" class="headerlink" title="解依赖"></a>解依赖</h2><p>解依赖往往是最难的地方。我们通常会遇到两个方面问题：一是难以在测试用例中实例化目标对象；二是难以在测试用例中运行方法。</p>
+<p>这时候就需要我用运用恰当的解依赖手法进行重构，接触依赖。<a href="#遗留代码开发三板斧">遗留代码解依赖三板斧</a></p>
+<h2 id="编写测试"><a href="#编写测试" class="headerlink" title="编写测试"></a>编写测试</h2><ul>
+<li>取一个“看名知其意”的测试名</li>
+<li>选择合适的测试替身</li>
+<li>编写测试代码</li>
+</ul>
+<h2 id="修改重构"><a href="#修改重构" class="headerlink" title="修改重构"></a>修改重构</h2><p>对被测试保护起来的代码进行清理，遵守整洁代码及消除坏味道，提高代码可读性</p>
+<h1 id="遗留系统解依赖三板斧"><a href="#遗留系统解依赖三板斧" class="headerlink" title="遗留系统解依赖三板斧"></a>遗留系统解依赖三板斧</h1><p><img src="https://note.youdao.com/yws/api/personal/file/WEB6626d87b31f359480b73040e07a5f89e?method=download&amp;shareKey=8b77d6594c673f7a8c1918b28a379e90" alt></p>
+<h2 id="参数化方法"><a href="#参数化方法" class="headerlink" title="参数化方法"></a>参数化方法</h2><blockquote>
+<p>假设你有一个方法，该方法在内部创建了某个对象，而你想要通过替换该对象来实现感知或分离。往往最简单的方法就是从外面将你的对象传进来</p>
+</blockquote>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>找出目标方法，将它复制一份</li>
+<li>给其中一份增加一个参数，并将方法体中相应的对象创建语句去掉，改为使用刚增加的这个参数</li>
+<li>将另一份复制的方法体删掉，代以对被参数化了的那个版本的调用，记得创建相应的对象作参数</li>
+</ol>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class TestCase &#123;</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        TestResult result = new TestResult();</span><br><span class="line">        result.runTest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TestResult &#123;</span><br><span class="line">    boolean flag = false;</span><br><span class="line"></span><br><span class="line">    void runTest() &#123;</span><br><span class="line">        flag = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class TestCase &#123;</span><br><span class="line">    public void run(TestResult result) &#123;</span><br><span class="line">        result.runTest();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TestResult &#123;</span><br><span class="line">    boolean flag = false;</span><br><span class="line"></span><br><span class="line">    void runTest() &#123;</span><br><span class="line">        flag = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class TestCaseTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void should_return_flag_is_true_when_call_run() &#123;</span><br><span class="line">        TestCase testCase = new TestCase();</span><br><span class="line">        TestResult mockTestResult = new TestResult();</span><br><span class="line">        testCase.run(mockTestResult);</span><br><span class="line">        Assert.assertTrue(mockTestResult.flag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参数适配"><a href="#参数适配" class="headerlink" title="参数适配"></a>参数适配</h2><blockquote>
+<p>当无法对一个参数的类型使用接口提取，或者当该参数难以“伪装”的时候，可采用参数适配手法</p>
+</blockquote>
+<h3 id="步骤-1"><a href="#步骤-1" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>创建将被用于该方法的新接口，该接口越简单且能表达意图越好。但也要注意，该接口不应导致需要对该方法的代码作大规模修改</li>
+<li>为新接口创建一个用于产品代码的实现</li>
+<li>为新接口创建一个用于测试的“伪造”实现</li>
+<li>编写一个简单的测试用例，将伪对象传给该方法</li>
+<li>对该方法作必要的修改以使其能使用新的参数</li>
+<li>运行测试来确保你能使用伪对象来测试该方法</li>
+</ol>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class ARMDispatcher &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; marketBinding = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public void populate(HttpsParameters parameters) &#123;</span><br><span class="line">        String[] values = parameters.getCipherSuites();</span><br><span class="line">        if (values != null &amp;&amp; values.length &gt; 0) &#123;</span><br><span class="line">            marketBinding.add(values[0]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重构-1"><a href="#重构-1" class="headerlink" title="重构"></a>重构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ARMDispatcher &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; marketBinding = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public void populate(ParameterSource parameterSource) &#123;</span><br><span class="line">        String values = parameterSource.getParameterValue();</span><br><span class="line">        if (values != null) &#123;</span><br><span class="line">            marketBinding.add(values);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface ParameterSource &#123;</span><br><span class="line">    String getParameterValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class HttpParameterSource implements ParameterSource &#123;</span><br><span class="line">    HttpsParameters mHttpsParameters;</span><br><span class="line"></span><br><span class="line">    public HttpParameterSource(HttpsParameters httpsParameters) &#123;</span><br><span class="line">        mHttpsParameters = httpsParameters;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String getParameterValue() &#123;</span><br><span class="line">        String[] values = mHttpsParameters.getCipherSuites();</span><br><span class="line">        if (values != null &amp;&amp; values.length &gt; 0) &#123;</span><br><span class="line">            return values[0];</span><br><span class="line">        &#125;</span><br><span class="line">        return &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class FakeParameterSource implements ParameterSource &#123;</span><br><span class="line"></span><br><span class="line">    public String value;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String getParameterValue() &#123;</span><br><span class="line">        return value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ARMDispatcherTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testPopulate() &#123;</span><br><span class="line">        ARMDispatcher armDispatcher = new ARMDispatcher();</span><br><span class="line">        FakeParameterSource fakeParameterSource = new FakeParameterSource();</span><br><span class="line">        fakeParameterSource.value = &quot;hello world&quot;;</span><br><span class="line">        armDispatcher.populate(fakeParameterSource);</span><br><span class="line">        assertThat(armDispatcher.marketBinding.size(),is(1));</span><br><span class="line">        assertThat(armDispatcher.marketBinding.get(0),is(&quot;hello world&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="接口提取"><a href="#接口提取" class="headerlink" title="接口提取"></a>接口提取</h2><blockquote>
+<p>提取接口时并不一定要提取类上的所有公有方法，考虑递增式地扩充该接口。</p>
+</blockquote>
+<h3 id="步骤-2"><a href="#步骤-2" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>创建一个新接口，给它起一个好名字。暂时不要往里面添加任何方法</li>
+<li>令你提取接口的目标类实现该接口。这一步不会破坏任何东西，因为接口上还没有任何方法。但你也可以编译确认一下</li>
+<li>将你想要使用伪对象的地方从引用原类改为引用你新建的接口</li>
+<li>编译系统。如果编译器汇报接口上缺少某某方法，则添加对应的方法（同时也往伪类上面添加一个空的实现），直到编译通过</li>
+</ol>
+<h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class PaydayTransaction &#123;</span><br><span class="line">    TransactionLog transactionLog;</span><br><span class="line"></span><br><span class="line">    public PaydayTransaction(TransactionLog transactionLog) &#123;</span><br><span class="line">        this.transactionLog = transactionLog;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        transactionLog.saveTransaction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TransactionLog &#123;</span><br><span class="line">    public void saveTransaction() &#123;</span><br><span class="line">        //call database</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void recordError(int code) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重构-2"><a href="#重构-2" class="headerlink" title="重构"></a>重构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface TransactionRecorder &#123;</span><br><span class="line">    void saveTransaction();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class PaydayTransaction &#123;</span><br><span class="line">    TransactionRecorder transactionRecorder;</span><br><span class="line"></span><br><span class="line">    public PaydayTransaction(TransactionRecorder transactionRecorder) &#123;</span><br><span class="line">        this.transactionRecorder = transactionRecorder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        transactionRecorder.saveTransaction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class TransactionLog implements TransactionRecorder &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void saveTransaction() &#123;</span><br><span class="line">        //call database</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void recordError(int code) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class FakeTransactionLog implements TransactionRecorder &#123;</span><br><span class="line">    public boolean isSave = false;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void saveTransaction() &#123;</span><br><span class="line">        isSave = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class PaydayTransactionTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testPayday() &#123;</span><br><span class="line">        FakeTransactionLog fakeTransactionLog = new FakeTransactionLog();</span><br><span class="line">        PaydayTransaction paydayTransaction = new PaydayTransaction(fakeTransactionLog);</span><br><span class="line">        paydayTransaction.run();</span><br><span class="line">        Assert.assertThat(fakeTransactionLog.isSave, is(true));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多解依赖手法的源码参考，<a href="https://github.com/junbin1011/LegacyCode" target="_blank" rel="noopener">LegacyCode</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://book.douban.com/subject/2248759/" target="_blank" rel="noopener">《修改代码的艺术》</a></p>
+<h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p><strong>欢迎关注我的个人公众号</strong></p>
+<p>微信搜索：<strong>一码一浮生</strong>，或者搜索公众号ID:<strong>life2code</strong></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB8682567ec4f22dab1ed9c5350ec9db62?method=download&amp;shareKey=06e819ed512febb7dcf540161b125867" alt></p>
+<ul>
+<li>作者：黄俊彬 </li>
+<li><a href="https://junbin.tech/" target="_blank" rel="noopener">博客：junbin.tech</a></li>
+<li><a href="https://github.com/junbin1011" target="_blank" rel="noopener">GitHub: junbin1011 </a></li>
+<li><a href="https://www.zhihu.com/people/junbin-9-77" target="_blank" rel="noopener">知乎: @JunBin</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2020/06/02/Kotlin-Coroutine-探索之旅/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2712,483 +2935,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://junbin1011.github.io/2018/09/21/Android热修复技术，你会怎么选？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄俊彬">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://note.youdao.com/yws/api/personal/file/WEB917b08143504a6f8c96228312fcb5245?method=download&shareKey=03cb5c302c83b56bbb91668c5008444f">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JunBin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/09/21/Android热修复技术，你会怎么选？/" itemprop="url">
-                  Android热修复技术，你会怎么选？
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-21T09:12:00+08:00">
-                2018-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/21/Android热修复技术，你会怎么选？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/21/Android热修复技术，你会怎么选？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>目前Android业内，热修复技术百花齐放，各大厂都推出了自己的热修复方案，使用的技术方案也各有所异，当然各个方案也都存在各自的局限性。在面对众多的方案，希望通过梳理这些热修复方案的对比及实现原理，掌握热修复技术的本质，同时也对项目接入做好准备。</p>
-<h1 id="什么是热修复技术？"><a href="#什么是热修复技术？" class="headerlink" title="什么是热修复技术？"></a>什么是热修复技术？</h1><p>关于热修复这个名词，并不陌生。相信大家都有过更新window补丁的经历，通过补丁可以动态修复系统的漏洞，只不过这个过程对用户而言是可选及自行操作。</p>
-<p>那么关于Android平台的热修复技术，简单来说，就是通过下发补丁包，让已安装的客户端动态更新，让用户可以不用重新安装APP，就能够修复软件缺陷的一种技术。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-50c2fb502983a3bb?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>随着热修复技术的发展，不仅可以修复代码，同时可以修复资源文件及SO库。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-cb67bc0991f396fb?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<h1 id="为什么要使用热修复技术？"><a href="#为什么要使用热修复技术？" class="headerlink" title="为什么要使用热修复技术？"></a>为什么要使用热修复技术？</h1><p>在回答这个问题之前，我觉得应该先思考如下几个问题。</p>
-<ol>
-<li>开发上线的版本能保证不存在Bug么？</li>
-<li>修复后的版本能保证用户都及时更新么？</li>
-<li>如何最大化减少线上Bug对业务的影响？</li>
-</ol>
-<p>从这些角度来说，相信大家应该都能有所体会，热修复技术带来的优势不言而喻。</p>
-<ol>
-<li>可快速修复，避免线上Bug带来的业务损失，把损失降到最低。</li>
-<li>保证客户端的更新率，无须用户进行版本升级安装</li>
-<li>良好的用户体验，无感知修复异常。节省用户下载安装成本。</li>
-</ol>
-<h1 id="怎么选择热修复技术方案？"><a href="#怎么选择热修复技术方案？" class="headerlink" title="怎么选择热修复技术方案？"></a>怎么选择热修复技术方案？</h1><h2 id="国内主流的技术方案"><a href="#国内主流的技术方案" class="headerlink" title="国内主流的技术方案"></a>国内主流的技术方案</h2><p> 1、阿里系</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://github.com/alibaba/AndFix" target="_blank" rel="noopener">AndFix </a></td>
-<td>开源，实时生效</td>
-</tr>
-<tr>
-<td><a href="http://baichuan.taobao.com/product/hotfix.htm?spm=a3c0d.7662652.1998907869.2.309abe485ZwUCh" target="_blank" rel="noopener">HotFix</a></td>
-<td>阿里百川，未开源，免费、实时生效</td>
-</tr>
-<tr>
-<td><a href="https://help.aliyun.com/product/51340.html?spm=a2c4g.11186623.6.540.61a72ef2DAZ30l" target="_blank" rel="noopener">Sophix</a></td>
-<td>未开源，商业收费，实时生效/冷启动修复</td>
-</tr>
-</tbody>
-</table>
-<p>HotFix是AndFix的优化版本，Sophix是HotFix的优化版本。目前阿里系主推是Sophix。</p>
-<p>2、腾讯系</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&amp;mid=400118620&amp;idx=1&amp;sn=b4fdd5055731290eef12ad0d17f39d4a" target="_blank" rel="noopener">Qzone超级补丁</a></td>
-<td>QQ空间，未开源，冷启动修复</td>
-</tr>
-<tr>
-<td><a href="https://github.com/alexclin0188/QFixPatch" target="_blank" rel="noopener">QFix</a></td>
-<td>手Q团队，开源，冷启动修复</td>
-</tr>
-<tr>
-<td><a href="http://www.tinkerpatch.com/Docs/intro" target="_blank" rel="noopener">Tinker</a></td>
-<td>微信团队，开源，冷启动修复。提供分发管理，<a href="http://www.tinkerpatch.com/Price" target="_blank" rel="noopener">基础版免费</a></td>
-</tr>
-</tbody>
-</table>
-<p>3、其他<br>名称 | 说明<br>—|—<br><a href="https://github.com/Meituan-Dianping/Robust" target="_blank" rel="noopener">Robust </a>|美团， 开源，实时修复<br><a href="https://github.com/jasonross/Nuwa" target="_blank" rel="noopener">Nuwa</a> |大众点评，开源，冷启动修复<br><a href="https://github.com/eleme/Amigo" target="_blank" rel="noopener">Amigo</a>|饿了么，开源，冷启动修复</p>
-<h2 id="方案对比"><a href="#方案对比" class="headerlink" title="方案对比"></a>方案对比</h2><table>
-<thead>
-<tr>
-<th>方案对比</th>
-<th>Sophix</th>
-<th>Tinker</th>
-<th>nuwa</th>
-<th>AndFix</th>
-<th>Robust</th>
-<th>Amigo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>类替换</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-<td>no</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>So替换</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-<td>no</td>
-<td>no</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>资源替换</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-<td>no</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>全平台支持</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>即时生效</td>
-<td>同时支持</td>
-<td>no</td>
-<td>no</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-</tr>
-<tr>
-<td>性能损耗</td>
-<td>较少</td>
-<td>较小</td>
-<td>较大</td>
-<td>较小</td>
-<td>较小</td>
-<td>较小</td>
-</tr>
-<tr>
-<td>补丁包大小</td>
-<td>小</td>
-<td>较小</td>
-<td>较大</td>
-<td>一般</td>
-<td>一般</td>
-<td>较大</td>
-</tr>
-<tr>
-<td>开发透明</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-<td>no</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>复杂度</td>
-<td>傻瓜式接入</td>
-<td>复杂</td>
-<td>较低</td>
-<td>复杂</td>
-<td>复杂</td>
-<td>较低</td>
-</tr>
-<tr>
-<td>Rom体积</td>
-<td>较小</td>
-<td>Dalvik较大</td>
-<td>较小</td>
-<td>较小</td>
-<td>较小</td>
-<td>大</td>
-</tr>
-<tr>
-<td>成功率</td>
-<td>高</td>
-<td>较高</td>
-<td>较高</td>
-<td>一般</td>
-<td>最高</td>
-<td>较高</td>
-</tr>
-<tr>
-<td>热度</td>
-<td>高</td>
-<td>高</td>
-<td>低</td>
-<td>低</td>
-<td>高</td>
-<td>低</td>
-</tr>
-<tr>
-<td>开源</td>
-<td>no</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>收费</td>
-<td>收费（设有免费阈值）</td>
-<td>收费（基础版免费，但有限制）</td>
-<td>免费</td>
-<td>免费</td>
-<td>免费</td>
-<td>免费</td>
-</tr>
-<tr>
-<td>监控</td>
-<td>提供分发控制及监控</td>
-<td>提供分发控制及监控</td>
-<td>no</td>
-<td>no</td>
-<td>no</td>
-<td>no</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>参考Tinker及Sophix官方对比</p>
-</blockquote>
-<p><a href="http://www.tinkerpatch.com/Docs/intro" target="_blank" rel="noopener">为什么使用 Tinker？</a></p>
-<p><a href="https://help.aliyun.com/document_detail/51416.html?spm=a2c4g.11186623.6.543.6ed62ef2MAnXZM" target="_blank" rel="noopener">Sophix产品优势？</a></p>
-<h2 id="怎么选？"><a href="#怎么选？" class="headerlink" title="怎么选？"></a>怎么选？</h2><p>怎么选？这个只能说一切看需求。如果公司综合实力强，完全考虑自研都没问题，但需要综合考虑成本及维护。下面给出2点建议，如下：</p>
-<p>1、项目需求</p>
-<ul>
-<li>只需要简单的方法级别Bug修复？</li>
-<li>需要资源及so库的修复？</li>
-<li>对平台兼容性要求及成功率要求？</li>
-<li>有需求对分发进行控制，对监控数据进行统计，补丁包进行管理？</li>
-<li>公司资源是否支持商业付费？</li>
-</ul>
-<p>2、学习及使用成本</p>
-<ul>
-<li>集成难度</li>
-<li>代码侵入性</li>
-<li>调试维护</li>
-</ul>
-<p>3、选择大厂</p>
-<ul>
-<li>技术性能有保障</li>
-<li>有专人维护</li>
-<li>热度高，开源社区活跃</li>
-</ul>
-<p>如果考虑付费，推荐选择阿里的Sophix，Sophix是综合优化的产物，功能完善、开发简单透明、提供分发及监控管理。</p>
-<p>如果不考虑付费，只需支持方法级别的Bug修复，不支持资源及so，推荐使用Robust。</p>
-<p>如果考虑需要同时支持资源及so，推荐使用Tinker。</p>
-<p>最后如果公司综合实力强，可考虑自研，灵活性及可控制最强。</p>
-<blockquote>
-<p>从Github上的热度及提交记录上看，nuwa、AndFix、Amigo等的提交都是2 years ago。</p>
-</blockquote>
-<h1 id="内业主要热修复技术方案原理？"><a href="#内业主要热修复技术方案原理？" class="headerlink" title="内业主要热修复技术方案原理？"></a>内业主要热修复技术方案原理？</h1><h2 id="技术分类"><a href="#技术分类" class="headerlink" title="技术分类"></a>技术分类</h2><p><img src="http://upload-images.jianshu.io/upload_images/5125122-97e7a2b8568b2972?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<h2 id="NativeHook-原理"><a href="#NativeHook-原理" class="headerlink" title="NativeHook 原理"></a>NativeHook 原理</h2><h2 id="原理及实现"><a href="#原理及实现" class="headerlink" title="原理及实现"></a>原理及实现</h2><p>NativeHook的原理是直接在native层进行方法的结构体信息对换，从而实现完美的方法新旧替换，从而实现热修复功能。<br>下面以AndFix的一段jni代码来进行说明，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">void replace_6_0(JNIEnv* env, jobject src, jobject dest) &#123;</span><br><span class="line"></span><br><span class="line">    // 通过Method对象得到底层Java函数对应ArtMethod的真实地址</span><br><span class="line">	art::mirror::ArtMethod* smeth =</span><br><span class="line">			(art::mirror::ArtMethod*) env-&gt;FromReflectedMethod(src);</span><br><span class="line"></span><br><span class="line">	art::mirror::ArtMethod* dmeth =</span><br><span class="line">			(art::mirror::ArtMethod*) env-&gt;FromReflectedMethod(dest);</span><br><span class="line"></span><br><span class="line">    reinterpret_cast&lt;art::mirror::Class*&gt;(dmeth-&gt;declaring_class_)-&gt;class_loader_ =</span><br><span class="line">    reinterpret_cast&lt;art::mirror::Class*&gt;(smeth-&gt;declaring_class_)-&gt;class_loader_; //for plugin classloader</span><br><span class="line">    reinterpret_cast&lt;art::mirror::Class*&gt;(dmeth-&gt;declaring_class_)-&gt;clinit_thread_id_ =</span><br><span class="line">    reinterpret_cast&lt;art::mirror::Class*&gt;(smeth-&gt;declaring_class_)-&gt;clinit_thread_id_;</span><br><span class="line">    reinterpret_cast&lt;art::mirror::Class*&gt;(dmeth-&gt;declaring_class_)-&gt;status_ = reinterpret_cast&lt;art::mirror::Class*&gt;(smeth-&gt;declaring_class_)-&gt;status_-1;</span><br><span class="line">    //for reflection invoke</span><br><span class="line">    reinterpret_cast&lt;art::mirror::Class*&gt;(dmeth-&gt;declaring_class_)-&gt;super_class_ = 0;</span><br><span class="line">    //把旧函数的所有成员变量都替换为新函数的</span><br><span class="line">    smeth-&gt;declaring_class_ = dmeth-&gt;declaring_class_;</span><br><span class="line">    smeth-&gt;dex_cache_resolved_methods_ = dmeth-&gt;dex_cache_resolved_methods_;</span><br><span class="line">    smeth-&gt;dex_cache_resolved_types_ = dmeth-&gt;dex_cache_resolved_types_;</span><br><span class="line">    smeth-&gt;access_flags_ = dmeth-&gt;access_flags_ | 0x0001;</span><br><span class="line">    smeth-&gt;dex_code_item_offset_ = dmeth-&gt;dex_code_item_offset_;</span><br><span class="line">    smeth-&gt;dex_method_index_ = dmeth-&gt;dex_method_index_;</span><br><span class="line">    smeth-&gt;method_index_ = dmeth-&gt;method_index_;</span><br><span class="line">    </span><br><span class="line">    smeth-&gt;ptr_sized_fields_.entry_point_from_interpreter_ =</span><br><span class="line">    dmeth-&gt;ptr_sized_fields_.entry_point_from_interpreter_;</span><br><span class="line">    </span><br><span class="line">    smeth-&gt;ptr_sized_fields_.entry_point_from_jni_ =</span><br><span class="line">    dmeth-&gt;ptr_sized_fields_.entry_point_from_jni_;</span><br><span class="line">    smeth-&gt;ptr_sized_fields_.entry_point_from_quick_compiled_code_ =</span><br><span class="line">    dmeth-&gt;ptr_sized_fields_.entry_point_from_quick_compiled_code_;</span><br><span class="line">    </span><br><span class="line">    LOGD(&quot;replace_6_0: %d , %d&quot;,</span><br><span class="line">         smeth-&gt;ptr_sized_fields_.entry_point_from_quick_compiled_code_,</span><br><span class="line">         dmeth-&gt;ptr_sized_fields_.entry_point_from_quick_compiled_code_);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void setFieldFlag_6_0(JNIEnv* env, jobject field) &#123;</span><br><span class="line">	art::mirror::ArtField* artField =</span><br><span class="line">			(art::mirror::ArtField*) env-&gt;FromReflectedField(field);</span><br><span class="line">	artField-&gt;access_flags_ = artField-&gt;access_flags_ &amp; (~0x0002) | 0x0001;</span><br><span class="line">	LOGD(&quot;setFieldFlag_6_0: %d &quot;, artField-&gt;access_flags_);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>每一个Java方法在art中都对应一个ArtMethod,ArtMethod记录了这个Java方法的所有信息，包括访问权限及代码执行地址等。通过env-&gt;FromReflectedMethod得到方法对应的ArtMethod的真正开始地址，然后强转为ArtMethod指针，从而对其所有成员进行修改。</p>
-<p>这样以后调用这个方法时就会直接走到新方法的实现中，达到热修复的效果。</p>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>即时生效</li>
-<li>没有性能开销，不需要任何编辑器的插桩或代码改写</li>
-</ul>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>存在稳定及兼容性问题。ArtMethod的结构基本参考Google开源的代码，各大厂商的ROM都可能有所改动，可能导致结构不一致，修复失败。</li>
-<li>无法增加变量及类，只能修复方法级别的Bug，无法做到新功能的发布</li>
-</ul>
-<h2 id="javaHook-原理"><a href="#javaHook-原理" class="headerlink" title="javaHook 原理"></a>javaHook 原理</h2><h2 id="原理及实现-1"><a href="#原理及实现-1" class="headerlink" title="原理及实现"></a>原理及实现</h2><p>以美团的Robust为例，Robust 的原理可以简单描述为：</p>
-<p>1、打基础包时插桩，在每个方法前插入一段类型为 ChangeQuickRedirect 静态变量的逻辑，插入过程对业务开发是完全透明</p>
-<p>2、加载补丁时，从补丁包中读取要替换的类及具体替换的方法实现，新建ClassLoader加载补丁dex。当changeQuickRedirect不为null时，可能会执行到accessDispatch从而替换掉之前老的逻辑，达到fix的目的</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-fc799bbd4a587560.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Robust 官方介绍示例图"></p>
-<p>下面通过Robust的源码来进行分析。<br>首先看一下打基础包是插入的代码逻辑，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static ChangeQuickRedirect u;</span><br><span class="line">protected void onCreate(Bundle bundle) &#123;</span><br><span class="line">        //为每个方法自动插入修复逻辑代码，如果ChangeQuickRedirect为空则不执行</span><br><span class="line">        if (u != null) &#123;</span><br><span class="line">            if (PatchProxy.isSupport(new Object[]&#123;bundle&#125;, this, u, false, 78)) &#123;</span><br><span class="line">                PatchProxy.accessDispatchVoid(new Object[]&#123;bundle&#125;, this, u, false, 78);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        super.onCreate(bundle);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>Robust的核心修复源码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">public class PatchExecutor extends Thread &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        ...</span><br><span class="line">        applyPatchList(patches);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * 应用补丁列表</span><br><span class="line">     */</span><br><span class="line">    protected void applyPatchList(List&lt;Patch&gt; patches) &#123;</span><br><span class="line">        ...</span><br><span class="line">        for (Patch p : patches) &#123;</span><br><span class="line">            ...</span><br><span class="line">            currentPatchResult = patch(context, p);</span><br><span class="line">            ...</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">     /**</span><br><span class="line">     * 核心修复源码</span><br><span class="line">     */</span><br><span class="line">    protected boolean patch(Context context, Patch patch) &#123;</span><br><span class="line">        ...</span><br><span class="line">        //新建ClassLoader</span><br><span class="line">        DexClassLoader classLoader = new DexClassLoader(patch.getTempPath(), context.getCacheDir().getAbsolutePath(),</span><br><span class="line">                null, PatchExecutor.class.getClassLoader());</span><br><span class="line">        patch.delete(patch.getTempPath());</span><br><span class="line">        ...</span><br><span class="line">        try &#123;</span><br><span class="line">            patchsInfoClass = classLoader.loadClass(patch.getPatchesInfoImplClassFullName());</span><br><span class="line">            patchesInfo = (PatchesInfo) patchsInfoClass.newInstance();</span><br><span class="line">            &#125; catch (Throwable t) &#123;</span><br><span class="line">             ...</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">        //通过遍历其中的类信息进而反射修改其中 ChangeQuickRedirect 对象的值</span><br><span class="line">        for (PatchedClassInfo patchedClassInfo : patchedClasses) &#123;</span><br><span class="line">            ...</span><br><span class="line">            try &#123;</span><br><span class="line">                oldClass = classLoader.loadClass(patchedClassName.trim());</span><br><span class="line">                Field[] fields = oldClass.getDeclaredFields();</span><br><span class="line">                for (Field field : fields) &#123;</span><br><span class="line">                    if (TextUtils.equals(field.getType().getCanonicalName(), ChangeQuickRedirect.class.getCanonicalName()) &amp;&amp; TextUtils.equals(field.getDeclaringClass().getCanonicalName(), oldClass.getCanonicalName())) &#123;</span><br><span class="line">                        changeQuickRedirectField = field;</span><br><span class="line">                        break;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                ...</span><br><span class="line">                try &#123;</span><br><span class="line">                    patchClass = classLoader.loadClass(patchClassName);</span><br><span class="line">                    Object patchObject = patchClass.newInstance();</span><br><span class="line">                    changeQuickRedirectField.setAccessible(true);</span><br><span class="line">                    changeQuickRedirectField.set(null, patchObject);</span><br><span class="line">                    &#125; catch (Throwable t) &#123;</span><br><span class="line">                    ...</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; catch (Throwable t) &#123;</span><br><span class="line">                 ...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>高兼容性（Robust只是在正常的使用DexClassLoader）、高稳定性，修复成功率高达99.9%</li>
-<li>补丁实时生效，不需要重新启动</li>
-<li>支持方法级别的修复，包括静态方法</li>
-<li>支持增加方法和类</li>
-<li>支持ProGuard的混淆、内联、优化等操作</li>
-</ul>
-<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>代码是侵入式的，会在原有的类中加入相关代码</li>
-<li>so和资源的替换暂时不支持</li>
-<li>会增大apk的体积，平均一个函数会比原来增加17.47个字节，10万个函数会增加1.67M</li>
-</ul>
-<h2 id="java-mulitdex-原理"><a href="#java-mulitdex-原理" class="headerlink" title="java mulitdex 原理"></a>java mulitdex 原理</h2><h2 id="原理及实现-2"><a href="#原理及实现-2" class="headerlink" title="原理及实现"></a>原理及实现</h2><p>Android内部使用的是BaseDexClassLoader、PathClassLoader、DexClassLoader三个类加载器实现从DEX文件中读取类数据，其中PathClassLoader和DexClassLoader都是继承自BaseDexClassLoader实现。dex文件转换成dexFile对象，存入Element[]数组，findclass顺序遍历Element数组获取DexFile，然后执行DexFile的findclass。源码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 加载名字为name的class对象</span><br><span class="line">public Class findClass(String name, List&lt;Throwable&gt; suppressed) &#123;</span><br><span class="line">    // 遍历从dexPath查询到的dex和资源Element</span><br><span class="line">    for (Element element : dexElements) &#123;</span><br><span class="line">        DexFile dex = element.dexFile;</span><br><span class="line">        // 如果当前的Element是dex文件元素</span><br><span class="line">        if (dex != null) &#123;</span><br><span class="line">            // 使用DexFile.loadClassBinaryName加载类</span><br><span class="line">            Class clazz = dex.loadClassBinaryName(name, definingContext, suppressed);</span><br><span class="line">            if (clazz != null) &#123;</span><br><span class="line">                return clazz;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (dexElementsSuppressedExceptions != null) &#123;</span><br><span class="line">        suppressed.addAll(Arrays.asList(dexElementsSuppressedExceptions));</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>所以此方案的原理是Hook了ClassLoader.pathList.dexElements[]，将补丁的dex插入到数组的最前端。因为ClassLoader的findClass是通过遍历dexElements[]中的dex来寻找类的。所以会优先查找到修复的类。从而达到修复的效果。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/5125122-07be03be319158d1?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片引用自QQ空间热修复介绍"></p>
-<p>下面使用Nuwa的关键实现源码进行说明如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">public static void injectDexAtFirst(String dexPath, String defaultDexOptPath) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException &#123;</span><br><span class="line">        //新建一个ClassLoader加载补丁Dex</span><br><span class="line">        DexClassLoader dexClassLoader = new DexClassLoader(dexPath, defaultDexOptPath, dexPath, getPathClassLoader());</span><br><span class="line">        //反射获取旧DexElements数组</span><br><span class="line">        Object baseDexElements = getDexElements(getPathList(getPathClassLoader()));</span><br><span class="line">        //反射获取补丁DexElements数组</span><br><span class="line">        Object newDexElements = getDexElements(getPathList(dexClassLoader));</span><br><span class="line">        //合并，将新数组的Element插入到最前面</span><br><span class="line">        Object allDexElements = combineArray(newDexElements, baseDexElements);</span><br><span class="line">        Object pathList = getPathList(getPathClassLoader());</span><br><span class="line">        //更新旧ClassLoader中的Element数组</span><br><span class="line">        ReflectionUtils.setField(pathList, pathList.getClass(), &quot;dexElements&quot;, allDexElements);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static PathClassLoader getPathClassLoader() &#123;</span><br><span class="line">        PathClassLoader pathClassLoader = (PathClassLoader) DexUtils.class.getClassLoader();</span><br><span class="line">        return pathClassLoader;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static Object getDexElements(Object paramObject)</span><br><span class="line">            throws IllegalArgumentException, NoSuchFieldException, IllegalAccessException &#123;</span><br><span class="line">        return ReflectionUtils.getField(paramObject, paramObject.getClass(), &quot;dexElements&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static Object getPathList(Object baseDexClassLoader)</span><br><span class="line">            throws IllegalArgumentException, NoSuchFieldException, IllegalAccessException, ClassNotFoundException &#123;</span><br><span class="line">        return ReflectionUtils.getField(baseDexClassLoader, Class.forName(&quot;dalvik.system.BaseDexClassLoader&quot;), &quot;pathList&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static Object combineArray(Object firstArray, Object secondArray) &#123;</span><br><span class="line">        Class&lt;?&gt; localClass = firstArray.getClass().getComponentType();</span><br><span class="line">        int firstArrayLength = Array.getLength(firstArray);</span><br><span class="line">        int allLength = firstArrayLength + Array.getLength(secondArray);</span><br><span class="line">        Object result = Array.newInstance(localClass, allLength);</span><br><span class="line">        for (int k = 0; k &lt; allLength; ++k) &#123;</span><br><span class="line">            if (k &lt; firstArrayLength) &#123;</span><br><span class="line">                Array.set(result, k, Array.get(firstArray, k));</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                Array.set(result, k, Array.get(secondArray, k - firstArrayLength));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>不需要考虑对dalvik虚拟机和art虚拟机做适配</li>
-<li>代码是非侵入式的，对apk体积影响不大</li>
-</ul>
-<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>需要下次启动才修复</li>
-<li>性能损耗大，为了避免类被加上CLASS_ISPREVERIFIED，使用插桩，单独放一个帮助类在独立的dex中让其他类调用。</li>
-</ul>
-<h2 id="dex替换"><a href="#dex替换" class="headerlink" title="dex替换"></a>dex替换</h2><h2 id="原理及实现-3"><a href="#原理及实现-3" class="headerlink" title="原理及实现"></a>原理及实现</h2><p>为了避免dex插桩带来的性能损耗，dex替换采取另外的方式。原理是提供dex差量包，整体替换dex的方案。差量的方式给出patch.dex，然后将patch.dex与应用的classes.dex合并成一个完整的dex，完整dex加载得到dexFile对象作为参数构建一个Element对象然后整体替换掉旧的dex-Elements数组。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5125122-7026bc1d835a9f3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片引用自TInker介绍"><br>)</p>
-<p>这也是微信Tinker采用的方案，并且Tinker自研了DexDiff/DexMerge算法。Tinker还支持资源和So包的更新，So补丁包使用BsDiff来生成，资源补丁包直接使用文件md5对比来生成，针对资源比较大的（默认大于100KB属于大文件）会使用BsDiff来对文件生成差量补丁。</p>
-<p>下面我们关键看看Tinker的实现源码，当然具体的实现算法很复杂，我们只看关键的实现，最后的修复在UpgradePatch中的tryPatch方法，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">  public boolean tryPatch(Context context, String tempPatchPath, PatchResult patchResult) &#123;</span><br><span class="line">      //省略一堆校验</span><br><span class="line">      ... ....</span><br><span class="line"></span><br><span class="line">      //下面是关键的diff算法及合并实现，实现相对复杂，感兴趣可以再仔细阅读源码</span><br><span class="line">      //we use destPatchFile instead of patchFile, because patchFile may be deleted during the patch process</span><br><span class="line">      if (!DexDiffPatchInternal.tryRecoverDexFiles(manager, signatureCheck, context, patchVersionDirectory, destPatchFile)) &#123;</span><br><span class="line">          TinkerLog.e(TAG, &quot;UpgradePatch tryPatch:new patch recover, try patch dex failed&quot;);</span><br><span class="line">          return false;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (!BsDiffPatchInternal.tryRecoverLibraryFiles(manager, signatureCheck, context, patchVersionDirectory, destPatchFile)) &#123;</span><br><span class="line">          TinkerLog.e(TAG, &quot;UpgradePatch tryPatch:new patch recover, try patch library failed&quot;);</span><br><span class="line">          return false;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (!ResDiffPatchInternal.tryRecoverResourceFiles(manager, signatureCheck, context, patchVersionDirectory, destPatchFile)) &#123;</span><br><span class="line">          TinkerLog.e(TAG, &quot;UpgradePatch tryPatch:new patch recover, try patch resource failed&quot;);</span><br><span class="line">          return false;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      // check dex opt file at last, some phone such as VIVO/OPPO like to change dex2oat to interpreted</span><br><span class="line">      if (!DexDiffPatchInternal.waitAndCheckDexOptFile(patchFile, manager)) &#123;</span><br><span class="line">          TinkerLog.e(TAG, &quot;UpgradePatch tryPatch:new patch recover, check dex opt file failed&quot;);</span><br><span class="line">          return false;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (!SharePatchInfo.rewritePatchInfoFileWithLock(patchInfoFile, newInfo, patchInfoLockFile)) &#123;</span><br><span class="line">          TinkerLog.e(TAG, &quot;UpgradePatch tryPatch:new patch recover, rewrite patch info failed&quot;);</span><br><span class="line">          manager.getPatchReporter().onPatchInfoCorrupted(patchFile, newInfo.oldVersion, newInfo.newVersion);</span><br><span class="line">          return false;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      TinkerLog.w(TAG, &quot;UpgradePatch tryPatch: done, it is ok&quot;);</span><br><span class="line">      return true;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="优缺点-3"><a href="#优缺点-3" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>兼容性高</li>
-<li>补丁小</li>
-<li>开发透明，代码非侵入式</li>
-</ul>
-<h3 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li>冷启动修复，下次启动修复</li>
-<li>Dex合并内存消耗在vm head上，容易OOM，最后导致合并失败</li>
-</ul>
-<h2 id="资源修复原理"><a href="#资源修复原理" class="headerlink" title="资源修复原理"></a>资源修复原理</h2><h3 id="Instant-Run"><a href="#Instant-Run" class="headerlink" title="Instant Run"></a>Instant Run</h3><p>1、构建一个新的AssetManager，并通过反射调用addAssertPath，把这个完整的新资源包加入到AssetManager中。这样就得到一个含有所有新资源的AssetManager</p>
-<p>2、找到所有值钱引用到原有AssetManager的地方，通过反射，把引用处替换为AssetManager</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line">public static void monkeyPatchExistingResources(Context context,</span><br><span class="line">                                                   String externalResourceFile, Collection activities) &#123;</span><br><span class="line">       if (externalResourceFile == null) &#123;</span><br><span class="line">           return;</span><br><span class="line">       &#125;</span><br><span class="line">       try &#123;</span><br><span class="line">           //反射一个新的   AssetManager</span><br><span class="line">           AssetManager newAssetManager = (AssetManager) AssetManager.class</span><br><span class="line">                   .getConstructor(new Class[0]).newInstance(new Object[0]);</span><br><span class="line">          //反射 addAssetPath 添加新的资源包</span><br><span class="line">           Method mAddAssetPath = AssetManager.class.getDeclaredMethod(&quot;addAssetPath&quot;, new Class[]&#123;String.class&#125;);</span><br><span class="line">           mAddAssetPath.setAccessible(true);</span><br><span class="line">           if (((Integer) mAddAssetPath.invoke(newAssetManager,</span><br><span class="line">                   new Object[]&#123;externalResourceFile&#125;)).intValue() == 0) &#123;</span><br><span class="line">               throw new IllegalStateException(</span><br><span class="line">                       &quot;Could not create new AssetManager&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">           Method mEnsureStringBlocks = AssetManager.class.getDeclaredMethod(&quot;ensureStringBlocks&quot;, new Class[0]);</span><br><span class="line">           mEnsureStringBlocks.setAccessible(true);</span><br><span class="line">           mEnsureStringBlocks.invoke(newAssetManager, new Object[0]);</span><br><span class="line">           //反射得到Activity中AssetManager的引用处，全部换成刚新构建的AssetManager对象</span><br><span class="line">           if (activities != null) &#123;</span><br><span class="line">               for (Activity activity : activities) &#123;</span><br><span class="line">                   Resources resources = activity.getResources();</span><br><span class="line">                   try &#123;</span><br><span class="line">                       Field mAssets = Resources.class.getDeclaredField(&quot;mAssets&quot;);</span><br><span class="line">                       mAssets.setAccessible(true);</span><br><span class="line">                       mAssets.set(resources, newAssetManager);</span><br><span class="line">                   &#125; catch (Throwable ignore) &#123;</span><br><span class="line">                       Field mResourcesImpl = Resources.class.getDeclaredField(&quot;mResourcesImpl&quot;);</span><br><span class="line">                       mResourcesImpl.setAccessible(true);</span><br><span class="line">                       Object resourceImpl = mResourcesImpl.get(resources);</span><br><span class="line">                       Field implAssets = resourceImpl.getClass().getDeclaredField(&quot;mAssets&quot;);</span><br><span class="line">                       implAssets.setAccessible(true);</span><br><span class="line">                       implAssets.set(resourceImpl, newAssetManager);</span><br><span class="line">                   &#125;</span><br><span class="line">                   Resources.Theme theme = activity.getTheme();</span><br><span class="line">                   try &#123;</span><br><span class="line">                       try &#123;</span><br><span class="line">                           Field ma = Resources.Theme.class.getDeclaredField(&quot;mAssets&quot;);</span><br><span class="line">                           ma.setAccessible(true);</span><br><span class="line">                           ma.set(theme, newAssetManager);</span><br><span class="line">                       &#125; catch (NoSuchFieldException ignore) &#123;</span><br><span class="line">                           Field themeField = Resources.Theme.class.getDeclaredField(&quot;mThemeImpl&quot;);</span><br><span class="line">                           themeField.setAccessible(true);</span><br><span class="line">                           Object impl = themeField.get(theme);</span><br><span class="line">                           Field ma = impl.getClass().getDeclaredField(&quot;mAssets&quot;);</span><br><span class="line">                           ma.setAccessible(true);</span><br><span class="line">                           ma.set(impl, newAssetManager);</span><br><span class="line">                       &#125;</span><br><span class="line">                       Field mt = ContextThemeWrapper.class.getDeclaredField(&quot;mTheme&quot;);</span><br><span class="line">                       mt.setAccessible(true);</span><br><span class="line">                       mt.set(activity, null);</span><br><span class="line">                       Method mtm = ContextThemeWrapper.class.getDeclaredMethod(&quot;initializeTheme&quot;, new Class[0]);</span><br><span class="line">                       mtm.setAccessible(true);</span><br><span class="line">                       mtm.invoke(activity, new Object[0]);</span><br><span class="line">                       Method mCreateTheme = AssetManager.class.getDeclaredMethod(&quot;createTheme&quot;, new Class[0]);</span><br><span class="line">                       mCreateTheme.setAccessible(true);</span><br><span class="line">                       Object internalTheme = mCreateTheme.invoke(newAssetManager, new Object[0]);</span><br><span class="line">                       Field mTheme = Resources.Theme.class.getDeclaredField(&quot;mTheme&quot;);</span><br><span class="line">                       mTheme.setAccessible(true);</span><br><span class="line">                       mTheme.set(theme, internalTheme);</span><br><span class="line">                   &#125; catch (Throwable e) &#123;</span><br><span class="line">                       Log.e(&quot;InstantRun&quot;,</span><br><span class="line">                               &quot;Failed to update existing theme for activity &quot;</span><br><span class="line">                                       + activity, e);</span><br><span class="line">                   &#125;</span><br><span class="line">                   pruneResourceCaches(resources);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           Collection references;</span><br><span class="line">           if (Build.VERSION.SDK_INT &gt;= 19) &#123;</span><br><span class="line">               Class resourcesManagerClass = Class.forName(&quot;android.app.ResourcesManager&quot;);</span><br><span class="line">               Method mGetInstance = resourcesManagerClass.getDeclaredMethod(&quot;getInstance&quot;, new Class[0]);</span><br><span class="line">               mGetInstance.setAccessible(true);</span><br><span class="line">               Object resourcesManager = mGetInstance.invoke(null, new Object[0]);</span><br><span class="line">               try &#123;</span><br><span class="line">                   Field fMActiveResources = resourcesManagerClass.getDeclaredField(&quot;mActiveResources&quot;);</span><br><span class="line">                   fMActiveResources.setAccessible(true);</span><br><span class="line">                   ArrayMap  arrayMap = (ArrayMap) fMActiveResources.get(resourcesManager);</span><br><span class="line">                   references = arrayMap.values();</span><br><span class="line">               &#125; catch (NoSuchFieldException ignore) &#123;</span><br><span class="line">                   Field mResourceReferences = resourcesManagerClass.getDeclaredField(&quot;mResourceReferences&quot;);</span><br><span class="line">                   mResourceReferences.setAccessible(true);</span><br><span class="line">                   references = (Collection) mResourceReferences.get(resourcesManager);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125; else &#123;</span><br><span class="line">               Class activityThread = Class.forName(&quot;android.app.ActivityThread&quot;);</span><br><span class="line">               Field fMActiveResources = activityThread.getDeclaredField(&quot;mActiveResources&quot;);</span><br><span class="line">               fMActiveResources.setAccessible(true);</span><br><span class="line">               Object thread = getActivityThread(context, activityThread);</span><br><span class="line">               HashMap  map = (HashMap) fMActiveResources.get(thread);</span><br><span class="line">               references = map.values();</span><br><span class="line">           &#125;</span><br><span class="line">           for (WeakReference wr : references) &#123;</span><br><span class="line">               Resources resources = (Resources) wr.get();</span><br><span class="line">               if (resources != null) &#123;</span><br><span class="line">                   try &#123;</span><br><span class="line">                       Field mAssets = Resources.class.getDeclaredField(&quot;mAssets&quot;);</span><br><span class="line">                       mAssets.setAccessible(true);</span><br><span class="line">                       mAssets.set(resources, newAssetManager);</span><br><span class="line">                   &#125; catch (Throwable ignore) &#123;</span><br><span class="line">                       Field mResourcesImpl = Resources.class.getDeclaredField(&quot;mResourcesImpl&quot;);</span><br><span class="line">                       mResourcesImpl.setAccessible(true);</span><br><span class="line">                       Object resourceImpl = mResourcesImpl.get(resources);</span><br><span class="line">                       Field implAssets = resourceImpl.getClass().getDeclaredField(&quot;mAssets&quot;);</span><br><span class="line">                       implAssets.setAccessible(true);</span><br><span class="line">                       implAssets.set(resourceImpl, newAssetManager);</span><br><span class="line">                   &#125;</span><br><span class="line">                   resources.updateConfiguration(resources.getConfiguration(), resources.getDisplayMetrics());</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; catch (Throwable e) &#123;</span><br><span class="line">           throw new IllegalStateException(e);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="so修复原理"><a href="#so修复原理" class="headerlink" title="so修复原理"></a>so修复原理</h2><h3 id="接口调用替换"><a href="#接口调用替换" class="headerlink" title="接口调用替换"></a>接口调用替换</h3><p>sdk提供接口替换System默认加载so库的接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SOPatchManger.loadLibrary(String libName)</span><br><span class="line">替换</span><br><span class="line">System.loadLibrary(String libName)</span><br></pre></td></tr></table></figure></p>
-<p>SOPatchManger.loadLibrary接口加载so库的时候优先尝试去加载sdk指定目录下补丁的so。若不存在，则再去加载安装apk目录下的so库</p>
-<p>优点：不需要对不同sdk版本进行兼容，所以sdk版本都是System.loadLibrary这个接口</p>
-<p>缺点：需要侵入业务代码，替换掉System默认加载so库的接口</p>
-<h3 id="反射注入"><a href="#反射注入" class="headerlink" title="反射注入"></a>反射注入</h3><p>采取类似类修复反射注入方式，只要把补丁so库的路径插入到nativeLibraryDirectories数组的最前面，就能够达到加载so库的时候是补丁so库而不是原来so库的目录，从而达到修复。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public String findLibrary(String libraryName) &#123;</span><br><span class="line">        String fileName = System.mapLibraryName(libraryName);</span><br><span class="line"></span><br><span class="line">        for (NativeLibraryElement element : nativeLibraryPathElements) &#123;</span><br><span class="line">            String path = element.findNativeLibrary(fileName);</span><br><span class="line"></span><br><span class="line">            if (path != null) &#123;</span><br><span class="line">                return path;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>优点：不需侵入用户接口调用</p>
-<p>缺点：需要做版本兼容控制，兼容性较差</p>
-<h1 id="使用热修复技术有哪些需要注意的问题？"><a href="#使用热修复技术有哪些需要注意的问题？" class="headerlink" title="使用热修复技术有哪些需要注意的问题？"></a>使用热修复技术有哪些需要注意的问题？</h1><h2 id="版本管理"><a href="#版本管理" class="headerlink" title="版本管理"></a>版本管理</h2><p>使用热修复技术后由于发布流程的变化，肯定也需求采用相应的分支管理进行控制。</p>
-<p>通常移动开发的分支管理采用特性分支，如下：</p>
-<table>
-<thead>
-<tr>
-<th>分支</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>master</td>
-<td>主分支（只能merge，不能commit，设置权限），用于管理线上版本，及时设置对应Tag</td>
-</tr>
-<tr>
-<td>dev</td>
-<td>开发分支，每个新版本的研发根据版本号基于主分支创建，测试通过验证后，上线合入master分支</td>
-</tr>
-<tr>
-<td>function X</td>
-<td>功能分支，按需求设定。基于开发分支创建，完成功能开发后合入dev开发分支</td>
-</tr>
-</tbody>
-</table>
-<p>接入热修复后，推荐可参考如下分支策略：<br>分支 | 描述<br>—|—<br>master | 主分支（只能merge，不能commit，设置权限），用于管理线上版本，及时设置对应Tag（一般3位版本号）<br>hot_fix | 热修复分支。基于master分支创建，修复紧急问题后，测试推送后，将hot_fix再合并到master分支。再次为master分支打tag。（一般4位版本号）<br>dev  | 开发分支，每个新版本的研发根据版本号基于主分支创建，测试通过验证后，上线合入master分支<br>function X|功能分支，按需求设定。基于开发分支创建，完成功能开发后合入dev开发分支</p>
-<p>注意热修复分支的测试及发布流程应用正常版本流程一致，保证质量。</p>
-<h2 id="分发监控"><a href="#分发监控" class="headerlink" title="分发监控"></a>分发监控</h2><p>目前主流的热修复方案，像Tinker及Sophix都会提供补丁的分发及监控。这也是我们选择热修复技术方案需要考虑的关键因素之一。毕竟为了保证线上版本的质量，分发控制及实时监测必不可少。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Android热修复技术发展至今已经是百花齐放，各大厂也都推出了自己的技术框架。也有像阿里推出的《深入探索Android热修复技术原理》对热修复技术的深入解读。本文大部分总结也都参考这本经典。鉴于热修复技术的多种多样，所以才决定进行梳理，提供选择时的一些注意事项及参考建议，也加深自己对热修复技术的理解。总的来说，还是收获满满。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://github.com/alibaba/AndFix" target="_blank" rel="noopener">AndFix源码</a></p>
-<p><a href="https://github.com/jasonross/Nuwa" target="_blank" rel="noopener">Nuwa源码</a></p>
-<p><a href="https://github.com/Tencent/tinker/wiki" target="_blank" rel="noopener">Tinker官方介绍</a></p>
-<p><a href="http://w4lle.com/2017/03/31/robust-0/" target="_blank" rel="noopener">Android热补丁之Robust原理解析(一)</a></p>
-<p><a href="https://www.cnblogs.com/popfisher/p/8543973.html" target="_blank" rel="noopener">Android热修复技术原理详解（最新最全版本）</a></p>
-<p>《深入探索Android热修复技术原理》</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3236,7 +2982,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -3249,7 +2995,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
